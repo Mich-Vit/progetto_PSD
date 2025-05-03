@@ -1,5 +1,7 @@
 //FILE lezione.h
 
+#include"data.h"
+
 typedef struct lezione *Lezione;
 
 Lezione crea_Lezione(int id, const char* nome, Data dat, const char* orario, int posti_max);
