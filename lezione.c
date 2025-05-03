@@ -2,6 +2,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include"cliente.h"
 #include"data.h"
 #include"lezione.h"
 
@@ -44,4 +45,20 @@ void libera_lezione(Lezione l)
         // Libera la memoria per la lezione
         free(l);
     }
+}
+
+void visualizza_lezione(Lezione l) 
+{
+    if (l == NULL) 
+    {
+        printf("Lezione non valida.\n");
+        return;
+    }
+
+    printf("ID Lezione: %d\n", l->id);
+    printf("Nome: %s\n", l->nome);
+    printf("Data: ");
+    visualizza_data(l->data);  // Stampa la data della lezione
+    printf("Orario: %s\n", l->orario);
+    printf("Posti occupati: %d/%d\n", l->posti_occupati, l->posti_max);
 }

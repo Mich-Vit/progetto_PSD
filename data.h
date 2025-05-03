@@ -9,4 +9,4 @@ int abbonamento_valido(Data oggi, Data scadenza); // Ritorna 1 se e' valido, 0 a
 int confronta_date(Data d1, Data d2);// -1 se d1 < d2, 0 se d1 == d2, 1 se d1 > d2
 Data copia_data(Data originale);
 void libera_data(Data d); //dealloca una data che non serve piu'
-
+Data inserisci_data_odierna();

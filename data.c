@@ -123,3 +123,19 @@ void libera_data(Data d)
         free(d);  // Libera la memoria allocata per la data
     }
 }
+
+Data inserisci_data_odierna()
+{
+    Data oggi = malloc(sizeof(struct data));  // Alloca memoria per la nuova data
+    if (oggi == NULL) 
+    {
+        printf("Errore di allocazione memoria per la data.\n");
+        exit(1);  // Uscita in caso di errore di allocazione
+    }
+
+    // Chiedi all'utente di inserire il giorno, mese e anno
+    printf("Inserisci la data (giorno mese anno): ");
+    scanf("%d %d %d", &oggi->giorno, &oggi->mese, &oggi->anno);
+
+    return oggi;
+}
