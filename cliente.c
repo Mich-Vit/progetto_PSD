@@ -39,3 +39,34 @@ Cliente crea_cliente(int id, char* nome, char* cognome, int durata, Data data_is
 
     return c;
 }
+
+void visualizza_cliente(Cliente c)
+{
+    if (c == NULL)
+    {
+        printf("Cliente non valido.\n");
+        return;
+    }
+
+    printf("\nDettagli del Cliente:\n");
+    printf("ID Cliente: %d\n", c->id);
+    printf("Nome: %s\n", c->nome);
+    printf("Cognome: %s\n", c->cognome);
+    visualizza_abbonamento_cliente(c);
+}
+
+void visualizza_abbonamento_cliente(Cliente c)
+{
+    if (c == NULL)
+    {
+        printf("Cliente non valido.\n");
+        return;
+    }
+
+    printf("\nDettagli abbonamento del cliente:\n");
+    printf("Durata abbonamento: %d mesi\n", c->durata_abbonamento);
+    printf("Data iscrizione: ");
+    visualizza_data(c->data_iscrizione);  // Usa la funzione che stampa la data
+    printf("Data scadenza: ");
+    visualizza_data(c->data_scadenza);    // Usa la funzione che stampa la data
+}
