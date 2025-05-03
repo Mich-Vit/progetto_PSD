@@ -55,3 +55,44 @@ Data calcolo_scadenza_abbonamento(Data data_inizio, int durata_abbonamento)
     return data_scadenza; 
 }
 
+int confronta_date(Data d1, Data d2)// -1 se d1 < d2, 0 se d1 == d2, 1 se d1 > d2
+{
+    if (d1->anno > d2->anno)
+        return 1;
+    if (d1->anno < d2->anno)
+        return -1;
+
+    // Anno uguale, confronto i mesi
+    if (d1->mese > d2->mese)
+        return 1;
+    if (d1->mese < d2->mese)
+        return -1;
+
+    // Mese uguale, confronto i giorni
+    if (d1->giorno > d2->giorno)
+        return 1;
+    if (d1->giorno < d2->giorno)
+        return -1;
+
+    // Tutti uguali
+    return 0;
+}
+
+int abbonamento_valido(Data oggi, Data scadenza) // Ritorna 1 se e' valido, 0 altrimenti
+{
+    if (confronta_date(oggi, scadenza) == -1) 
+    {
+        // oggi è prima della scadenza
+        return 1;
+    } 
+    else if (confronta_date(oggi, scadenza) == 0) 
+    {
+        // oggi è il giorno stesso della scadenza
+        return 1;
+    } 
+    else 
+    {
+        // oggi è dopo la scadenza
+        return 0;
+    }
+}
