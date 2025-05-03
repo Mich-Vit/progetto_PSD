@@ -96,3 +96,21 @@ int abbonamento_valido(Data oggi, Data scadenza) // Ritorna 1 se e' valido, 0 al
         return 0;
     }
 }
+
+Data copia_data(Data originale) 
+{
+    // Alloca memoria per una nuova Data
+    Data nuova_data = malloc(sizeof(struct data)); 
+    if (nuova_data == NULL)
+    {
+        printf("Errore di allocazione memoria per la copia della data.\n");
+        exit(1);
+    }
+
+    // Copia i dati dalla data originale alla nuova
+    nuova_data->giorno = originale->giorno;
+    nuova_data->mese = originale->mese;
+    nuova_data->anno = originale->anno;
+
+    return nuova_data;
+}
