@@ -114,3 +114,12 @@ Data copia_data(Data originale)
 
     return nuova_data;
 }
+
+// Funzione che libera la memoria allocata per una data
+void libera_data(Data d) 
+{
+    if (d != NULL)
+    {
+        free(d);  // Libera la memoria allocata per la data
+    }
+}
