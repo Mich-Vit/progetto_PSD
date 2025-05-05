@@ -70,3 +70,14 @@ void visualizza_abbonamento_cliente(Cliente c)
     printf("Data scadenza: ");
     visualizza_data(c->data_scadenza);    // Usa la funzione che stampa la data
 }
+
+int confronta_clienti(Cliente c1, Cliente c2)
+{
+    if (c1 == NULL || c2 == NULL)
+        return 0;  // Non uguali se uno dei due è NULL
+
+    if (c1->id == c2->id)
+        return 1;  // Uguali se l'ID coincide
+    else
+        return 0;  // Altrimenti diversi
+}
