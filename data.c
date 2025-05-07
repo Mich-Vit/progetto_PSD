@@ -2,6 +2,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 #include"data.h"
 
 struct data
@@ -124,18 +125,15 @@ void libera_data(Data d)
     }
 }
 
-Data inserisci_data_odierna()
+Data data_oggi()
 {
-    Data oggi = malloc(sizeof(struct data));  // Alloca memoria per la nuova data
-    if (oggi == NULL) 
-    {
-        printf("Errore di allocazione memoria per la data.\n");
-        exit(1);  // Uscita in caso di errore di allocazione
-    }
+    time_t t = time(NULL);            // Ottieni tempo corrente
+    //la struttura struct tm e' presente nella libreria <time.h>, così come la funzione localtime 
+    struct tm *tm_info = localtime(&t);  // Converti in tempo locale
 
-    // Chiedi all'utente di inserire il giorno, mese e anno
-    printf("Inserisci la data (giorno mese anno): ");
-    scanf("%d %d %d", &oggi->giorno, &oggi->mese, &oggi->anno);
+    int giorno = tm_info->tm_mday;
+    int mese = tm_info->tm_mon + 1;     // tm_mon parte da 0 (gennaio)
+    int anno = tm_info->tm_year + 1900; // tm_year parte da 1900
 
-    return oggi;
+    return creaData(giorno, mese, anno);
 }
