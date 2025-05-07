@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "lista_clienti.h"
-
+#include <stdlib.h>
 
 struct node
 {
@@ -29,22 +29,20 @@ int emptyList(list l)
 
 list consList(Cliente cl, list l)
 {
-    struct node *new = malloc(sizeof(struct node));
-    if(new == NULL)
+    struct node *nuovo = malloc(sizeof(struct node));
+
+    if (nuovo != NULL)
     {
-        printf("Errore\n");
-        exit(0);
+        nuovo->c = cl;       // Assegna il cliente al nodo
+        nuovo->next = l;     // Collega il nuovo nodo alla lista esistente
+        l = nuovo;           // Il nuovo nodo diventa la testa della lista
     }
-    
-    if(l == NULL)
+    else
     {
-        return l;
+        printf("Errore allocazione memoria in consList\n");
+        exit(1);
     }
-    
-    new->c = cl;
-    new->next = l;
-    l->next = new;
-    
+
     return l;
 }
 
@@ -61,46 +59,35 @@ list tailList(list l)
     return temp;
 }
 
-Cliente getFirst (list l)
+Cliente getFirst(list l)
 {
-    Cliente cl;
-    
-    if(l == NULL)
+    if (l == NULL)
     {
-        return l;
+        return NULL; 
     }
-    
-    cl = l->c;
-    return cl;
+    return l->c;  // Restituisce il cliente nella testa della lista
 }
 
-int sizeList (list l)
+
+int sizeList(list l)
 {
-    int n;
-    
-    if(l == NULL)
-    {
-        return l;
-    }
-    
-    while(!emptyList(l))
+    int n = 0;  // Inizializza n a zero
+    while (l != NULL)
     {
         n++;
-        
         l = tailList(l);
     }
-    
     return n;
 }
 
-int posCliente (list l, Cliente cl)
+int posCliente(list l, Cliente cl)
 {
     int pos = 0;
     int found = 0;
 
-    while (!emptyList(l) && !found)
+    while (l != NULL && !found)
     {
-        if (confronta_clienti(getFirst(l), cl))
+        if (confronta_clienti(getFirst(l), cl))  //confronta_clienti restituisca 1 se sono uguali
             found = 1;
         else
         {
@@ -110,35 +97,36 @@ int posCliente (list l, Cliente cl)
     }
 
     if (!found)
-        pos = -1; // se non trovato restituiamo -1
+        pos = -1;  // Se non trovato, restituisce -1
 
     return pos;
 }
 
-
-Cliente getCliente (list l, int pos) //data una posizione, restituisce l'elemento in quella posizione
+Cliente getCliente(list l, int pos)
 {
-    Cliente cl;
     int i = 0;
     
-    if(pos < 0)
+    if (pos < 0)  // Se la posizione è negativa, restituisci NULL
     {
-        return -1;
+        return NULL; 
     }
-    
-    while (!emptyList(l) && i < pos)
+
+    while (l != NULL && i < pos)
     {
         i++;
-        l=tailList(l);
+        l = l->next;
     }
-    
-    if (!emptyList(l)) // se la lista ha almeno pos+1 elementi
-        cl = getFirst(l); // elemento di posizione pos
+
+    if (l != NULL)
+    {
+        return l->c;  // Restituisce il cliente nella posizione trovata
+    }
     else
-        cl = NULLCLIENTE;
-    
-    return cl;
+    {
+        return NULL;  // Restituisci NULL se la posizione non esiste
+    }
 }
+
 
 list reverseList (list l)
 {

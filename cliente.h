@@ -1,7 +1,7 @@
 //FILE cliente.h
 
 #include"data.h"
-#define NULLCLIENTE 0;
+#define NULLCLIENTE NULL
 
 typedef struct cliente *Cliente;
 
