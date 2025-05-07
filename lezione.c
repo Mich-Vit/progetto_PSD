@@ -72,7 +72,7 @@ void visualizza_lezione(Lezione l)
     }
 }
 
-int prenota_lezioe(Lezione l, Cliente c)
+int prenota_lezione(Lezione l, Cliente c)
 {
     if (l == NULL || c == NULL) 
     {
