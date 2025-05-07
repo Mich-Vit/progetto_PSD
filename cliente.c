@@ -86,3 +86,8 @@ Data get_data_scadenza(Cliente c)
 {
     return c->data_scadenza;
 }
+
+int get_id_cliente(Cliente c)
+{
+    return c->id;
+}

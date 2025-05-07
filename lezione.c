@@ -90,3 +90,8 @@ int prenota_lezioe(Lezione l, Cliente c)
     printf("Prenotazione riuscita per la lezione: %s\n", l->nome);
     return 1;
 }
+
+int get_id_lezione(Lezione l)
+{
+    return l->id;
+}
