@@ -61,6 +61,15 @@ void visualizza_lezione(Lezione l)
     visualizza_data(l->data);  // Stampa la data della lezione
     printf("Orario: %s\n", l->orario);
     printf("Posti occupati: %d/%d\n", l->posti_occupati, l->posti_max);
+
+    if (l->posti_occupati < l->posti_max)
+    {
+        printf("Posti disponibili: %d\n", l->posti_max - l->posti_occupati);
+    }
+    else
+    {
+        printf("Lezione al completo.\n");
+    }
 }
 
 int prenota_lezioe(Lezione l, Cliente c)
