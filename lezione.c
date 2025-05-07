@@ -62,3 +62,31 @@ void visualizza_lezione(Lezione l)
     printf("Orario: %s\n", l->orario);
     printf("Posti occupati: %d/%d\n", l->posti_occupati, l->posti_max);
 }
+
+int prenota_lezioe(Lezione l, Cliente c)
+{
+    if (l == NULL || c == NULL) 
+    {
+        printf("Errore: lezione o cliente non valido.\n");
+        return 0;
+    }
+
+    // Verifica se l'abbonamento del cliente è valido
+    if (!abbonamento_valido(data_oggi(), get_data_scadenza(c))) 
+    {
+        printf("Abbonamento non valido. Impossibile prenotare la lezione.\n");
+        return 0; // Prenotazione fallita
+    }
+
+    //verifica che ci sono posti disponibili 
+    if(l->posti_occupati >= l->posti_max)
+    {
+        printf("Lezione al completo. Impossibile prenotare.\n");
+        return 0; // Prenotazione fallita
+    }
+
+    // Prenotazione riuscita
+    l->posti_occupati++;
+    printf("Prenotazione riuscita per la lezione: %s\n", l->nome);
+    return 1;
+}

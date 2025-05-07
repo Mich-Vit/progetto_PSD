@@ -81,3 +81,8 @@ int confronta_clienti(Cliente c1, Cliente c2)
     else
         return 0;  // Altrimenti diversi
 }
+
+Data get_data_scadenza(Cliente c)
+{
+    return c->data_scadenza;
+}
