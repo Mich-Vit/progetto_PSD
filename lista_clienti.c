@@ -9,12 +9,12 @@ struct node
 };
 
 
-list newList(void)
+list newList_c(void)
 {
     return NULL;
 }
 
-int emptyList(list l)
+int emptyList_c(list l)
 {
     if(l == NULL)
     {
@@ -27,7 +27,7 @@ int emptyList(list l)
 }
 
 
-list consList(Cliente cl, list l)
+list consList_c(Cliente cl, list l)
 {
     struct node *nuovo = malloc(sizeof(struct node));
 
@@ -46,7 +46,7 @@ list consList(Cliente cl, list l)
     return l;
 }
 
-list tailList(list l)
+list tailList_c(list l)
 {
     list temp;
     if(l == NULL)
@@ -59,7 +59,7 @@ list tailList(list l)
     return temp;
 }
 
-Cliente getFirst(list l)
+Cliente getFirst_c(list l)
 {
     if (l == NULL)
     {
@@ -69,7 +69,7 @@ Cliente getFirst(list l)
 }
 
 
-int sizeList(list l)
+int sizeList_c(list l)
 {
     int n = 0;  // Inizializza n a zero
     while (l != NULL)
@@ -128,7 +128,7 @@ Cliente getCliente(list l, int pos)
 }
 
 
-list reverseList (list l)
+list reverseList_c(list l)
 {
     list rev = newList();
     Cliente cl;
@@ -143,7 +143,7 @@ list reverseList (list l)
     return rev;
 }
 
-void outputList(list l)
+void outputList_c(list l)
 {
     int i = 0;
     Cliente cl;
