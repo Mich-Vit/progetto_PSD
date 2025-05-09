@@ -8,15 +8,15 @@
 
 struct lezione
 {
-    int id;                     // ID lezione
-    char nome[50];             // es. "Zumba", "Pilates"
-    Data data;                 // La data della lezione (giorno, mese, anno)
-    char orario[6];            // es. "18:30"
-    int posti_max;             // capacità totale
-    int posti_occupati;        // quanti sono già prenotati
+    char* id;                   // ID lezione (ora è una stringa dinamica)
+    char nome[50];              // es. "Zumba", "Pilates"
+    Data data;                  // La data della lezione (giorno, mese, anno)
+    char orario[6];             // es. "18:30"
+    int posti_max;              // capacità totale
+    int posti_occupati;         // quanti sono già prenotati
 };
 
-Lezione crea_lezione(int id, const char* nome, Data dat, const char* orario, int posti_max)
+Lezione crea_lezione(const char* id, const char* nome, Data dat, const char* orario, int posti_max)
 {
     Lezione nuova_lezione = malloc(sizeof(struct lezione));
     if (nuova_lezione == NULL) 
@@ -25,7 +25,16 @@ Lezione crea_lezione(int id, const char* nome, Data dat, const char* orario, int
         exit(1); 
     }
 
-    nuova_lezione->id = id;
+    // Allocazione dinamica per ID
+    nuova_lezione->id = malloc(strlen(id) + 1);  // +1 per il terminatore '\0'
+    if (nuova_lezione->id == NULL)
+    {
+        printf("Errore di allocazione memoria per l'ID della lezione.\n");
+        free(nuova_lezione); // Dealloca la memoria già allocata per la lezione
+        exit(1); // Esci con errore
+    }
+    strcpy(nuova_lezione->id, id);  // Copia l'ID nella memoria allocata
+
     strcpy(nuova_lezione->nome, nome);
     nuova_lezione->data = copia_data(dat);  // Imposta la data della lezione
     strcpy(nuova_lezione->orario, orario);
@@ -35,10 +44,14 @@ Lezione crea_lezione(int id, const char* nome, Data dat, const char* orario, int
     return nuova_lezione;
 }
 
+
 void libera_lezione(Lezione l) 
 {
     if (l != NULL) 
     {
+        // Libera la memoria per l'ID
+        free(l->id); // Libera la memoria allocata per l'ID
+
         // Libera la memoria per la data
         libera_data(l->data);  // Funzione che libera la memoria allocata per la data
 
@@ -55,7 +68,7 @@ void visualizza_lezione(Lezione l)
         return;
     }
 
-    printf("ID Lezione: %d\n", l->id);
+    printf("ID Lezione: %s\n", l->id);  // Stampa l'ID come stringa
     printf("Nome: %s\n", l->nome);
     printf("Data: ");
     visualizza_data(l->data);  // Stampa la data della lezione
@@ -71,6 +84,7 @@ void visualizza_lezione(Lezione l)
         printf("Lezione al completo.\n");
     }
 }
+
 
 int prenota_lezione(Lezione l, Cliente c)
 {
@@ -100,7 +114,8 @@ int prenota_lezione(Lezione l, Cliente c)
     return 1;
 }
 
-int get_id_lezione(Lezione l)
+
+char* get_id_lezione(Lezione l)
 {
-    return l->id;
+    return l->id; 
 }
