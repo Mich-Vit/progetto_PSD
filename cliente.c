@@ -9,36 +9,42 @@
 
 struct cliente
 {
-    int id;                      // ID univoco cliente
+    char *id;                    // ID univoco cliente (dinamico)
     char nome[50];
     char cognome[50];
-    int durata_abbonamento;     // in mesi
-    Data data_iscrizione;       // Inizio iscrizione
-    Data data_scadenza;         // Validità dell’abbonamento
+    int durata_abbonamento;      // in mesi
+    Data data_iscrizione;
+    Data data_scadenza;
 };
 
-Cliente crea_cliente(int id, char* nome, char* cognome, int durata, Data data_is)
+Cliente crea_cliente(char* id, char* nome, char* cognome, int durata, Data data_is)
 {
     Cliente c = malloc(sizeof(struct cliente));
-    if(c == NULL) //controllo malloc
+    if (c == NULL)
     {
-        printf("Errore di allocazione memoria per la data.\n");
-        exit(1);  // Uscita in caso di errore di memoria
+        printf("Errore di allocazione memoria per il cliente.\n");
+        exit(1);
     }
 
-    c->id = id;
+    // Allocazione dinamica per ID
+    c->id = malloc(strlen(id) + 1);  // +1 per il terminatore '\0'
+    if (c->id == NULL)
+    {
+        printf("Errore di allocazione memoria per l'ID del cliente.\n");
+        free(c);
+        exit(1);
+    }
+    strcpy(c->id, id);
+
     strcpy(c->nome, nome);
     strcpy(c->cognome, cognome);
     c->durata_abbonamento = durata;
-
-    // Usa la funzione creaData per allocare e inizializzare la data_iscrizione
     c->data_iscrizione = copia_data(data_is);
-
-    // Calcola data di scadenza in base alla durata
     c->data_scadenza = calcolo_scadenza_abbonamento(data_is, durata);
 
     return c;
 }
+
 
 void visualizza_cliente(Cliente c)
 {
@@ -49,7 +55,7 @@ void visualizza_cliente(Cliente c)
     }
 
     printf("\nDettagli del Cliente:\n");
-    printf("ID Cliente: %d\n", c->id);
+    printf("ID Cliente: %s\n", c->id);
     printf("Nome: %s\n", c->nome);
     printf("Cognome: %s\n", c->cognome);
     visualizza_abbonamento_cliente(c);
@@ -76,7 +82,7 @@ int confronta_clienti(Cliente c1, Cliente c2)
     if (c1 == NULL || c2 == NULL)
         return 0;  // Non uguali se uno dei due è NULL
 
-    if (c1->id == c2->id)
+    if (strcmp(c1->id, c2->id) == 0)
         return 1;  // Uguali se l'ID coincide
     else
         return 0;  // Altrimenti diversi
@@ -87,7 +93,7 @@ Data get_data_scadenza(Cliente c)
     return c->data_scadenza;
 }
 
-int get_id_cliente(Cliente c)
+char* get_id_cliente(Cliente c)
 {
     return c->id;
 }
