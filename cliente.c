@@ -6,6 +6,7 @@
 #include"data.h"
 #include"cliente.h"
 
+// === Definizione della struttura ===
 
 struct cliente
 {
@@ -15,7 +16,9 @@ struct cliente
     int durata_abbonamento;      // in mesi
     Data data_iscrizione;
     Data data_scadenza;
+    struct cliente *next;
 };
+
 
 Cliente crea_cliente(char* id, char* nome, char* cognome, int durata, Data data_is)
 {
@@ -27,7 +30,7 @@ Cliente crea_cliente(char* id, char* nome, char* cognome, int durata, Data data_
     }
 
     // Allocazione dinamica per ID
-    c->id = malloc(strlen(id) + 1);  // +1 per il terminatore '\0'
+    c->id = malloc(strlen(id) + 1);
     if (c->id == NULL)
     {
         printf("Errore di allocazione memoria per l'ID del cliente.\n");
@@ -41,10 +44,21 @@ Cliente crea_cliente(char* id, char* nome, char* cognome, int durata, Data data_
     c->durata_abbonamento = durata;
     c->data_iscrizione = copia_data(data_is);
     c->data_scadenza = calcolo_scadenza_abbonamento(data_is, durata);
+    c->next = NULL;
 
     return c;
 }
 
+void distruggi_cliente(Cliente c)
+{
+    if (c != NULL)
+    {
+        free(c->id);
+        libera_data(c->data_iscrizione);
+        libera_data(c->data_scadenza);
+        free(c);
+    }
+}
 
 void visualizza_cliente(Cliente c)
 {
@@ -72,9 +86,9 @@ void visualizza_abbonamento_cliente(Cliente c)
     printf("\nDettagli abbonamento del cliente:\n");
     printf("Durata abbonamento: %d mesi\n", c->durata_abbonamento);
     printf("Data iscrizione: ");
-    visualizza_data(c->data_iscrizione);  // Usa la funzione che stampa la data
+    visualizza_data(c->data_iscrizione);
     printf("Data scadenza: ");
-    visualizza_data(c->data_scadenza);    // Usa la funzione che stampa la data
+    visualizza_data(c->data_scadenza);
 }
 
 int confronta_clienti(Cliente c1, Cliente c2)
@@ -88,6 +102,8 @@ int confronta_clienti(Cliente c1, Cliente c2)
         return 0;  // Altrimenti diversi
 }
 
+// === Getter ===
+
 Data get_data_scadenza(Cliente c)
 {
     return c->data_scadenza;
@@ -98,14 +114,48 @@ char* get_id_cliente(Cliente c)
     return c->id;
 }
 
-void distruggi_cliente(Cliente c)
+Cliente get_next_cliente(Cliente c)
 {
-    if (c != NULL)
+    if (c == NULL)
     {
-        free(c->id);                 // libera stringa ID
-        libera_data(c->data_iscrizione); // libera Data iscrizione
-        libera_data(c->data_scadenza);   // libera Data scadenza
-        free(c);                     // libera la struttura Cliente
+        return NULL;
+    } 
+    else
+    {
+        return c->next;
+    }
+}
+
+char* get_nome_cliente(Cliente c)
+{
+    if (c == NULL) return NULL;
+    return c->nome;
+}
+
+char* get_cognome_cliente(Cliente c)
+{
+    if (c == NULL) return NULL;
+    return c->cognome;
+}
+
+int get_durata_abbonamento(Cliente c)
+{
+    if (c == NULL) return -1; // oppure un valore sentinella adeguato
+    return c->durata_abbonamento;
+}
+
+Data get_data_iscrizione(Cliente c)
+{
+    if (c == NULL) return NULL;
+    return c->data_iscrizione;
+}
+
+// === Setter ===
+
+void set_next_cliente(Cliente c, Cliente next)
+{
+    if (c != NULL) {
+        c->next = next;
     }
 }
 
