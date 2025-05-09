@@ -11,3 +11,4 @@ void visualizza_abbonamento_cliente(Cliente c);
 int confronta_clienti(Cliente c1, Cliente c2);
 Data get_data_scadenza(Cliente c);
 char* get_id_cliente(Cliente c);
+void distruggi_cliente(Cliente c);

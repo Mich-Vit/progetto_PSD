@@ -97,3 +97,15 @@ char* get_id_cliente(Cliente c)
 {
     return c->id;
 }
+
+void distruggi_cliente(Cliente c)
+{
+    if (c != NULL)
+    {
+        free(c->id);                 // libera stringa ID
+        libera_data(c->data_iscrizione); // libera Data iscrizione
+        libera_data(c->data_scadenza);   // libera Data scadenza
+        free(c);                     // libera la struttura Cliente
+    }
+}
+
