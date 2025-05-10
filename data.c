@@ -13,7 +13,7 @@ struct data
 };
 
 // Funzione per creare una nuova data
-Data creaData(int gg, int mm, int aa)
+Data crea_data(int gg, int mm, int aa)
 {
     Data nuova_data = malloc(sizeof(struct data));
     if(nuova_data == NULL) //controllo malloc
@@ -135,5 +135,5 @@ Data data_oggi()
     int mese = tm_info->tm_mon + 1;     // tm_mon parte da 0 (gennaio)
     int anno = tm_info->tm_year + 1900; // tm_year parte da 1900
 
-    return creaData(giorno, mese, anno);
+    return crea_data(giorno, mese, anno);
 }
