@@ -1,5 +1,8 @@
 //FILE lista_lezioni.h
 
+#ifndef LISTA_LEZIONI_H
+#define LISTA_LEZIONI_H
+
 #include"lezione.h"
 
 typedef struct node *list;
@@ -19,3 +22,5 @@ int sizeList(list l); //restituisce la lunghezza della lista
 list reverseList(list l); //restituisce la lista invertia
 
 void outputList(list l); //stampa tutti i nodi della lista
+
+#endif /* LISTA_LEZIONI_H */

@@ -6,11 +6,13 @@
 #include"area_clienti.h"
 #include"area_gestore.h"
 #include"lista_lezioni.h"
+#include"utils.h"
 
 int main(void)
 {
     int sc;
     hashtable h = newHashtable(10);  
+    carica_clienti_da_file(h);
     list l = newList();      // crea la lista di lezioni vuota
 
     do
@@ -32,11 +34,11 @@ int main(void)
             {
                 printf("Hai scelto l'area gestore.\n");
                 // inserisci qui le funzioni per il gestore
-                inserisci_cliente(h);  // Verifica che i dati vengano inseriti
                 break;
             }
             case 2:
             {
+                pulisci_schermo();
                 printf("Hai scelto l'area cliente.\n");
                 Cliente cliente = login_cliente(h);
 

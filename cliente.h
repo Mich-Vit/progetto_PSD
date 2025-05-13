@@ -1,7 +1,9 @@
 // FILE cliente.h
 
+#ifndef CLIENTE_H
+#define CLIENTE_H
+
 #include "data.h"
-#define NULLCLIENTE NULL
 
 typedef struct cliente *Cliente;
 
@@ -31,4 +33,4 @@ Cliente get_next_cliente(Cliente c);
 void set_next_cliente(Cliente c, Cliente next);
 void set_data_scadenza(Cliente c, Data nuova_data);
 
-
+#endif /* CLIENTE_H */

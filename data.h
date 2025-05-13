@@ -1,5 +1,8 @@
 //FILE data.h
 
+#ifndef DATA_H
+#define DATA_H
+
 typedef struct data *Data;
 
 Data crea_data(int gg, int mm, int aa);
@@ -15,3 +18,5 @@ Data data_oggi(); //da la vera data odierna
 int get_giorno(Data d);
 int get_mese(Data d);
 int get_anno(Data d);
+
+#endif /* DATA_H */

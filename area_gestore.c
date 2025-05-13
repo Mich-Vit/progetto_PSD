@@ -5,6 +5,9 @@
 #include <string.h>
 #include"cliente.h"
 #include "area_gestore.h"
+#include "lista_lezioni.h"
+#include "hash.h"
+#include "data.h"
 
 void inserisci_cliente(hashtable h)
 {
@@ -52,4 +55,49 @@ void inserisci_cliente(hashtable h)
     {
         printf("Errore: Cliente già presente nella hash table.\n");
     }
+}
+
+void menu_gestore(Cliente c, hashtable h, list lezioni) 
+{
+    int scelta;
+    do 
+    {
+        printf("\n====== AREA GESTORE ======\n");
+        printf("1) Inserisci un nuovo cliente\n");
+        printf("2) Inserisci una nuova lezione\n");
+        printf("3) Visualizza la lista dei clienti\n");
+        printf("4) Visualizza il report mensile\n");
+        printf("0) Esci\n");
+        printf("=========================\n");
+        printf("Scegli un'opzione: ");
+        scanf("%d", &scelta);
+
+        switch (scelta) 
+        {
+            case 1:
+                inserisci_cliente(h);
+                break;
+
+            case 2:
+                //TO DO
+                break;
+
+            case 3:
+                //TO DO: DEVE PRATICAMENTE STAMPARE LA TABELLA HASH INTERA
+                        //OPPURE STAMPARE IL FILE clienti.txt
+                break;
+
+            case 4:
+                //TO DO
+                break;
+
+            case 0:
+                printf("Arrivederci!\n");
+                break;
+
+            default:
+                printf("Opzione non valida. Riprova.\n");
+                break;
+        }
+    } while (scelta != 0);
 }
