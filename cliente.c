@@ -124,21 +124,28 @@ int confronta_clienti(Cliente c1, Cliente c2)
         return 0;  // Altrimenti diversi
 }
 
-void salva_cliente_file(Cliente c) {
-    FILE *fp = fopen("clienti.txt", "a");  // "a" per aggiungere alla fine del file
-    if (fp == NULL) {
-        printf("Errore nell'apertura del file clienti.txt\n");
+void salva_cliente_file(Cliente c)
+{
+    FILE *fp = fopen("clienti.txt", "a");
+    if (fp == NULL)
+    {
+        printf("Errore nell'aprire il file clienti.txt.\n");
         return;
     }
 
-    fprintf(fp, "%s;%s;%s;%d;%02d/%02d/%04d;%02d/%02d/%04d\n",
-        c->id,
-        c->nome,
-        c->cognome,
-        c->durata_abbonamento,
-        get_giorno(c->data_iscrizione), get_mese(c->data_iscrizione), get_anno(c->data_iscrizione),
-        get_giorno(c->data_scadenza), get_mese(c->data_scadenza), get_anno(c->data_scadenza)
-    );
+   fprintf(fp, "ID: %s\n", c->id); 
+    fprintf(fp, "Nome: %s\n", c->nome);  
+    fprintf(fp, "Cognome: %s\n", c->cognome);  
+    fprintf(fp, "Durata abbonamento: %d\n", c->durata_abbonamento);  // Durata abbonamento
+
+    // Usa i getter per le date
+    fprintf(fp, "Data d'iscrizione: %02d/%02d/%04d\n", 
+            get_giorno(c->data_iscrizione), get_mese(c->data_iscrizione), get_anno(c->data_iscrizione));
+    fprintf(fp, "Data scadenza: %02d/%02d/%04d\n", 
+            get_giorno(c->data_scadenza), get_mese(c->data_scadenza), get_anno(c->data_scadenza));
+
+    // Aggiungi una riga di separazione per il prossimo cliente
+    fprintf(fp, "-----------------------\n");
 
     fclose(fp);
 }
