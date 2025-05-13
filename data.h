@@ -10,3 +10,8 @@ int confronta_date(Data d1, Data d2);// -1 se d1 < d2, 0 se d1 == d2, 1 se d1 > 
 Data copia_data(Data originale);
 void libera_data(Data d); //dealloca una data che non serve piu'
 Data data_oggi(); //da la vera data odierna
+
+// Funzioni di accesso (getter)
+int get_giorno(Data d);
+int get_mese(Data d);
+int get_anno(Data d);

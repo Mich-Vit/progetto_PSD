@@ -137,3 +137,20 @@ Data data_oggi()
 
     return crea_data(giorno, mese, anno);
 }
+
+// === Getter ===
+
+int get_giorno(Data d)
+{
+    return d->giorno;
+}
+
+int get_mese(Data d)
+{
+    return d->mese;
+}
+
+int get_anno(Data d)
+{
+    return d->anno;
+}

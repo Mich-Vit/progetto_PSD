@@ -19,6 +19,28 @@ struct cliente
     struct cliente *next;
 };
 
+char* genera_id_cliente()
+{
+    static int counter = -1;  // Variabile statica per mantenere il contatore
+    if (counter == -1)
+    {
+        counter = carica_contatore();  // Carica il contatore dal file
+    }
+    counter++;  // Incrementa il contatore ad ogni chiamata
+
+    char* id = malloc(10 * sizeof(char)); 
+    if (id == NULL)
+    {
+        printf("Errore di allocazione memoria per l'ID.\n");
+        exit(1);
+    }
+
+    // Genera l'ID nel formato C001, C002, ecc.
+    sprintf(id, "C%03d", counter);  
+
+    salva_contatore(counter);  // Salva il nuovo valore del contatore nel file (utils.c)
+    return id;
+}
 
 Cliente crea_cliente(char* id, char* nome, char* cognome, int durata, Data data_is)
 {
@@ -60,21 +82,6 @@ void distruggi_cliente(Cliente c)
     }
 }
 
-void visualizza_cliente(Cliente c)
-{
-    if (c == NULL)
-    {
-        printf("Cliente non valido.\n");
-        return;
-    }
-
-    printf("\nDettagli del Cliente:\n");
-    printf("ID Cliente: %s\n", c->id);
-    printf("Nome: %s\n", c->nome);
-    printf("Cognome: %s\n", c->cognome);
-    visualizza_abbonamento_cliente(c);
-}
-
 void visualizza_abbonamento_cliente(Cliente c)
 {
     if (c == NULL)
@@ -91,6 +98,21 @@ void visualizza_abbonamento_cliente(Cliente c)
     visualizza_data(c->data_scadenza);
 }
 
+void visualizza_cliente(Cliente c)
+{
+    if (c == NULL)
+    {
+        printf("Cliente non valido.\n");
+        return;
+    }
+
+    printf("\nDettagli del Cliente:\n");
+    printf("ID Cliente: %s\n", c->id);
+    printf("Nome: %s\n", c->nome);
+    printf("Cognome: %s\n", c->cognome);
+    visualizza_abbonamento_cliente(c);
+}
+
 int confronta_clienti(Cliente c1, Cliente c2)
 {
     if (c1 == NULL || c2 == NULL)
@@ -100,6 +122,25 @@ int confronta_clienti(Cliente c1, Cliente c2)
         return 1;  // Uguali se l'ID coincide
     else
         return 0;  // Altrimenti diversi
+}
+
+void salva_cliente_file(Cliente c) {
+    FILE *fp = fopen("clienti.txt", "a");  // "a" per aggiungere alla fine del file
+    if (fp == NULL) {
+        printf("Errore nell'apertura del file clienti.txt\n");
+        return;
+    }
+
+    fprintf(fp, "%s;%s;%s;%d;%02d/%02d/%04d;%02d/%02d/%04d\n",
+        c->id,
+        c->nome,
+        c->cognome,
+        c->durata_abbonamento,
+        get_giorno(c->data_iscrizione), get_mese(c->data_iscrizione), get_anno(c->data_iscrizione),
+        get_giorno(c->data_scadenza), get_mese(c->data_scadenza), get_anno(c->data_scadenza)
+    );
+
+    fclose(fp);
 }
 
 // === Getter ===
@@ -156,6 +197,19 @@ void set_next_cliente(Cliente c, Cliente next)
 {
     if (c != NULL) {
         c->next = next;
+    }
+}
+
+void set_data_scadenza(Cliente c, Data nuova_data)
+{
+    if (c != NULL && nuova_data != NULL) 
+    {
+        // Aggiorna la data di scadenza del cliente
+        c->data_scadenza = nuova_data;
+    }
+    else
+    {
+        printf("Errore: Cliente o data non valida.\n");
     }
 }
 
