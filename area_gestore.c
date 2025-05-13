@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include"cliente.h"
 #include "area_gestore.h"
 
 void inserisci_cliente(hashtable h)

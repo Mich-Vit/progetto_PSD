@@ -5,4 +5,4 @@
 #include "lista_lezioni.h"
 #include "hash.h"
 
-void inserisci_nuovo_cliente(hashtable h);
+void inserisci_cliente(hashtable h);

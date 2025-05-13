@@ -2,6 +2,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include "cliente.h"
 #include "hash.h"
 #include"data.h"
@@ -10,12 +11,10 @@
 // Funzione di login: richiede l'ID cliente e cerca nella hashtable
 Cliente login_cliente(hashtable h)
 {
-    char id[20];  // buffer temporaneo per leggere l'ID
+    char id[20];
 
     printf("Inserisci il tuo ID cliente: ");
-    fgets(id, sizeof(id), stdin);  // Legge l'input da stdin (la tastiera)
-    
-    // Rimuove il carattere '\n' che viene aggiunto da fgets
+    fgets(id, sizeof(id), stdin); 
     id[strcspn(id, "\n")] = '\0';  
 
     Cliente c = hashSearch(h, id);

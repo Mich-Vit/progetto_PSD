@@ -8,6 +8,9 @@ typedef struct cliente *Cliente;
 Cliente crea_cliente(char* id, char* nome, char* cognome, int durata, Data data_iscrizione);
 void distruggi_cliente(Cliente c);
 
+char* genera_id_cliente();
+void salva_cliente_file(Cliente c);
+
 // Visualizzazione
 void visualizza_cliente(Cliente c);
 void visualizza_abbonamento_cliente(Cliente c);

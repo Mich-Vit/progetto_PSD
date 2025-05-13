@@ -1,3 +1,5 @@
+//FILE lista_lezioni.c
+
 #include <stdio.h>
 #include"lista_lezioni.h"
 #include <stdlib.h>
