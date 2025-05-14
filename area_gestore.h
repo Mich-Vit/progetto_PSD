@@ -10,6 +10,6 @@
 
 void inserisci_cliente(hashtable h);
 
-void menu_gestore(Cliente c, hashtable clienti, list lezioni);
+void menu_gestore(hashtable h, list l);
 
 #endif /* AREA_GESTORE_H */

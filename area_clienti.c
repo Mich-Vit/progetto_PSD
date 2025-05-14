@@ -84,6 +84,8 @@ void menu_cliente(Cliente c, hashtable h, list l)
         printf("=========================\n");
         printf("Scegli un'opzione: ");
         scanf("%d", &scelta);
+        // Pulisce il buffer dopo scanf
+        while (getchar() != '\n'); 
 
         switch (scelta) 
         {

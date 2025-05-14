@@ -57,7 +57,7 @@ void inserisci_cliente(hashtable h)
     }
 }
 
-void menu_gestore(Cliente c, hashtable h, list lezioni) 
+void menu_gestore(hashtable h, list l) 
 {
     int scelta;
     do 
@@ -71,6 +71,8 @@ void menu_gestore(Cliente c, hashtable h, list lezioni)
         printf("=========================\n");
         printf("Scegli un'opzione: ");
         scanf("%d", &scelta);
+        // Pulisce il buffer dopo scanf
+        while (getchar() != '\n'); 
 
         switch (scelta) 
         {

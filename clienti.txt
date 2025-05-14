@@ -5,6 +5,13 @@ Durata abbonamento: 7
 Data d'iscrizione: 13/05/2025
 Data scadenza: 13/12/2025
 -----------------------
+ID: C004
+Nome: Tony
+Cognome: Boy
+Durata abbonamento: 10
+Data d'iscrizione: 14/05/2025
+Data scadenza: 14/03/2026
+-----------------------
 ID: C001
 Nome: Michele
 Cognome: Vitiello

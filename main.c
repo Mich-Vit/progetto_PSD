@@ -25,15 +25,15 @@ int main(void)
         printf("0) Per uscire\n");
         printf("Scelta: ");
         scanf("%d", &sc);
-         // Pulisce il buffer dopo scanf
+        // Pulisce il buffer dopo scanf
         while (getchar() != '\n'); 
 
         switch (sc) 
         {
             case 1:
             {
-                printf("Hai scelto l'area gestore.\n");
-                // inserisci qui le funzioni per il gestore
+                pulisci_schermo();
+                menu_gestore(h, l);
                 break;
             }
             case 2:
