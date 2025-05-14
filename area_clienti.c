@@ -7,6 +7,7 @@
 #include "hash.h"
 #include"data.h"
 #include"lista_lezioni.h"
+#include"utils.h"
 
 // Funzione di login: richiede l'ID cliente e cerca nella hashtable
 Cliente login_cliente(hashtable h)
@@ -32,7 +33,7 @@ Cliente login_cliente(hashtable h)
 }
 
 // Funzione di rinnovo dell'abbonamento
-void rinnova_abbonamento(Cliente c)
+void rinnova_abbonamento(Cliente c, hashtable h)
 {
     if (c == NULL)
     {
@@ -56,16 +57,20 @@ void rinnova_abbonamento(Cliente c)
 
     // Calcola la nuova data di scadenza aggiungendo la durata all'abbonamento
     Data nuova_data_scadenza = calcolo_scadenza_abbonamento(data_scadenza_attuale, durata);
-
-    // Imposta la nuova data di scadenza
     set_data_scadenza(c, nuova_data_scadenza);
+
+    // Calcola la durata effettiva dell'abbonamento (differenza tra data di scadenza e data di iscrizione)
+    int durata_effettiva = calcola_durata_in_mesi(get_data_iscrizione(c), get_data_scadenza(c));    
+    set_durata(c, durata_effettiva);
+
+    riscrivi_file_clienti(h);
 
     printf("Il tuo abbonamento è stato rinnovato fino al ");
     visualizza_data(nuova_data_scadenza);  // Funzione per visualizzare la data
     printf("\n");
 }
 
-void menu_cliente(Cliente c, hashtable clienti, list lezioni) 
+void menu_cliente(Cliente c, hashtable h, list l) 
 {
     int scelta;
     do 
@@ -87,7 +92,7 @@ void menu_cliente(Cliente c, hashtable clienti, list lezioni)
                 break;
 
             case 2:
-                rinnova_abbonamento(c);
+                rinnova_abbonamento(c, h);
                 break;
 
             case 3:
@@ -95,7 +100,7 @@ void menu_cliente(Cliente c, hashtable clienti, list lezioni)
                 break;
 
             case 4:
-                outputList(lezioni);
+                outputList(l);
                 break;
 
             case 0:

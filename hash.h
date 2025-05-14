@@ -17,5 +17,11 @@ Cliente hashDelete(hashtable h, char *id);
 
 void destroyHashtable(hashtable h); 
 
+// Funzioni di accesso (getter)
+int get_size_hash(hashtable h);
+Cliente* get_table_hash(hashtable h);
+
+
+
 
 #endif /* HASH_H */

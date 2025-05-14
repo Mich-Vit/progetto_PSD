@@ -215,3 +215,15 @@ void destroyHashtable(hashtable h)
     free(h);
 }
 
+
+// === Getter ===
+int get_size_hash(hashtable h)
+{
+    return h->size;
+}
+
+Cliente* get_table_hash(hashtable h)
+{
+    return h->table;
+}
+

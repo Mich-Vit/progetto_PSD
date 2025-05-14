@@ -221,3 +221,15 @@ void set_data_scadenza(Cliente c, Data nuova_data)
     }
 }
 
+void set_durata(Cliente c, int nuova_durata)
+{
+    if (c != NULL)  // Verifica che il cliente esista (non sia NULL)
+    {
+        c->durata_abbonamento = nuova_durata;  // Imposta la nuova durata dell'abbonamento
+    }
+    else
+    {
+        printf("Errore: Cliente non valido.\n");
+    }
+}
+

@@ -32,5 +32,6 @@ Cliente get_next_cliente(Cliente c);
 // Funzioni di modifica (setter)
 void set_next_cliente(Cliente c, Cliente next);
 void set_data_scadenza(Cliente c, Data nuova_data);
+void set_durata(Cliente c, int nuova_durata);
 
 #endif /* CLIENTE_H */

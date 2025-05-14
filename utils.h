@@ -15,5 +15,9 @@ void carica_clienti_da_file(hashtable h);
 
 void pulisci_schermo();
 
+int calcola_durata_in_mesi(Data data_inizio, Data data_fine);
+
+void riscrivi_file_clienti(hashtable h);
+
 #endif /* UTILS_H */
 

@@ -1,16 +1,16 @@
+ID: C002
+Nome: Gerardo
+Cognome: Vertolomo
+Durata abbonamento: 7
+Data d'iscrizione: 13/05/2025
+Data scadenza: 13/12/2025
+-----------------------
 ID: C001
 Nome: Michele
 Cognome: Vitiello
 Durata abbonamento: 6
 Data d'iscrizione: 13/05/2025
-Data scadenza: 13/11/2025
------------------------
-ID: C002
-Nome: Gerardo
-Cognome: Vertolomo
-Durata abbonamento: 2
-Data d'iscrizione: 13/05/2025
-Data scadenza: 13/07/2025
+Data scadenza: 13/05/2026
 -----------------------
 ID: C003
 Nome: Giuseppe

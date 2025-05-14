@@ -82,3 +82,65 @@ void pulisci_schermo()
         system("clear");
     #endif
 }
+
+int calcola_durata_in_mesi(Data data_inizio, Data data_fine)
+{
+    int anni_diff = get_anno(data_fine) - get_anno(data_inizio);
+    int mesi_diff = get_mese(data_fine) - get_mese(data_inizio);
+    int giorni_diff = get_giorno(data_fine) - get_giorno(data_inizio);
+
+    // Calcolare la durata in mesi
+    int durata_in_mesi = anni_diff * 12 + mesi_diff;
+    
+    // Se la differenza nei giorni è negativa (ovvero la data di fine non è ancora arrivata a completare il mese), 
+    // diminuisci un mese dalla durata
+    if (giorni_diff < 0)
+    {
+        durata_in_mesi--;
+    }
+
+    return durata_in_mesi;
+}
+
+void riscrivi_file_clienti(hashtable h)
+{
+    FILE* fp = fopen("clienti.txt", "w"); // "w" per riscrivere il file ogni volta
+    if (fp == NULL)
+    {
+        printf("Errore nell'apertura del file per la scrittura.\n");
+        return;
+    }
+
+    Cliente* table = get_table_hash(h); 
+
+    for (int i = 0; i < get_size_hash(h); i++)  // Scorri ogni slot della tabella hash
+    {
+        Cliente curr = table[i];  // Ottieni la lista di clienti in questo slot
+
+        while (curr != NULL)  // Scorri la lista concatenata
+        {
+            // Scrivi le informazioni del cliente nel file
+            fprintf(fp, "ID: %s\n", get_id_cliente(curr));
+            fprintf(fp, "Nome: %s\n", get_nome_cliente(curr));
+            fprintf(fp, "Cognome: %s\n", get_cognome_cliente(curr));
+            fprintf(fp, "Durata abbonamento: %d\n", get_durata_abbonamento(curr));
+            
+            // Scrivi le date (data iscrizione e scadenza)
+            fprintf(fp, "Data d'iscrizione: %02d/%02d/%04d\n",
+                get_giorno(get_data_iscrizione(curr)),
+                get_mese(get_data_iscrizione(curr)),
+                get_anno(get_data_iscrizione(curr)));
+                
+            fprintf(fp, "Data scadenza: %02d/%02d/%04d\n",
+                get_giorno(get_data_scadenza(curr)),
+                get_mese(get_data_scadenza(curr)),
+                get_anno(get_data_scadenza(curr)));
+                
+            fprintf(fp, "-----------------------\n");  // Separazione tra i clienti
+
+            curr = get_next_cliente(curr);  // Passa al prossimo cliente nella lista
+        }
+    }
+
+    fclose(fp);  // Chiudi il file
+}
