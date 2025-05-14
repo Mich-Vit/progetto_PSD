@@ -22,12 +22,14 @@ struct cliente
 
 char* genera_id_cliente()
 {
-    static int counter = -1;  // Variabile statica per mantenere il contatore
+    static int counter = -1;  // Variabile statica per mantenere il contatore tra chiamate
+
     if (counter == -1)
     {
-        counter = carica_contatore();  // Carica il contatore dal file
+        counter = carica_contatore();  // Ora carica l'ID massimo già presente nel file clienti.txt
     }
-    counter++;  // Incrementa il contatore ad ogni chiamata
+
+    counter++;  // Incrementa per creare il nuovo ID
 
     char* id = malloc(10 * sizeof(char)); 
     if (id == NULL)
@@ -39,9 +41,9 @@ char* genera_id_cliente()
     // Genera l'ID nel formato C001, C002, ecc.
     sprintf(id, "C%03d", counter);  
 
-    salva_contatore(counter);  // Salva il nuovo valore del contatore nel file (utils.c)
     return id;
 }
+
 
 Cliente crea_cliente(char* id, char* nome, char* cognome, int durata, Data data_is)
 {

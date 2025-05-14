@@ -2,44 +2,40 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "utils.h"
 #include "data.h"
 #include "hash.h"
 #include "cliente.h"
 
-
-// Funzione per salvare il contatore in un file
-void salva_contatore(int counter)
-{
-    FILE* file = fopen("counter.txt", "w");  // Apre il file in modalità scrittura (sovrascrive)
-    if (file == NULL)
-    {
-        printf("Errore nell'aprire il file per salvare il contatore.\n");
-        exit(1);
-    }
-
-    fprintf(file, "%d", counter);  // Scrive il valore del contatore nel file
-    fclose(file);  // Chiude il file
-}
-
 // Funzione per caricare il contatore da un file
 int carica_contatore()
 {
-    FILE* file = fopen("counter.txt", "r");  // Apre il file in modalità lettura
-    int counter = 0;
+    FILE* file = fopen("clienti.txt", "r");
+    int max_id = 0;
 
-    if (file != NULL)
+    if (file == NULL)
     {
-        fscanf(file, "%d", &counter);  // Legge il valore del contatore dal file
-        fclose(file);  // Chiude il file
-    }
-    else
-    {
-        printf("File 'counter.txt' non trovato. Inizializzo il contatore a 0.\n");
+        printf("File 'clienti.txt' non trovato. Inizializzo il contatore a 0.\n");
+        return 0;
     }
 
-    return counter;
+    char line[256];
+    while (fgets(line, sizeof(line), file))
+    {
+        if (strncmp(line, "ID: C", 5) == 0)
+        {
+            // Estrai il numero dopo "ID: C"
+            int current_id = atoi(line + 5); // Es: "C007" -> 7
+            if (current_id > max_id)
+                max_id = current_id;
+        }
+    }
+
+    fclose(file);
+    return max_id;
 }
+
 
 void carica_clienti_da_file(hashtable h)
 {

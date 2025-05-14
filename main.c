@@ -11,7 +11,7 @@
 int main(void)
 {
     int sc;
-    hashtable h = newHashtable(10);  
+    hashtable h = newHashtable(20);  
     carica_clienti_da_file(h);
     list l = newList();      // crea la lista di lezioni vuota
 
