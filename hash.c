@@ -215,6 +215,42 @@ void destroyHashtable(hashtable h)
     free(h);
 }
 
+// Funzione per stampare tutti i clienti nella tabella hash
+void stampaHash(hashtable h)
+{
+    if (h == NULL)
+    {
+        printf("Tabella non inizializzata.\n");
+        return;
+    }
+
+    printf("===================================\n");
+    printf("         Elenco Clienti\n");
+
+    int i, clienti_trovati = 0;
+
+    for (i = 0; i < h->size; i++)
+    {
+        Cliente curr = h->table[i];
+        while (curr != NULL)
+        {
+            visualizza_cliente(curr);
+            curr = get_next_cliente(curr);
+            clienti_trovati++;
+        }
+    }
+
+    if (clienti_trovati == 0)
+    {
+        printf("Nessun cliente presente.\n");
+    }
+    else
+    {
+        printf("-----------------------------------\n");
+        printf("Totale clienti presenti: %d\n", clienti_trovati);
+    }
+}
+
 
 // === Getter ===
 int get_size_hash(hashtable h)

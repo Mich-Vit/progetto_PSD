@@ -8,6 +8,7 @@
 #include "lista_lezioni.h"
 #include "hash.h"
 #include "data.h"
+#include "utils.h"
 
 void inserisci_cliente(hashtable h)
 {
@@ -49,11 +50,11 @@ void inserisci_cliente(hashtable h)
     // Inserimento nella hash
     if (insertHash(h, nuovo_cliente))
     {
-        printf("Cliente inserito con successo nella hash table!\n");
+        printf("Cliente inserito con successo!\n");
     }
     else
     {
-        printf("Errore: Cliente già presente nella hash table.\n");
+        printf("Errore: Cliente già presente!\n");
     }
 }
 
@@ -62,7 +63,8 @@ void menu_gestore(hashtable h, list l)
     int scelta;
     do 
     {
-        printf("\n====== AREA GESTORE ======\n");
+        pulisci_schermo();
+        printf("====== AREA GESTORE ======\n");
         printf("1) Inserisci un nuovo cliente\n");
         printf("2) Inserisci una nuova lezione\n");
         printf("3) Visualizza la lista dei clienti\n");
@@ -77,18 +79,21 @@ void menu_gestore(hashtable h, list l)
         switch (scelta) 
         {
             case 1:
+                pulisci_schermo();
                 inserisci_cliente(h);
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');  // attende un invio
                 break;
-
             case 2:
                 //TO DO
                 break;
 
             case 3:
-                //TO DO: DEVE PRATICAMENTE STAMPARE LA TABELLA HASH INTERA
-                        //OPPURE STAMPARE IL FILE clienti.txt
+                pulisci_schermo();
+                stampaHash(h);
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');  // attende un invio
                 break;
-
             case 4:
                 //TO DO
                 break;

@@ -92,8 +92,7 @@ void visualizza_abbonamento_cliente(Cliente c)
         printf("Cliente non valido.\n");
         return;
     }
-
-    printf("\nDettagli abbonamento del cliente:\n");
+    
     printf("Durata abbonamento: %d mesi\n", c->durata_abbonamento);
     printf("Data iscrizione: ");
     visualizza_data(c->data_iscrizione);
@@ -109,10 +108,10 @@ void visualizza_cliente(Cliente c)
         return;
     }
 
-    printf("\nDettagli del Cliente:\n");
-    printf("ID Cliente: %s\n", c->id);
-    printf("Nome: %s\n", c->nome);
-    printf("Cognome: %s\n", c->cognome);
+    printf("===================================\n");
+    printf("ID: %s\n",c->id);
+    printf("Nome: %s\n",c->nome);
+    printf("Cognome: %s\n",c->cognome);
     visualizza_abbonamento_cliente(c);
 }
 

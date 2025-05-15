@@ -17,6 +17,7 @@ int main(void)
 
     do
     {
+        pulisci_schermo();
         printf("===================================\n");
         printf("BENVENUTO NELLA TUA PALESTRA !\n");
         printf("===================================\n");
