@@ -1,10 +1,3 @@
-ID: C002
-Nome: Gerardo
-Cognome: Vertolomo
-Durata abbonamento: 7
-Data d'iscrizione: 13/05/2025
-Data scadenza: 13/12/2025
------------------------
 ID: C004
 Nome: Tony
 Cognome: Boy

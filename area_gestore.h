@@ -10,6 +10,9 @@
 
 void inserisci_cliente(hashtable h);
 
+void rimuovi_cliente(hashtable h);
+
 void menu_gestore(hashtable h, list l);
+
 
 #endif /* AREA_GESTORE_H */
