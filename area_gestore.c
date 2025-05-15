@@ -60,6 +60,16 @@ void inserisci_cliente(hashtable h)
 
 void rimuovi_cliente(hashtable h)
 {
+    printf("===================================\n");
+    printf("         Rimuovi un cliente\n");
+    printf("===================================\n");
+
+    if (h == NULL)
+    {
+        printf("Nessuna tabella trovata.\n");
+        return;
+    }
+
     char id[20];
 
     printf("Inserisci l'ID del cliente da rimuovere: ");
@@ -68,8 +78,9 @@ void rimuovi_cliente(hashtable h)
 
     Cliente rem = hashDelete(h, id);
 
-    if (rem == NULL) {
-        printf("Cliente con ID %s non trovato nella tabella hash.\n", id);
+    if (rem == NULL)
+    {
+        printf("Cliente con ID %s non trovato.\n", id);
         return;
     }
 
@@ -123,6 +134,42 @@ void rimuovi_cliente(hashtable h)
     rename("temp.txt", "clienti.txt");
 }
 
+void ricerca_cliente(hashtable h)
+{
+    printf("===================================\n");
+    printf("         Ricerca un cliente\n");
+    printf("===================================\n");
+
+    if (h == NULL)
+    {
+        printf("Nessuna tabella trovata.\n");
+        return;
+    }
+
+    char id[20];
+
+    printf("Inserisci l'ID del cliente da cercare: ");
+    fgets(id, sizeof(id), stdin);
+    id[strcspn(id, "\n")] = '\0';  // Rimuove il newline
+
+    if (strlen(id) == 0)
+    {
+        printf("ID non valido.\n");
+        return;
+    }
+
+    Cliente ricercato = hashSearch(h, id);
+
+    if (ricercato == NULL)
+    {
+        printf("Cliente con ID %s non trovato nella tabella hash.\n", id);
+        return;
+    }
+
+    printf("Cliente trovato:\n");
+    visualizza_cliente(ricercato);
+}
+
 
 void menu_gestore(hashtable h, list l) 
 {
@@ -138,7 +185,8 @@ void menu_gestore(hashtable h, list l)
         printf("4) Visualizza la lista delle lezioni\n");
         printf("5) Rimuovi un cliente\n");
         printf("6) Rimuovi una lezione\n");
-        printf("7) Visualizza il report mensile\n");
+        printf("7) Ricerca un cliente\n");
+        printf("8) Visualizza il report mensile\n");
         printf("0) Esci\n");
         printf("==========================\n");
         printf("Scegli un'opzione: ");
@@ -184,6 +232,12 @@ void menu_gestore(hashtable h, list l)
                 while (getchar() != '\n');
                 break;
             case 7:
+                pulisci_schermo();
+                ricerca_cliente(h);
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');
+                break;
+            case 8:
                 pulisci_schermo();
                 // visualizza_report_mensile(h, l);
                 printf("\nPremi INVIO per tornare al menu...");

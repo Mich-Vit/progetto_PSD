@@ -12,6 +12,8 @@ void inserisci_cliente(hashtable h);
 
 void rimuovi_cliente(hashtable h);
 
+void ricerca_cliente(hashtable h);
+
 void menu_gestore(hashtable h, list l);
 
 

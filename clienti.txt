@@ -12,13 +12,6 @@ Durata abbonamento: 6
 Data d'iscrizione: 13/05/2025
 Data scadenza: 13/05/2026
 -----------------------
-ID: C003
-Nome: Giuseppe
-Cognome: Scarpa
-Durata abbonamento: 3
-Data d'iscrizione: 13/05/2025
-Data scadenza: 13/08/2025
------------------------
 ID: C005
 Nome: Ezio 
 Cognome: Auditore
