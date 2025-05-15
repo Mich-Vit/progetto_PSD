@@ -6,11 +6,16 @@
 #include "data.h"
 #include "hash.h"
 #include "cliente.h"
+#include "lista_lezioni.h"
 
 // Dichiarazione delle funzioni per la gestione del contatore di id
-int carica_contatore();
+int carica_contatore_clienti();
+
+int carica_contatore_lezioni();
 
 void carica_clienti_da_file(hashtable h);
+
+list carica_lezioni_da_file(list l);
 
 void pulisci_schermo();
 

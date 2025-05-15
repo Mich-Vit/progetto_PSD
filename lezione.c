@@ -6,6 +6,7 @@
 #include"cliente.h"
 #include"data.h"
 #include"lezione.h"
+#include "utils.h"
 
 struct lezione
 {
@@ -16,6 +17,31 @@ struct lezione
     int posti_max;              // capacità totale
     int posti_occupati;         // quanti sono già prenotati
 };
+
+char* genera_id_lezione()
+{
+    static int counter = -1;  // Mantiene il contatore tra le chiamate
+
+    if (counter == -1)
+    {
+        counter = carica_contatore_lezioni();  // Carica il contatore massimo dal file lezioni.txt
+    }
+
+    counter++;  // Genera un nuovo ID incrementale
+
+    char* id = malloc(10 * sizeof(char)); 
+    if (id == NULL)
+    {
+        printf("Errore di allocazione memoria per l'ID della lezione.\n");
+        exit(1);
+    }
+
+    // Genera l'ID nel formato L001, L002, ...
+    sprintf(id, "L%03d", counter);  
+
+    return id;
+}
+
 
 Lezione crea_lezione(const char* id, const char* nome, Data dat, const char* orario, int posti_max)
 {
@@ -45,6 +71,27 @@ Lezione crea_lezione(const char* id, const char* nome, Data dat, const char* ora
     return nuova_lezione;
 }
 
+void salva_lezione_file(Lezione l)
+{
+    FILE *fp = fopen("lezioni.txt", "a");
+    if (fp == NULL)
+    {
+        printf("Errore nell'aprire il file lezioni.txt.\n");
+        return;
+    }
+
+    fprintf(fp, "ID: %s\n", l->id);
+    fprintf(fp, "Nome: %s\n", l->nome);
+    fprintf(fp, "Data: %02d/%02d/%04d\n",
+            get_giorno(l->data), get_mese(l->data), get_anno(l->data));
+    fprintf(fp, "Orario: %s\n", l->orario);
+    fprintf(fp, "Posti massimi: %d\n", l->posti_max);
+    fprintf(fp, "Posti occupati: %d\n", l->posti_occupati);
+    fprintf(fp, "-----------------------\n");
+
+    fclose(fp);
+}
+
 
 void libera_lezione(Lezione l) 
 {
@@ -69,6 +116,7 @@ void visualizza_lezione(Lezione l)
         return;
     }
 
+    printf("===================================\n");
     printf("ID Lezione: %s\n", l->id);  // Stampa l'ID come stringa
     printf("Nome: %s\n", l->nome);
     printf("Data: ");
@@ -85,6 +133,8 @@ void visualizza_lezione(Lezione l)
         printf("Lezione al completo.\n");
     }
 }
+
+
 
 
 int prenota_lezione(Lezione l, Cliente c)
@@ -119,4 +169,19 @@ int prenota_lezione(Lezione l, Cliente c)
 char* get_id_lezione(Lezione l)
 {
     return l->id; 
+}
+
+void set_posti_occupati(Lezione l, int pos_occupati)
+{
+    if (l == NULL)
+        return;
+
+    if (pos_occupati >= 0 && pos_occupati <= l->posti_max)
+    {
+        l->posti_occupati = pos_occupati;
+    }
+    else
+    {
+        printf("Errore: posti occupati non validi (deve essere tra 0 e %d).\n", l->posti_max);
+    }
 }

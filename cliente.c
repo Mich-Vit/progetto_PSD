@@ -26,7 +26,7 @@ char* genera_id_cliente()
 
     if (counter == -1)
     {
-        counter = carica_contatore();  // Ora carica l'ID massimo già presente nel file clienti.txt
+        counter = carica_contatore_clienti();  // Ora carica l'ID massimo già presente nel file clienti.txt
     }
 
     counter++;  // Incrementa per creare il nuovo ID
@@ -92,7 +92,7 @@ void visualizza_abbonamento_cliente(Cliente c)
         printf("Cliente non valido.\n");
         return;
     }
-    
+
     printf("Durata abbonamento: %d mesi\n", c->durata_abbonamento);
     printf("Data iscrizione: ");
     visualizza_data(c->data_iscrizione);

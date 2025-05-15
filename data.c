@@ -79,6 +79,41 @@ int confronta_date(Data d1, Data d2)// -1 se d1 < d2, 0 se d1 == d2, 1 se d1 > d
     return 0;
 }
 
+Data leggi_data()
+{
+    int giorno, mese, anno;
+
+    while (1)
+    {
+        printf("Inserisci la data (GG MM AAAA): ");
+        if (scanf("%d %d %d", &giorno, &mese, &anno) != 3)
+        {
+            printf("Input non valido. Riprova.\n");
+            while (getchar() != '\n'); // Pulisce il buffer
+            continue;
+        }
+
+        while (getchar() != '\n'); // Pulisce il buffer dopo scanf
+
+        Data inserita = crea_data(giorno, mese, anno);  // Funzione che alloca dinamicamente una data
+
+        if (inserita == NULL)
+        {
+            printf("Data non valida. Riprova.\n");
+            continue;
+        }
+
+        if (confronta_date(inserita, data_oggi()) < 0)
+        {
+            printf("Errore: la data non può essere precedente a oggi.\n");
+            libera_data(inserita);
+            continue;
+        }
+        
+        return inserita;
+    }
+}
+
 int abbonamento_valido(Data oggi, Data scadenza) // Ritorna 1 se e' valido, 0 altrimenti
 {
     if (confronta_date(oggi, scadenza) == -1) 

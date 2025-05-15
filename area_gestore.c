@@ -9,6 +9,7 @@
 #include "hash.h"
 #include "data.h"
 #include "utils.h"
+#include "lezione.h"
 
 void inserisci_cliente(hashtable h)
 {
@@ -57,6 +58,57 @@ void inserisci_cliente(hashtable h)
         printf("Errore: Cliente già presente!\n");
     }
 }
+
+list inserisci_lezione(list l)
+{
+    char nome[50];
+    char orario[6];
+    int posti_max;
+    Data data;
+
+    // Input dati lezione
+    printf("Inserisci il nome della lezione: ");
+    fgets(nome, sizeof(nome), stdin);
+    nome[strcspn(nome, "\n")] = '\0';
+
+    printf("Inserisci l'orario della lezione: ");
+    fgets(orario, sizeof(orario), stdin);
+    orario[strcspn(orario, "\n")] = '\0';
+
+    do
+    {
+        printf("Inserisci il numero massimo di posti: ");
+        scanf("%d", &posti_max);
+        while (getchar() != '\n');  // Pulisce il buffer
+
+        if (posti_max <= 0)
+        {
+            printf("Errore: il numero di posti deve essere positivo. Riprova.\n");
+        }
+    } while (posti_max <= 0);
+
+    data = copia_data(leggi_data()); 
+
+    // Genera ID per la lezione
+    char* id = genera_id_lezione();  // Da implementare
+
+    // Crea la nuova lezione
+    Lezione nuova_lezione = crea_lezione(id, nome, data, orario, posti_max);
+
+    // Inserisci nella lista
+    l = consList(nuova_lezione, l);
+
+    // Salva su file
+    salva_lezione_file(nuova_lezione);
+
+    printf("Lezione inserita con successo!\n");
+
+    // Libera memoria dell'ID se la copia è fatta internamente
+    free(id);
+
+    return l;
+}
+
 
 void rimuovi_cliente(hashtable h)
 {
@@ -203,7 +255,7 @@ void menu_gestore(hashtable h, list l)
                 break;
             case 2:
                 pulisci_schermo();
-                // inserisci_lezione(l);
+                l = inserisci_lezione(l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;

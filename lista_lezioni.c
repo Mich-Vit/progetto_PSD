@@ -102,12 +102,13 @@ void outputList(list l)
     int i = 0;
     Lezione le;
 
+    printf("===================================\n");
+    printf("         Elenco Lezioni\n");
+
     while (!emptyList(l))
     {
         le = getFirst(l); 
-        printf("\nElemento di posizione %d:\n", i);
-        visualizza_lezione(le);  // Usa la funzione specifica per la lezione
-         
+        visualizza_lezione(le);
         l = tailList(l);
         i++;
     }

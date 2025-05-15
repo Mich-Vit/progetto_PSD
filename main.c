@@ -14,6 +14,7 @@ int main(void)
     hashtable h = newHashtable(20);  
     carica_clienti_da_file(h);
     list l = newList();      // crea la lista di lezioni vuota
+    l = carica_lezioni_da_file(l);
 
     do
     {

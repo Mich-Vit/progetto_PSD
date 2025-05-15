@@ -10,6 +10,8 @@
 
 void inserisci_cliente(hashtable h);
 
+list inserisci_lezione(list l);
+
 void rimuovi_cliente(hashtable h);
 
 void ricerca_cliente(hashtable h);

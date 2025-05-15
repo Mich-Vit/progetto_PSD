@@ -1,0 +1,28 @@
+ID: L001
+Nome: Pilates
+Data: 17/05/2025
+Orario: 17:40
+Posti massimi: 20
+Posti occupati: 0
+-----------------------
+ID: L004
+Nome: Sala pesi
+Data: 20/05/2025
+Orario: 20:00
+Posti massimi: 25
+Posti occupati: 0
+-----------------------
+ID: L005
+Nome: Box
+Data: 18/06/2025
+Orario: 12:00
+Posti massimi: 10
+Posti occupati: 0
+-----------------------
+ID: L006
+Nome: Yoga
+Data: 18/06/2025
+Orario: 18:00
+Posti massimi: 15
+Posti occupati: 0
+-----------------------

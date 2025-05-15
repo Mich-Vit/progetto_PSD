@@ -7,9 +7,11 @@
 #include "data.h"
 #include "hash.h"
 #include "cliente.h"
+#include "lezione.h"
+#include "lista_lezioni.h"
 
 // Funzione per caricare il contatore da un file
-int carica_contatore()
+int carica_contatore_clienti()
 {
     FILE* file = fopen("clienti.txt", "r");
     int max_id = 0;
@@ -27,6 +29,32 @@ int carica_contatore()
         {
             // Estrai il numero dopo "ID: C"
             int current_id = atoi(line + 5); // Es: "C007" -> 7
+            if (current_id > max_id)
+                max_id = current_id;
+        }
+    }
+
+    fclose(file);
+    return max_id;
+}
+
+int carica_contatore_lezioni()
+{
+    FILE* file = fopen("lezioni.txt", "r");
+    int max_id = 0;
+
+    if (file == NULL)
+    {
+        printf("File 'lezioni.txt' non trovato. Inizializzo il contatore a 0.\n");
+        return 0;
+    }
+
+    char line[256];
+    while (fgets(line, sizeof(line), file))
+    {
+        if (strncmp(line, "ID: L", 5) == 0)
+        {
+            int current_id = atoi(line + 5);  // Es: "L007" -> 7
             if (current_id > max_id)
                 max_id = current_id;
         }
@@ -78,6 +106,75 @@ void pulisci_schermo()
         system("clear");
     #endif
 }
+
+list carica_lezioni_da_file(list l)
+{
+    FILE *fp = fopen("lezioni.txt", "r");
+    if (fp == NULL)
+    {
+        printf("Errore nell'apertura del file lezioni.txt\n");
+        return NULL;
+    }
+
+    char buffer[256];
+    char id[20], nome[50], orario[6];
+    int giorno, mese, anno, posti_max, posti_occupati;
+
+    while (1)
+    {
+        // Leggi ID
+        if (fgets(buffer, sizeof(buffer), fp) == NULL)
+            break;
+        if (sscanf(buffer, "ID: %s", id) != 1)
+            break;
+
+        // Leggi Nome
+        if (fgets(buffer, sizeof(buffer), fp) == NULL)
+            break;
+        if (sscanf(buffer, "Nome: %[^\n]", nome) != 1)
+            break;
+
+        // Leggi Data
+        if (fgets(buffer, sizeof(buffer), fp) == NULL)
+            break;
+        if (sscanf(buffer, "Data: %d/%d/%d", &giorno, &mese, &anno) != 3)
+            break;
+
+        // Leggi Orario
+        if (fgets(buffer, sizeof(buffer), fp) == NULL)
+            break;
+        if (sscanf(buffer, "Orario: %s", orario) != 1)
+            break;
+
+        // Leggi Posti massimi
+        if (fgets(buffer, sizeof(buffer), fp) == NULL)
+            break;
+        if (sscanf(buffer, "Posti massimi: %d", &posti_max) != 1)
+            break;
+
+        // Leggi Posti occupati
+        if (fgets(buffer, sizeof(buffer), fp) == NULL)
+            break;
+        if (sscanf(buffer, "Posti occupati: %d", &posti_occupati) != 1)
+            break;
+
+        // Leggi linea separatrice
+        if (fgets(buffer, sizeof(buffer), fp) == NULL)
+            break;
+
+        Data data = crea_data(giorno, mese, anno);
+        Lezione lez = crea_lezione(id, nome, data, orario, posti_max);
+        set_posti_occupati(lez, posti_occupati);
+
+        l = consList(lez, l);  // inserisce in testa
+    }
+
+    fclose(fp);
+
+    return l;
+}
+
+
 
 int calcola_durata_in_mesi(Data data_inizio, Data data_fine)
 {
