@@ -1,10 +1,3 @@
-ID: L001
-Nome: Pilates
-Data: 17/05/2025
-Orario: 17:40
-Posti massimi: 20
-Posti occupati: 0
------------------------
 ID: L004
 Nome: Sala pesi
 Data: 20/05/2025
@@ -45,13 +38,6 @@ Nome: Zumba
 Data: 17/03/2026
 Orario: 19:00
 Posti massimi: 12
-Posti occupati: 0
------------------------
-ID: L010
-Nome: Box
-Data: 29/02/2028
-Orario: 15:20
-Posti massimi: 10
 Posti occupati: 0
 -----------------------
 ID: L011

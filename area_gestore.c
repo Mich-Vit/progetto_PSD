@@ -209,6 +209,100 @@ void rimuovi_cliente(hashtable h)
     rename("temp.txt", "clienti.txt");
 }
 
+list rimuovi_lezione(list l)
+{
+    printf("==============================================\n");
+    printf("\t      RIMUOVI UNA LEZIONE\n");
+    printf("==============================================\n");
+
+    if (emptyList(l))
+    {
+        printf("Nessuna lista per le lezioni trovata.\n");
+        return l;
+    }
+
+    char id[20];
+
+    printf("Inserisci l'ID della lezione da rimuovere: ");
+    fgets(id, sizeof(id), stdin);
+    id[strcspn(id, "\n")] = '\0';
+
+    list app = newList();
+    Lezione x;
+    int trovata = 0;
+
+    while(!emptyList(l))
+    {
+        x = getFirst(l);
+        if (strcmp(get_id_lezione(x), id) == 0)
+        {
+            libera_lezione(x);
+            trovata = 1;
+        }
+        else
+        {
+            app = consList(x, app);
+        }
+        l = tailList(l);
+    }
+
+    if (!trovata)
+    {
+        printf("Lezione con ID %s non trovata.\n", id);
+        return app;
+    }
+
+    l = reverseList(app); // Ripristina l'ordine
+    printf("Lezione rimossa!\n");
+
+    FILE *file = fopen("lezioni.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    if (file == NULL || temp == NULL)
+    {
+        printf("Errore nell'apertura dei file.\n");
+        if (file) fclose(file);
+        if (temp) fclose(temp);
+        return l;
+    }
+
+    char riga[256];
+    int saltare = 0;
+
+    while (fgets(riga, sizeof(riga), file))
+    {
+        if (strncmp(riga, "ID:", 3) == 0)
+        {
+            char id_letto[20];
+            sscanf(riga, "ID: %s", id_letto);
+
+            if (strcmp(id_letto, id) == 0)
+            {
+                saltare = 1;
+                continue;  // salta la riga dell'ID
+            }
+            else
+            {
+                saltare = 0;
+            }
+        }
+
+        if (saltare)
+        {
+            continue;  // salta le righe del cliente da eliminare
+        }
+
+        fputs(riga, temp);
+    }
+
+    fclose(file);
+    fclose(temp);
+
+    remove("lezioni.txt");
+    rename("temp.txt", "lezioni.txt");
+    return l;
+}
+
 void ricerca_cliente(hashtable h)
 {
     printf("==============================================\n");
@@ -310,7 +404,7 @@ void menu_gestore(hashtable h, list l)
                 break;
             case 6:
                 pulisci_schermo();
-                // rimuovi_lezione(l);
+                l = rimuovi_lezione(l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;

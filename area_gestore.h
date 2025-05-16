@@ -14,6 +14,8 @@ list inserisci_lezione(list l);
 
 void rimuovi_cliente(hashtable h);
 
+list rimuovi_lezione(list l);
+
 void ricerca_cliente(hashtable h);
 
 void menu_gestore(hashtable h, list l);
