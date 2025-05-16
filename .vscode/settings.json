@@ -4,6 +4,7 @@
         "area_clienti.h": "c",
         "lista_lezioni.h": "c",
         "cliente.h": "c",
-        "orario.h": "c"
+        "orario.h": "c",
+        "list": "c"
     }
 }

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include"lista_lezioni.h"
 #include <stdlib.h>
+#include "lezione.h"
 
 struct node
 {
@@ -113,3 +114,93 @@ void outputList(list l)
         i++;
     }
 }
+
+list removeList(list l, int pos)
+{
+    int i = 0;
+    list app = newList();
+    list l2 = newList();
+    Lezione x;
+
+    if (emptyList(l))
+    {
+        return l;  // Se la lista è vuota, restituisci la lista vuota
+    }
+
+    while (!emptyList(l) && pos > i)
+    {
+        x = getFirst(l);
+        app = consList(x, app);
+        l = tailList(l);
+        i++;
+    }
+
+    if (pos == i)
+    {
+        l2 = tailList(l);  // Prendi la parte successiva alla posizione da rimuovere
+        while (!emptyList(app))
+        {
+            x = getFirst(app);
+            l2 = consList(x, l2);  // Aggiungi i nodi precedenti alla lista successiva
+            app = tailList(app);
+        }
+    }
+
+    return l2;  // Restituisci la lista modificata
+}
+
+list copiaLista(list l)
+{
+    list copia = newList();
+    list temp = newList();
+
+    // Copia l'originale in una lista temporanea (per mantenere ordine)
+    while (!emptyList(l))
+    {
+        Lezione lezione = getFirst(l);
+        temp = consList(lezione, temp);
+        l = tailList(l);
+    }
+
+    // Inverti la temporanea per ottenere l'ordine originale
+    while (!emptyList(temp))
+    {
+        Lezione lezione = getFirst(temp);
+        copia = consList(lezione, copia);
+        temp = tailList(temp);
+    }
+
+    return copia;
+}
+
+list ordina_Lista(list l)
+{
+    list copia = copiaLista(l); // Per non modificare l'originale
+    list l_ord = newList();
+
+    while (!emptyList(copia))
+    {
+        list tmp = copia;
+        Lezione min = getFirst(copia);
+        int pos = 0, i = 0;
+
+        // Trova la lezione più imminente
+        while (!emptyList(tmp))
+        {
+            Lezione curr = getFirst(tmp);
+            if (confronta_lezioni(curr, min) < 0)
+            {
+                min = curr;
+                pos = i;
+            }
+            tmp = tailList(tmp);
+            i++;
+        }
+
+        l_ord = consList(min, l_ord);      // Aggiungi a lista ordinata
+        copia = removeList(copia, pos);    // Rimuovi dalla copia
+    }
+
+    return reverseList(l_ord); // Riporta in ordine crescente
+}
+

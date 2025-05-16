@@ -282,7 +282,7 @@ void menu_gestore(hashtable h, list l)
                 break;
             case 4:
                 pulisci_schermo();
-                outputList(l);
+                outputList(ordina_Lista(l));
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;

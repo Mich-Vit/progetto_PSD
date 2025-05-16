@@ -19,6 +19,8 @@ void libera_lezione(Lezione l); //dealloca una lezione dalla memoria quando non 
 
 void visualizza_lezione(Lezione l);
 
+int confronta_lezioni(Lezione l1, Lezione l2);
+
 int prenota_lezione(Lezione l, Cliente c); //ritorna 1 se e' stata prenotata, 0 altrimenti
 
 char* get_id_lezione(Lezione l);

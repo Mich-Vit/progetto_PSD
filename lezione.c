@@ -99,14 +99,10 @@ void libera_lezione(Lezione l)
 {
     if (l != NULL) 
     {
-        // Libera la memoria per l'ID
-        free(l->id); // Libera la memoria allocata per l'ID
-
-        // Libera la memoria per la data
-        libera_data(l->data);  // Funzione che libera la memoria allocata per la data
-
-        // Libera la memoria per la lezione
-        free(l);
+        free(l->id);               // libera l'ID (se mallocato)
+        libera_data(l->data);      // libera la data
+        libera_orario(l->ora_lezione);  // libera l'orario
+        free(l);                   // libera la struttura Lezione
     }
 }
 
@@ -135,6 +131,16 @@ void visualizza_lezione(Lezione l)
     {
         printf("Lezione al completo.\n");
     }
+}
+
+int confronta_lezioni(Lezione l1, Lezione l2)
+{
+    int cmp_data = confronta_date(l1->data, l2->data);
+    if (cmp_data != 0) //non sono uguali le date
+        return cmp_data;
+
+    //se le date sono uguali confronta l'orario
+    return confronta_orario(l1->ora_lezione, l2->ora_lezione);
 }
 
 int prenota_lezione(Lezione l, Cliente c)
