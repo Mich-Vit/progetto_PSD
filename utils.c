@@ -9,8 +9,9 @@
 #include "cliente.h"
 #include "lezione.h"
 #include "lista_lezioni.h"
+#include "orario.h"
 
-// Funzione per caricare il contatore da un file
+// Funzioni per ID lezione e ID cliente
 int carica_contatore_clienti()
 {
     FILE* file = fopen("clienti.txt", "r");
@@ -117,8 +118,11 @@ list carica_lezioni_da_file(list l)
     }
 
     char buffer[256];
-    char id[20], nome[50], orario[6];
-    int giorno, mese, anno, posti_max, posti_occupati;
+    char id[20], nome[50];
+    char orario_str[10];
+    int ore, minuti;
+    int giorno, mese, anno;
+    int posti_max, posti_occupati;
 
     while (1)
     {
@@ -128,7 +132,7 @@ list carica_lezioni_da_file(list l)
         if (sscanf(buffer, "ID: %s", id) != 1)
             break;
 
-        // Leggi Nome
+        // Leggi Nome (anche con spazi)
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
         if (sscanf(buffer, "Nome: %[^\n]", nome) != 1)
@@ -140,39 +144,48 @@ list carica_lezioni_da_file(list l)
         if (sscanf(buffer, "Data: %d/%d/%d", &giorno, &mese, &anno) != 3)
             break;
 
-        // Leggi Orario
+        // Leggi Orario (stringa)
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
-        if (sscanf(buffer, "Orario: %s", orario) != 1)
+        if (sscanf(buffer, "Orario: %s", orario_str) != 1)
             break;
 
-        // Leggi Posti massimi
+        // Leggi posti massimi
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
         if (sscanf(buffer, "Posti massimi: %d", &posti_max) != 1)
             break;
 
-        // Leggi Posti occupati
+        // Leggi posti occupati
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
         if (sscanf(buffer, "Posti occupati: %d", &posti_occupati) != 1)
             break;
 
-        // Leggi linea separatrice
+        // Leggi la linea separatrice
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
 
+        // Converto orario da stringa HH:MM a interi ore e minuti
+        if (sscanf(orario_str, "%d:%d", &ore, &minuti) != 2)
+        {
+            printf("Formato orario non valido per ID %s\n", id);
+            continue;
+        }
+
         Data data = crea_data(giorno, mese, anno);
-        Lezione lez = crea_lezione(id, nome, data, orario, posti_max);
+        Orario ora_lez = crea_orario(ore, minuti);
+
+        Lezione lez = crea_lezione(id, nome, data, ora_lez, posti_max);
         set_posti_occupati(lez, posti_occupati);
 
-        l = consList(lez, l);  // inserisce in testa
+        l = consList(lez, l); 
     }
 
     fclose(fp);
-
     return l;
 }
+
 
 
 

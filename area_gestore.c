@@ -10,6 +10,7 @@
 #include "data.h"
 #include "utils.h"
 #include "lezione.h"
+#include "orario.h"
 
 void inserisci_cliente(hashtable h)
 {
@@ -62,23 +63,43 @@ void inserisci_cliente(hashtable h)
 list inserisci_lezione(list l)
 {
     char nome[50];
-    char orario[6];
     int posti_max;
     Data data;
+    Orario orario = NULL;
+    int ore, min;
 
-    // Input dati lezione
+    // Input nome lezione
     printf("Inserisci il nome della lezione: ");
     fgets(nome, sizeof(nome), stdin);
-    nome[strcspn(nome, "\n")] = '\0';
+    nome[strcspn(nome, "\n")] = '\0';  // rimuove newline
 
-    printf("Inserisci l'orario della lezione: ");
-    fgets(orario, sizeof(orario), stdin);
-    orario[strcspn(orario, "\n")] = '\0';
+    // Input orario con controllo formato e valori
+    do {
+        printf("Inserisci l'orario della lezione (HH:MM): ");
+        if (scanf("%d:%d", &ore, &min) != 2)
+        {
+            printf("Formato orario non valido. Riprova.\n");
+            while(getchar() != '\n'); // pulisce buffer
+            continue;
+        }
+        while(getchar() != '\n'); // pulisce buffer
+
+        orario = crea_orario(ore, min);
+        if (orario == NULL)
+        {
+            printf("Orario non valido. Riprova.\n");
+        }
+    } while (orario == NULL);
 
     do
     {
         printf("Inserisci il numero massimo di posti: ");
-        scanf("%d", &posti_max);
+        if (scanf("%d", &posti_max) != 1)
+        {
+            printf("Input non valido. Riprova.\n");
+            while(getchar() != '\n'); // pulisce buffer
+            continue;
+        }
         while (getchar() != '\n');  // Pulisce il buffer
 
         if (posti_max <= 0)
@@ -87,28 +108,22 @@ list inserisci_lezione(list l)
         }
     } while (posti_max <= 0);
 
-    data = copia_data(leggi_data()); 
+    data = copia_data(leggi_data());
 
-    // Genera ID per la lezione
-    char* id = genera_id_lezione();  // Da implementare
+    char* id = genera_id_lezione();
 
-    // Crea la nuova lezione
     Lezione nuova_lezione = crea_lezione(id, nome, data, orario, posti_max);
 
-    // Inserisci nella lista
     l = consList(nuova_lezione, l);
 
-    // Salva su file
     salva_lezione_file(nuova_lezione);
 
     printf("Lezione inserita con successo!\n");
 
-    // Libera memoria dell'ID se la copia è fatta internamente
     free(id);
 
     return l;
 }
-
 
 void rimuovi_cliente(hashtable h)
 {

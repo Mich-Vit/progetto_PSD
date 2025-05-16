@@ -26,3 +26,10 @@ Orario: 18:00
 Posti massimi: 15
 Posti occupati: 0
 -----------------------
+ID: L007
+Nome: Pilates
+Data: 12/06/2025
+Orario: 14:00
+Posti massimi: 30
+Posti occupati: 0
+-----------------------

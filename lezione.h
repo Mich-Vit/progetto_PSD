@@ -5,12 +5,13 @@
 
 #include"cliente.h"
 #include"data.h"
+#include "orario.h"
 
 typedef struct lezione *Lezione;
 
 char* genera_id_lezione();
 
-Lezione crea_lezione(const char* id, const char* nome, Data dat, const char* orario, int posti_max);
+Lezione crea_lezione(const char* id, const char* nome, Data dat, Orario orario, int posti_max);
 
 void salva_lezione_file(Lezione l);
 

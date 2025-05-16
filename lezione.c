@@ -7,13 +7,14 @@
 #include"data.h"
 #include"lezione.h"
 #include "utils.h"
+#include "orario.h"
 
 struct lezione
 {
     char* id;                   // ID lezione (ora è una stringa dinamica)
     char nome[50];              // es. "Zumba", "Pilates"
     Data data;                  // La data della lezione (giorno, mese, anno)
-    char orario[6];             // es. "18:30"
+    Orario ora_lezione;            // es. "18:30"
     int posti_max;              // capacità totale
     int posti_occupati;         // quanti sono già prenotati
 };
@@ -42,8 +43,7 @@ char* genera_id_lezione()
     return id;
 }
 
-
-Lezione crea_lezione(const char* id, const char* nome, Data dat, const char* orario, int posti_max)
+Lezione crea_lezione(const char* id, const char* nome, Data dat, Orario orario, int posti_max)
 {
     Lezione nuova_lezione = malloc(sizeof(struct lezione));
     if (nuova_lezione == NULL) 
@@ -53,20 +53,20 @@ Lezione crea_lezione(const char* id, const char* nome, Data dat, const char* ora
     }
 
     // Allocazione dinamica per ID
-    nuova_lezione->id = malloc(strlen(id) + 1);  // +1 per il terminatore '\0'
+    nuova_lezione->id = malloc(strlen(id) + 1);
     if (nuova_lezione->id == NULL)
     {
         printf("Errore di allocazione memoria per l'ID della lezione.\n");
-        free(nuova_lezione); // Dealloca la memoria già allocata per la lezione
-        exit(1); // Esci con errore
+        free(nuova_lezione);
+        exit(1);
     }
-    strcpy(nuova_lezione->id, id);  // Copia l'ID nella memoria allocata
+    strcpy(nuova_lezione->id, id);
 
     strcpy(nuova_lezione->nome, nome);
-    nuova_lezione->data = copia_data(dat);  // Imposta la data della lezione
-    strcpy(nuova_lezione->orario, orario);
+    nuova_lezione->data = copia_data(dat);
+    nuova_lezione->ora_lezione = copia_orario(orario);
     nuova_lezione->posti_max = posti_max;
-    nuova_lezione->posti_occupati = 0; // inizialmente nessun posto prenotato
+    nuova_lezione->posti_occupati = 0;
 
     return nuova_lezione;
 }
@@ -84,7 +84,9 @@ void salva_lezione_file(Lezione l)
     fprintf(fp, "Nome: %s\n", l->nome);
     fprintf(fp, "Data: %02d/%02d/%04d\n",
             get_giorno(l->data), get_mese(l->data), get_anno(l->data));
-    fprintf(fp, "Orario: %s\n", l->orario);
+
+    fprintf(fp, "Orario: %02d:%02d\n", get_ora(l->ora_lezione), get_minuti(l->ora_lezione));
+
     fprintf(fp, "Posti massimi: %d\n", l->posti_max);
     fprintf(fp, "Posti occupati: %d\n", l->posti_occupati);
     fprintf(fp, "-----------------------\n");
@@ -117,12 +119,13 @@ void visualizza_lezione(Lezione l)
     }
 
     printf("===================================\n");
-    printf("ID Lezione: %s\n", l->id);  // Stampa l'ID come stringa
+    printf("ID Lezione: %s\n", l->id);
     printf("Nome: %s\n", l->nome);
     printf("Data: ");
-    visualizza_data(l->data);  // Stampa la data della lezione
-    printf("Orario: %s\n", l->orario);
-    printf("Posti occupati: %d/%d\n", l->posti_occupati, l->posti_max);
+    visualizza_data(l->data);
+    printf("Orario: ");
+    stampa_orario(l->ora_lezione);
+    printf("\nPosti occupati: %d/%d\n", l->posti_occupati, l->posti_max);
 
     if (l->posti_occupati < l->posti_max)
     {
@@ -133,9 +136,6 @@ void visualizza_lezione(Lezione l)
         printf("Lezione al completo.\n");
     }
 }
-
-
-
 
 int prenota_lezione(Lezione l, Cliente c)
 {

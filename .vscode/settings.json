@@ -2,6 +2,8 @@
     "files.associations": {
         "stdio.h": "c",
         "area_clienti.h": "c",
-        "lista_lezioni.h": "c"
+        "lista_lezioni.h": "c",
+        "cliente.h": "c",
+        "orario.h": "c"
     }
 }
