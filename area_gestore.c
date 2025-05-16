@@ -18,6 +18,10 @@ void inserisci_cliente(hashtable h)
     int durata;
     Data data_iscrizione;
 
+    printf("==============================================\n");
+    printf("\tINSERISCI UN CLIENTE\n");
+    printf("==============================================\n");
+
     printf("Inserisci il nome del cliente: ");
     fgets(nome, sizeof(nome), stdin);
     nome[strcspn(nome, "\n")] = '\0';
@@ -67,6 +71,10 @@ list inserisci_lezione(list l)
     Data data;
     Orario orario = NULL;
     int ore, min;
+
+    printf("==============================================\n");
+    printf("\tINSERISCI UNA LEZIONE\n");
+    printf("==============================================\n");
 
     // Input nome lezione
     printf("Inserisci il nome della lezione: ");
@@ -127,9 +135,9 @@ list inserisci_lezione(list l)
 
 void rimuovi_cliente(hashtable h)
 {
-    printf("===================================\n");
-    printf("         Rimuovi un cliente\n");
-    printf("===================================\n");
+    printf("==============================================\n");
+    printf("\t      RIMUOVI UN CLIENTE\n");
+    printf("==============================================\n");
 
     if (h == NULL)
     {
@@ -153,7 +161,7 @@ void rimuovi_cliente(hashtable h)
 
     distruggi_cliente(rem);  // libera la memoria solo se rem non è NULL
 
-    printf("Cliente rimosso dalla tabella hash.\n");
+    printf("Cliente rimosso!\n");
 
     FILE *file = fopen("clienti.txt", "r");
     FILE *temp = fopen("temp.txt", "w");
@@ -203,9 +211,9 @@ void rimuovi_cliente(hashtable h)
 
 void ricerca_cliente(hashtable h)
 {
-    printf("===================================\n");
-    printf("         Ricerca un cliente\n");
-    printf("===================================\n");
+    printf("==============================================\n");
+    printf("\t      RICERCA UN CLIENTI\n");
+    printf("==============================================\n");
 
     if (h == NULL)
     {
@@ -229,7 +237,7 @@ void ricerca_cliente(hashtable h)
 
     if (ricercato == NULL)
     {
-        printf("Cliente con ID %s non trovato nella tabella hash.\n", id);
+        printf("Cliente con ID %s non trovato.\n", id);
         return;
     }
 
@@ -245,7 +253,9 @@ void menu_gestore(hashtable h, list l)
     do
     {
         pulisci_schermo();
-        printf("====== AREA GESTORE ======\n");
+        printf("==============================================\n");
+        printf("\tBENVENUTO NELLA AREA GESTORE!\n");
+        printf("==============================================\n");
         printf("1) Inserisci un nuovo cliente\n");
         printf("2) Inserisci una nuova lezione\n");
         printf("3) Visualizza la lista dei clienti\n");
@@ -255,7 +265,7 @@ void menu_gestore(hashtable h, list l)
         printf("7) Ricerca un cliente\n");
         printf("8) Visualizza il report mensile\n");
         printf("0) Esci\n");
-        printf("==========================\n");
+        printf("==============================================\n");
         printf("Scegli un'opzione: ");
         scanf("%d", &scelta);
         while (getchar() != '\n'); // pulizia buffer
@@ -288,9 +298,9 @@ void menu_gestore(hashtable h, list l)
                 break;
             case 5:
                 pulisci_schermo();
-                printf("===================================\n");
-                printf("         Lista dei clienti\n");
-                printf("===================================\n");
+                printf("==============================================\n");
+                printf("\t      LISTA DEI CLIENTI\n");
+                printf("==============================================\n");
 
                 stampaMinimaHash(h);
                 printf("\n");

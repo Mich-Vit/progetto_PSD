@@ -54,3 +54,10 @@ Orario: 15:20
 Posti massimi: 10
 Posti occupati: 0
 -----------------------
+ID: L011
+Nome: Power-Lifting
+Data: 18/12/2025
+Orario: 18:00
+Posti massimi: 40
+Posti occupati: 0
+-----------------------

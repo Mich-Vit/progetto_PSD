@@ -19,9 +19,9 @@ int main(void)
     do
     {
         pulisci_schermo();
-        printf("===================================\n");
-        printf("BENVENUTO NELLA TUA PALESTRA !\n");
-        printf("===================================\n");
+        printf("==============================================\n");
+        printf("\tBENVENUTO NELLA TUA PALESTRA !\n");
+        printf("==============================================\n");
         printf("1) Per il gestore della palestra\n");
         printf("2) Per l'area cliente\n");
         printf("0) Per uscire\n");
@@ -41,11 +41,14 @@ int main(void)
             case 2:
             {
                 pulisci_schermo();
-                printf("Hai scelto l'area cliente.\n");
+                printf("==============================================\n");
+                printf("\tBENVENUTO NELLA TUA AREA !\n");
+                printf("==============================================\n");
                 Cliente cliente = login_cliente(h);
 
                 if (cliente != NULL)
                 {
+                    pulisci_schermo();
                     menu_cliente(cliente, h, l);
                 }
                 break;
@@ -59,6 +62,6 @@ int main(void)
                 printf("Scelta non valida. Riprova.\n");
         }
     } while (sc != 0);
-    
+
     return 0;
 }

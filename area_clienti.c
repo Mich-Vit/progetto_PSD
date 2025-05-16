@@ -20,13 +20,11 @@ Cliente login_cliente(hashtable h)
 
     Cliente c = hashSearch(h, id);
 
-    if (c != NULL)
-    {
-        printf("Benvenuto, %s %s!\n", get_nome_cliente(c), get_cognome_cliente(c));
-    }
-    else
+    if (c == NULL)
     {
         printf("Cliente non trovato. Verifica l'ID inserito.\n");
+        printf("\nPremi INVIO per tornare al menu...");
+        while (getchar() != '\n');
     }
 
     return c;
@@ -75,13 +73,15 @@ void menu_cliente(Cliente c, hashtable h, list l)
     int scelta;
     do 
     {
-        printf("\n====== AREA CLIENTI ======\n");
+        printf("==============================================\n");
+        printf("\tBenvenuto, %s %s!\n", get_nome_cliente(c), get_cognome_cliente(c));
+        printf("==============================================\n");
         printf("1) Visualizza informazioni sull'abbonamento\n");
         printf("2) Rinnova abbonamento\n");
         printf("3) Prenota una lezione\n");
         printf("4) Visualizza lezioni disponibili\n");
         printf("0) Esci\n");
-        printf("=========================\n");
+        printf("==============================================\n");
         printf("Scegli un'opzione: ");
         scanf("%d", &scelta);
         // Pulisce il buffer dopo scanf
