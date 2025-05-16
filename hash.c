@@ -251,6 +251,19 @@ void stampaHash(hashtable h)
     }
 }
 
+void stampaMinimaHash(hashtable h)
+{
+    for (int i = 0; i < h->size; i++)
+    {
+        Cliente curr = h->table[i];
+        while (curr != NULL)
+        {
+            visualizza_essenziale_cliente(curr);
+            curr = get_next_cliente(curr);
+        }
+    }
+}
+
 
 // === Getter ===
 int get_size_hash(hashtable h)

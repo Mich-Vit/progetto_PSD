@@ -16,6 +16,7 @@ void salva_cliente_file(Cliente c);
 // Visualizzazione
 void visualizza_cliente(Cliente c);
 void visualizza_abbonamento_cliente(Cliente c);
+void visualizza_essenziale_cliente(Cliente c);
 
 // Confronto
 int confronta_clienti(Cliente c1, Cliente c2);

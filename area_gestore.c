@@ -288,6 +288,12 @@ void menu_gestore(hashtable h, list l)
                 break;
             case 5:
                 pulisci_schermo();
+                printf("===================================\n");
+                printf("         Lista dei clienti\n");
+                printf("===================================\n");
+
+                stampaMinimaHash(h);
+                printf("\n");
                 rimuovi_cliente(h);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');

@@ -115,6 +115,11 @@ void visualizza_cliente(Cliente c)
     visualizza_abbonamento_cliente(c);
 }
 
+void visualizza_essenziale_cliente(Cliente c)
+{
+    printf("%-8s %-15s %-15s\n",c->id, c->cognome, c->nome);
+}
+
 int confronta_clienti(Cliente c1, Cliente c2)
 {
     if (c1 == NULL || c2 == NULL)

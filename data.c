@@ -79,37 +79,61 @@ int confronta_date(Data d1, Data d2)// -1 se d1 < d2, 0 se d1 == d2, 1 se d1 > d
     return 0;
 }
 
+int data_valida(int giorno, int mese, int anno)
+{
+    if (anno < 1900 || mese < 1 || mese > 12 || giorno < 1)
+        return 0;
+
+    int giorni_per_mese[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    // Anno bisestile
+    if ((anno % 4 == 0 && anno % 100 != 0) || (anno % 400 == 0))
+        giorni_per_mese[1] = 29; //febbraio avra' 29 giorni
+
+    //Controlla che il giorno non superi il numero massimo di giorni per quel mese.
+    if (giorno > giorni_per_mese[mese - 1])
+        return 0;
+
+    return 1;
+}
+
 Data leggi_data()
 {
     int giorno, mese, anno;
 
     while (1)
     {
-        printf("Inserisci la data (GG MM AAAA): ");
-        if (scanf("%d %d %d", &giorno, &mese, &anno) != 3)
+        printf("Inserisci la data (GG/MM/AAAA): ");
+        if (scanf("%d/%d/%d", &giorno, &mese, &anno) != 3)
         {
             printf("Input non valido. Riprova.\n");
-            while (getchar() != '\n'); // Pulisce il buffer
+            while (getchar() != '\n');
             continue;
         }
 
-        while (getchar() != '\n'); // Pulisce il buffer dopo scanf
+        while (getchar() != '\n');
 
-        Data inserita = crea_data(giorno, mese, anno);  // Funzione che alloca dinamicamente una data
+        if (!data_valida(giorno, mese, anno))
+        {
+            printf("Data non valida. Verifica il giorno, mese e anno.\n");
+            continue;
+        }
+
+        Data inserita = crea_data(giorno, mese, anno);
 
         if (inserita == NULL)
         {
-            printf("Data non valida. Riprova.\n");
+            printf("Errore nella creazione della data.\n");
             continue;
         }
 
-        if (confronta_date(inserita, data_oggi()) < 0)
+        if (confronta_date(inserita, data_oggi()) <= 0)
         {
-            printf("Errore: la data non può essere precedente a oggi.\n");
+            printf("Errore: la data non può essere precedente o uguale ad oggi.\n");
             libera_data(inserita);
             continue;
         }
-        
+
         return inserita;
     }
 }

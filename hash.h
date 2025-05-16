@@ -18,6 +18,7 @@ Cliente hashDelete(hashtable h, char *id);
 void destroyHashtable(hashtable h); 
 
 void stampaHash(hashtable h);
+void stampaMinimaHash(hashtable h);
 
 // Funzioni di accesso (getter)
 int get_size_hash(hashtable h);

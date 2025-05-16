@@ -33,3 +33,24 @@ Orario: 14:00
 Posti massimi: 30
 Posti occupati: 0
 -----------------------
+ID: L008
+Nome: Danza Classica
+Data: 60/05/2025
+Orario: 16:00
+Posti massimi: 20
+Posti occupati: 0
+-----------------------
+ID: L009
+Nome: Zumba
+Data: 17/03/2026
+Orario: 19:00
+Posti massimi: 12
+Posti occupati: 0
+-----------------------
+ID: L010
+Nome: Box
+Data: 29/02/2028
+Orario: 15:20
+Posti massimi: 10
+Posti occupati: 0
+-----------------------

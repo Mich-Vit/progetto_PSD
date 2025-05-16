@@ -13,7 +13,7 @@ int main(void)
     int sc;
     hashtable h = newHashtable(20);  
     carica_clienti_da_file(h);
-    list l = newList();      // crea la lista di lezioni vuota
+    list l = newList();
     l = carica_lezioni_da_file(l);
 
     do
@@ -59,9 +59,6 @@ int main(void)
                 printf("Scelta non valida. Riprova.\n");
         }
     } while (sc != 0);
-
-
-
-
+    
     return 0;
 }
