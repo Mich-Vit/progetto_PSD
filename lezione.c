@@ -19,30 +19,6 @@ struct lezione
     int posti_occupati;         // quanti sono già prenotati
 };
 
-char* genera_id_lezione()
-{
-    static int counter = -1;  // Mantiene il contatore tra le chiamate
-
-    if (counter == -1)
-    {
-        counter = carica_contatore_lezioni();  // Carica il contatore massimo dal file lezioni.txt
-    }
-
-    counter++;  // Genera un nuovo ID incrementale
-
-    char* id = malloc(10 * sizeof(char)); 
-    if (id == NULL)
-    {
-        printf("Errore di allocazione memoria per l'ID della lezione.\n");
-        exit(1);
-    }
-
-    // Genera l'ID nel formato L001, L002, ...
-    sprintf(id, "L%03d", counter);  
-
-    return id;
-}
-
 Lezione crea_lezione(const char* id, const char* nome, Data dat, Orario orario, int posti_max)
 {
     Lezione nuova_lezione = malloc(sizeof(struct lezione));

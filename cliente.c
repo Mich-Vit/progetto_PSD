@@ -20,31 +20,6 @@ struct cliente
     struct cliente *next;
 };
 
-char* genera_id_cliente()
-{
-    static int counter = -1;  // Variabile statica per mantenere il contatore tra chiamate
-
-    if (counter == -1)
-    {
-        counter = carica_contatore_clienti();  // Ora carica l'ID massimo già presente nel file clienti.txt
-    }
-
-    counter++;  // Incrementa per creare il nuovo ID
-
-    char* id = malloc(10 * sizeof(char)); 
-    if (id == NULL)
-    {
-        printf("Errore di allocazione memoria per l'ID.\n");
-        exit(1);
-    }
-
-    // Genera l'ID nel formato C001, C002, ecc.
-    sprintf(id, "C%03d", counter);  
-
-    return id;
-}
-
-
 Cliente crea_cliente(char* id, char* nome, char* cognome, int durata, Data data_is)
 {
     Cliente c = malloc(sizeof(struct cliente));

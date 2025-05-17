@@ -9,9 +9,9 @@
 #include "lista_lezioni.h"
 
 // Dichiarazione delle funzioni per la gestione del contatore di id
-int carica_contatore_clienti();
 
-int carica_contatore_lezioni();
+char* genera_id_generico(const char* prefix_letter, const char* filename);
+int carica_contatore_generico(const char* filename, const char* prefix);
 
 void carica_clienti_da_file(hashtable h);
 

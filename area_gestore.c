@@ -60,7 +60,7 @@ void inserisci_cliente(hashtable h)
     data_iscrizione = data_oggi();
 
     // Genera automaticamente l'ID
-    char* id = genera_id_cliente();
+    char* id = genera_id_generico("C", "clienti.txt");
 
     // Creazione del cliente
     Cliente nuovo_cliente = crea_cliente(id, nome, cognome, durata, data_iscrizione);
@@ -135,7 +135,7 @@ list inserisci_lezione(list l)
 
     data = copia_data(leggi_data());
 
-    char* id = genera_id_lezione();
+    char* id = genera_id_generico("L", "lezioni.txt");
 
     Lezione nuova_lezione = crea_lezione(id, nome, data, orario, posti_max);
 

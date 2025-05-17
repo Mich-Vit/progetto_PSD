@@ -11,25 +11,24 @@
 #include "lista_lezioni.h"
 #include "orario.h"
 
-// Funzioni per ID lezione e ID cliente
-int carica_contatore_clienti()
+int carica_contatore_generico(const char* filename, const char* prefix)
 {
-    FILE* file = fopen("clienti.txt", "r");
+    FILE* file = fopen(filename, "r");
     int max_id = 0;
 
     if (file == NULL)
     {
-        printf("File 'clienti.txt' non trovato. Inizializzo il contatore a 0.\n");
+        printf("File '%s' non trovato. Inizializzo il contatore a 0.\n", filename);
         return 0;
     }
 
     char line[256];
+    int prefix_len = strlen(prefix);
     while (fgets(line, sizeof(line), file))
     {
-        if (strncmp(line, "ID: C", 5) == 0)
+        if (strncmp(line, prefix, prefix_len) == 0)
         {
-            // Estrai il numero dopo "ID: C"
-            int current_id = atoi(line + 5); // Es: "C007" -> 7
+            int current_id = atoi(line + prefix_len);
             if (current_id > max_id)
                 max_id = current_id;
         }
@@ -39,32 +38,43 @@ int carica_contatore_clienti()
     return max_id;
 }
 
-int carica_contatore_lezioni()
+char* genera_id_generico(const char* prefix_letter, const char* filename)
 {
-    FILE* file = fopen("lezioni.txt", "r");
-    int max_id = 0;
+    static int contatore_clienti = -1;
+    static int contatore_lezioni = -1;
+    static int contatore_prenotazioni = -1;
+    int* counter = NULL;
 
-    if (file == NULL)
+    if (strcmp(prefix_letter, "C") == 0)
+        counter = &contatore_clienti;
+    else if (strcmp(prefix_letter, "L") == 0)
+        counter = &contatore_lezioni;
+    else if (strcmp(prefix_letter, "P") == 0)
+        counter = &contatore_prenotazioni;
+    else
     {
-        printf("File 'lezioni.txt' non trovato. Inizializzo il contatore a 0.\n");
-        return 0;
+        printf("Prefisso non riconosciuto.\n");
+        exit(1);
     }
 
-    char line[256];
-    while (fgets(line, sizeof(line), file))
+    char prefix[10];
+    sprintf(prefix, "ID: %s", prefix_letter);
+
+    if (*counter == -1)
+        *counter = carica_contatore_generico(filename, prefix);
+
+    (*counter)++;
+
+    char* id = malloc(10 * sizeof(char));
+    if (id == NULL)
     {
-        if (strncmp(line, "ID: L", 5) == 0)
-        {
-            int current_id = atoi(line + 5);  // Es: "L007" -> 7
-            if (current_id > max_id)
-                max_id = current_id;
-        }
+        printf("Errore di allocazione memoria per l'ID.\n");
+        exit(1);
     }
 
-    fclose(file);
-    return max_id;
+    sprintf(id, "%s%03d", prefix_letter, *counter);
+    return id;
 }
-
 
 void carica_clienti_da_file(hashtable h)
 {

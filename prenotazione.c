@@ -10,11 +10,11 @@
 
 struct prenotazione
 {
+    char *id_prenotazione;
     char *id_cliente;   
     char *id_lezione;   
     Data data_prenotazione;
 };
-
 
 Prenotazione crea_prenotazione(Cliente c, Lezione l, Data data_prenotazione) 
 {
