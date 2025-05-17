@@ -24,6 +24,7 @@ list reverseList(list l); //restituisce la lista invertia
 list removeList(list l, int pos);
 
 void outputList(list l); //stampa tutti i nodi della lista
+void stampaMinimaList(list l);
 
 list ordina_Lista(list l);
 

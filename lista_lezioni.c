@@ -98,23 +98,6 @@ list reverseList(list l)
     return rev;
 }
 
-void outputList(list l)
-{
-    int i = 0;
-    Lezione le;
-
-    printf("===================================\n");
-    printf("         Elenco Lezioni\n");
-
-    while (!emptyList(l))
-    {
-        le = getFirst(l); 
-        visualizza_lezione(le);
-        l = tailList(l);
-        i++;
-    }
-}
-
 list removeList(list l, int pos)
 {
     int i = 0;
@@ -203,4 +186,34 @@ list ordina_Lista(list l)
 
     return reverseList(l_ord); // Riporta in ordine crescente
 }
+
+void outputList(list l)
+{
+    Lezione le;
+    l = ordina_Lista(l);
+
+    printf("===================================\n");
+    printf("         Elenco Lezioni\n");
+
+    while (!emptyList(l))
+    {
+        le = getFirst(l); 
+        visualizza_lezione(le);
+        l = tailList(l);
+    }
+}
+
+void stampaMinimaList(list l)
+{
+    Lezione le;
+    l = ordina_Lista(l);
+
+    while (!emptyList(l))
+    {
+        le = getFirst(l); 
+        visualizza_essenziale_lezione(le);
+        l = tailList(l);
+    }
+}
+
 

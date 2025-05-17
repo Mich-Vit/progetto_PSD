@@ -1,23 +1,9 @@
-ID: C004
-Nome: Tony
-Cognome: Boy
-Durata abbonamento: 10
-Data d'iscrizione: 14/05/2025
-Data scadenza: 14/03/2026
------------------------
-ID: C001
+ID: C012
 Nome: Michele
 Cognome: Vitiello
-Durata abbonamento: 6
-Data d'iscrizione: 13/05/2025
-Data scadenza: 13/05/2026
------------------------
-ID: C005
-Nome: Ezio 
-Cognome: Auditore
-Durata abbonamento: 12
-Data d'iscrizione: 14/05/2025
-Data scadenza: 14/05/2026
+Durata abbonamento: 9
+Data d'iscrizione: 17/05/2025
+Data scadenza: 17/02/2026
 -----------------------
 ID: C011
 Nome: Michael
@@ -25,4 +11,18 @@ Cognome: Scoffield
 Durata abbonamento: 24
 Data d'iscrizione: 14/05/2025
 Data scadenza: 14/05/2027
+-----------------------
+ID: C005
+Nome: Ezio
+Cognome: Auditore
+Durata abbonamento: 12
+Data d'iscrizione: 14/05/2025
+Data scadenza: 14/05/2026
+-----------------------
+ID: C004
+Nome: Tony
+Cognome: Boy
+Durata abbonamento: 10
+Data d'iscrizione: 14/05/2025
+Data scadenza: 14/03/2026
 -----------------------

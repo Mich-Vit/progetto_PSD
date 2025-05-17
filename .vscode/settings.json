@@ -5,6 +5,7 @@
         "lista_lezioni.h": "c",
         "cliente.h": "c",
         "orario.h": "c",
-        "list": "c"
+        "list": "c",
+        "hash.h": "c"
     }
 }

@@ -59,7 +59,10 @@ int main(void)
                 break;
             }
             default:
-                printf("Scelta non valida. Riprova.\n");
+                printf("Opzione non valida. Riprova.\n");
+                printf("\nPremi INVIO...");
+                while (getchar() != '\n');
+                break;
         }
     } while (sc != 0);
 

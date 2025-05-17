@@ -18,12 +18,15 @@ void salva_lezione_file(Lezione l);
 void libera_lezione(Lezione l); //dealloca una lezione dalla memoria quando non serve piu'
 
 void visualizza_lezione(Lezione l);
+void visualizza_essenziale_lezione(Lezione l);
 
 int confronta_lezioni(Lezione l1, Lezione l2);
 
 int prenota_lezione(Lezione l, Cliente c); //ritorna 1 se e' stata prenotata, 0 altrimenti
 
 char* get_id_lezione(Lezione l);
+int get_posti_occupati(Lezione l);
+int get_posti_max(Lezione l);
 
 void set_posti_occupati(Lezione l, int pos_occupati);
 

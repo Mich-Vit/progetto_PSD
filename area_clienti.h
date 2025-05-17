@@ -11,6 +11,8 @@ Cliente login_cliente(hashtable h);
 
 void rinnova_abbonamento(Cliente c);
 
+void visualizza_lezioni(list l);
+
 void menu_cliente(Cliente c, hashtable h, list l);
 
 #endif /* AREA_CLIENTI_H */

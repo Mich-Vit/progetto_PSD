@@ -143,6 +143,18 @@ int confronta_lezioni(Lezione l1, Lezione l2)
     return confronta_orario(l1->ora_lezione, l2->ora_lezione);
 }
 
+void visualizza_essenziale_lezione(Lezione le)
+{
+    char buffer_ora[6]; 
+    char buffer_data[11]; 
+
+    snprintf(buffer_ora, sizeof(buffer_ora), "%02d:%02d", get_ora(le->ora_lezione), get_minuti(le->ora_lezione));
+    snprintf(buffer_data, sizeof(buffer_data), "%02d/%02d/%04d", get_giorno(le->data), get_mese(le->data), get_anno(le->data));
+
+    // Stampa allineata
+    printf("%-8s %-15s %-10s %-12s\n", le->id, le->nome, buffer_ora, buffer_data);
+}
+
 int prenota_lezione(Lezione l, Cliente c)
 {
     if (l == NULL || c == NULL) 
@@ -175,6 +187,16 @@ int prenota_lezione(Lezione l, Cliente c)
 char* get_id_lezione(Lezione l)
 {
     return l->id; 
+}
+
+int get_posti_occupati(Lezione l)
+{
+    return l->posti_occupati; 
+}
+
+int get_posti_max(Lezione l)
+{
+    return l->posti_max; 
 }
 
 void set_posti_occupati(Lezione l, int pos_occupati)

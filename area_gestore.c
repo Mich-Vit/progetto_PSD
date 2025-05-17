@@ -252,7 +252,7 @@ list rimuovi_lezione(list l)
         return app;
     }
 
-    l = reverseList(app); // Ripristina l'ordine
+    list nuova = reverseList(app); // Ripristina l'ordine
     printf("Lezione rimossa!\n");
 
     FILE *file = fopen("lezioni.txt", "r");
@@ -300,7 +300,7 @@ list rimuovi_lezione(list l)
 
     remove("lezioni.txt");
     rename("temp.txt", "lezioni.txt");
-    return l;
+    return nuova;
 }
 
 void ricerca_cliente(hashtable h)
@@ -386,7 +386,7 @@ void menu_gestore(hashtable h, list l)
                 break;
             case 4:
                 pulisci_schermo();
-                outputList(ordina_Lista(l));
+                outputList(l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
@@ -404,6 +404,11 @@ void menu_gestore(hashtable h, list l)
                 break;
             case 6:
                 pulisci_schermo();
+                printf("==============================================\n");
+                printf("\t      LISTA DELLE LEZIONI\n");
+                printf("==============================================\n");
+
+                stampaMinimaList(l);
                 l = rimuovi_lezione(l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
