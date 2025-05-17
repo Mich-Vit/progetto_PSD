@@ -93,8 +93,7 @@ void visualizza_lezioni(list l)
     printf("1) Tutte le lezioni\n");
     printf("2) Solo lezioni disponibili\n");
     printf("Scelta: ");
-    scanf("%d", &scelta);
-    getchar(); // consuma l'\n rimasto nel buffer
+    scelta = leggi_intero();
 
     list tmp = l;
     int trovate = 0;
@@ -134,9 +133,7 @@ void menu_cliente(Cliente c, hashtable h, list l)
         printf("0) Esci\n");
         printf("==============================================\n");
         printf("Scegli un'opzione: ");
-        scanf("%d", &scelta);
-        // Pulisce il buffer dopo scanf
-        while (getchar() != '\n'); 
+        scelta = leggi_intero(); 
 
         switch (scelta) 
         {

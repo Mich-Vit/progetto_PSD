@@ -33,3 +33,10 @@ Orario: 19:00
 Posti massimi: 12
 Posti occupati: 0
 -----------------------
+ID: L010
+Nome: Zumba
+Data: 28/06/2025
+Orario: 22:00
+Posti massimi: 1
+Posti occupati: 0
+-----------------------

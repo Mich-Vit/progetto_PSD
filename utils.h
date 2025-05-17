@@ -23,5 +23,9 @@ int calcola_durata_in_mesi(Data data_inizio, Data data_fine);
 
 void riscrivi_file_clienti(hashtable h);
 
+int leggi_intero(); //controlla se l'input sia effettivamente un numero intero.
+
+int solo_lettere(char* s);
+
 #endif /* UTILS_H */
 

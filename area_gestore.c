@@ -22,18 +22,34 @@ void inserisci_cliente(hashtable h)
     printf("\tINSERISCI UN CLIENTE\n");
     printf("==============================================\n");
 
-    printf("Inserisci il nome del cliente: ");
-    fgets(nome, sizeof(nome), stdin);
-    nome[strcspn(nome, "\n")] = '\0';
+    do
+    {
+        printf("Inserisci il nome: ");
+        fgets(nome, sizeof(nome), stdin);
+        nome[strcspn(nome, "\n")] = '\0';
+    
+        if (!solo_lettere(nome))
+        {
+            printf("Errore: il nome deve contenere solo lettere. Riprova.\n");
+        }
+    } while (!solo_lettere(nome));
 
-    printf("Inserisci il cognome del cliente: ");
-    fgets(cognome, sizeof(cognome), stdin);
-    cognome[strcspn(cognome, "\n")] = '\0';
+    do
+    {
+        printf("Inserisci il cognome: ");
+        fgets(cognome, sizeof(cognome), stdin);
+        cognome[strcspn(cognome, "\n")] = '\0';
+    
+        if (!solo_lettere(cognome))
+        {
+            printf("Errore: il cognome deve contenere solo lettere. Riprova.\n");
+        }
+    } while (!solo_lettere(cognome));
 
     do
     {
         printf("Inserisci la durata dell'abbonamento (in mesi): ");
-        scanf("%d", &durata);
+        durata = leggi_intero();
 
         if (durata <= 0)
         {
@@ -76,13 +92,20 @@ list inserisci_lezione(list l)
     printf("\tINSERISCI UNA LEZIONE\n");
     printf("==============================================\n");
 
-    // Input nome lezione
-    printf("Inserisci il nome della lezione: ");
-    fgets(nome, sizeof(nome), stdin);
-    nome[strcspn(nome, "\n")] = '\0';  // rimuove newline
+    do
+    {
+        printf("Inserisci il nome: ");
+        fgets(nome, sizeof(nome), stdin);
+        nome[strcspn(nome, "\n")] = '\0';
+    
+        if (!solo_lettere(nome))
+        {
+            printf("Errore: il nome deve contenere solo lettere. Riprova.\n");
+        }
+    } while (!solo_lettere(nome));
 
-    // Input orario con controllo formato e valori
-    do {
+    do
+    {
         printf("Inserisci l'orario della lezione (HH:MM): ");
         if (scanf("%d:%d", &ore, &min) != 2)
         {
@@ -102,13 +125,7 @@ list inserisci_lezione(list l)
     do
     {
         printf("Inserisci il numero massimo di posti: ");
-        if (scanf("%d", &posti_max) != 1)
-        {
-            printf("Input non valido. Riprova.\n");
-            while(getchar() != '\n'); // pulisce buffer
-            continue;
-        }
-        while (getchar() != '\n');  // Pulisce il buffer
+        posti_max = leggi_intero();
 
         if (posti_max <= 0)
         {
@@ -361,8 +378,7 @@ void menu_gestore(hashtable h, list l)
         printf("0) Esci\n");
         printf("==============================================\n");
         printf("Scegli un'opzione: ");
-        scanf("%d", &scelta);
-        while (getchar() != '\n'); // pulizia buffer
+        scelta = leggi_intero();
 
         switch (scelta)
         {
@@ -430,6 +446,8 @@ void menu_gestore(hashtable h, list l)
                 break;
             default:
                 printf("Opzione non valida. Riprova.\n");
+                printf("\nPremi INVIO...");
+                while (getchar() != '\n');
                 break;
         }
     } while (scelta != 0);

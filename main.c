@@ -26,9 +26,7 @@ int main(void)
         printf("2) Per l'area cliente\n");
         printf("0) Per uscire\n");
         printf("Scelta: ");
-        scanf("%d", &sc);
-        // Pulisce il buffer dopo scanf
-        while (getchar() != '\n'); 
+        sc = leggi_intero();
 
         switch (sc) 
         {

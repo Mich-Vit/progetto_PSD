@@ -186,9 +186,6 @@ list carica_lezioni_da_file(list l)
     return l;
 }
 
-
-
-
 int calcola_durata_in_mesi(Data data_inizio, Data data_fine)
 {
     int anni_diff = get_anno(data_fine) - get_anno(data_inizio);
@@ -249,4 +246,33 @@ void riscrivi_file_clienti(hashtable h)
     }
 
     fclose(fp);  // Chiudi il file
+}
+
+int leggi_intero()
+{
+    char buffer[64];
+    int valore;
+
+    while (1)
+    {
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+            continue;
+
+        if (sscanf(buffer, "%d", &valore) == 1)
+            return valore;
+
+        printf("Input non valido. Inserisci un numero intero: ");
+    }
+}
+
+int solo_lettere(char* s)
+{
+    for (int i = 0; s[i] != '\0'; i++)
+    {
+        if (!( (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') ))
+        {
+            return 0; // Non è una lettera
+        }
+    }
+    return 1; // Tutti i caratteri sono lettere
 }

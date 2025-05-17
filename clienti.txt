@@ -1,9 +1,9 @@
 ID: C012
 Nome: Michele
 Cognome: Vitiello
-Durata abbonamento: 9
+Durata abbonamento: 11
 Data d'iscrizione: 17/05/2025
-Data scadenza: 17/02/2026
+Data scadenza: 17/04/2026
 -----------------------
 ID: C011
 Nome: Michael
@@ -25,4 +25,11 @@ Cognome: Boy
 Durata abbonamento: 10
 Data d'iscrizione: 14/05/2025
 Data scadenza: 14/03/2026
+-----------------------
+ID: C013
+Nome: Gerardo
+Cognome: Vertolomo
+Durata abbonamento: 4
+Data d'iscrizione: 17/05/2025
+Data scadenza: 17/09/2025
 -----------------------
