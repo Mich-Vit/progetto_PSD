@@ -7,6 +7,7 @@
 #include "hash.h"
 #include "cliente.h"
 #include "lista_lezioni.h"
+#include "hash_prenotazioni.h"
 
 // Dichiarazione delle funzioni per la gestione del contatore di id
 
@@ -16,6 +17,10 @@ int carica_contatore_generico(const char* filename, const char* prefix);
 void carica_clienti_da_file(hashtable h);
 
 list carica_lezioni_da_file(list l);
+
+void carica_prenotazioni_da_file(hashtable_p h);
+
+void aggiorna_file_lezioni(list l);
 
 void pulisci_schermo();
 

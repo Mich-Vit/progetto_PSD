@@ -6,6 +6,12 @@
         "cliente.h": "c",
         "orario.h": "c",
         "list": "c",
-        "hash.h": "c"
+        "hash.h": "c",
+        "prenotazione.h": "c",
+        "random": "c",
+        "lezione.h": "c",
+        "text_encoding": "c",
+        "hash_prenotazioni.h": "c",
+        "utils.h": "c"
     }
 }

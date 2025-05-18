@@ -10,6 +10,8 @@
 #include "lezione.h"
 #include "lista_lezioni.h"
 #include "orario.h"
+#include "hash_prenotazioni.h"
+#include "prenotazione.h"
 
 int carica_contatore_generico(const char* filename, const char* prefix)
 {
@@ -103,6 +105,64 @@ void carica_clienti_da_file(hashtable h)
         Cliente c = crea_cliente(id, nome, cognome, durata, data_is);
         set_data_scadenza(c, data_sca);
         insertHash(h, c);
+    }
+
+    fclose(fp);
+}
+
+void carica_prenotazioni_da_file(hashtable_p h)
+{
+    FILE *fp = fopen("prenotazioni.txt", "r");
+    if (fp == NULL)
+    {
+        printf("Errore nell'apertura del file prenotazioni.txt\n");
+        return;
+    }
+
+    char id_pren[20], id_cli[50], id_lez[50];
+    int giorno, mese, anno;
+
+    while (fscanf(fp, "ID: %s\n", id_pren) == 1)
+    {
+        fscanf(fp, "ID Cliente: %s\n", id_cli);
+        fscanf(fp, "ID Lezione: %s\n", id_lez);
+        fscanf(fp, "Data Prenotazione: %d/%d/%d\n", &giorno, &mese, &anno);
+        fscanf(fp, "-----------------------\n");
+
+        Data data_pre = crea_data(giorno, mese, anno);
+
+        // Passo id_pren, id_cli, id_lez e data_pre secondo la nuova firma
+        Prenotazione p = crea_prenotazione(id_pren, id_cli, id_lez, data_pre);
+
+        insertHash_p(h, p);
+    }
+
+    fclose(fp);
+}
+
+void aggiorna_file_lezioni(list l)
+{
+    FILE *fp = fopen("lezioni.txt", "w");
+    if (fp == NULL)
+    {
+        printf("Errore nell'apertura del file lezioni.txt.\n");
+        return;
+    }
+
+    while (!emptyList(l))
+    {
+        Lezione le = getFirst(l);
+
+        fprintf(fp, "ID: %s\n", get_id_lezione(le));
+        fprintf(fp, "Nome: %s\n", get_nome_lezione(le));
+        fprintf(fp, "Data: %02d/%02d/%04d\n",
+                get_giorno(get_data_lezione(le)), get_mese(get_data_lezione(le)), get_anno(get_data_lezione(le)));
+        fprintf(fp, "Orario: %02d:%02d\n", get_ora(get_ora_lezione(le)), get_minuti(get_ora_lezione(le)));
+        fprintf(fp, "Posti massimi: %d\n", get_posti_max(le));
+        fprintf(fp, "Posti occupati: %d\n", get_posti_occupati(le));
+        fprintf(fp, "-----------------------\n");
+
+        l = tailList(l);
     }
 
     fclose(fp);

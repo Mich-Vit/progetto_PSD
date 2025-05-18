@@ -24,8 +24,10 @@ list reverseList(list l); //restituisce la lista invertia
 list removeList(list l, int pos);
 
 void outputList(list l); //stampa tutti i nodi della lista
-void stampaMinimaList(list l);
+void stampa_lezioni_libere(list l);
 
 list ordina_Lista(list l);
+
+Lezione cerca_lezione_per_id(list l, const char *id_lezione);
 
 #endif /* LISTA_LEZIONI_H */

@@ -3,10 +3,8 @@
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
-#include"cliente.h"
 #include"data.h"
 #include"lezione.h"
-#include "utils.h"
 #include "orario.h"
 
 struct lezione
@@ -119,7 +117,7 @@ int confronta_lezioni(Lezione l1, Lezione l2)
     return confronta_orario(l1->ora_lezione, l2->ora_lezione);
 }
 
-void visualizza_essenziale_lezione(Lezione le)
+void visualizza_essenziale_lezione(Lezione le, int posti_occupati, int posti_max)
 {
     char buffer_ora[6]; 
     char buffer_data[11]; 
@@ -127,38 +125,9 @@ void visualizza_essenziale_lezione(Lezione le)
     snprintf(buffer_ora, sizeof(buffer_ora), "%02d:%02d", get_ora(le->ora_lezione), get_minuti(le->ora_lezione));
     snprintf(buffer_data, sizeof(buffer_data), "%02d/%02d/%04d", get_giorno(le->data), get_mese(le->data), get_anno(le->data));
 
-    // Stampa allineata
-    printf("%-8s %-15s %-10s %-12s\n", le->id, le->nome, buffer_ora, buffer_data);
+    // Stampa allineata con posti disponibili
+    printf("%-8s %-15s %-10s %-12s %d/%d\n", le->id, le->nome, buffer_ora, buffer_data, posti_max - posti_occupati, posti_max);
 }
-
-int prenota_lezione(Lezione l, Cliente c)
-{
-    if (l == NULL || c == NULL) 
-    {
-        printf("Errore: lezione o cliente non valido.\n");
-        return 0;
-    }
-
-    // Verifica se l'abbonamento del cliente è valido
-    if (!abbonamento_valido(data_oggi(), get_data_scadenza(c))) 
-    {
-        printf("Abbonamento non valido. Impossibile prenotare la lezione.\n");
-        return 0; // Prenotazione fallita
-    }
-
-    //verifica che ci sono posti disponibili 
-    if(l->posti_occupati >= l->posti_max)
-    {
-        printf("Lezione al completo. Impossibile prenotare.\n");
-        return 0; // Prenotazione fallita
-    }
-
-    // Prenotazione riuscita
-    l->posti_occupati++;
-    printf("Prenotazione riuscita per la lezione: %s\n", l->nome);
-    return 1;
-}
-
 
 char* get_id_lezione(Lezione l)
 {
@@ -173,6 +142,27 @@ int get_posti_occupati(Lezione l)
 int get_posti_max(Lezione l)
 {
     return l->posti_max; 
+}
+
+char* get_nome_lezione(Lezione l)
+{
+    if (l == NULL)
+        return NULL;
+    return l->nome;
+}
+
+Data get_data_lezione(Lezione l)
+{
+    if (l == NULL)
+        return NULL;
+    return l->data;
+}
+
+Orario get_ora_lezione(Lezione l)
+{
+    if (l == NULL)
+        return NULL;
+    return l->ora_lezione;
 }
 
 void set_posti_occupati(Lezione l, int pos_occupati)

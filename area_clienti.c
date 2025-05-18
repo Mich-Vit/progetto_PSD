@@ -8,6 +8,7 @@
 #include"data.h"
 #include"lista_lezioni.h"
 #include"utils.h"
+#include "hash_prenotazioni.h"
 
 // Funzione di login: richiede l'ID cliente e cerca nella hashtable
 Cliente login_cliente(hashtable h)
@@ -117,7 +118,80 @@ void visualizza_lezioni(list l)
     }
 }
 
-void menu_cliente(Cliente c, hashtable h, list l) 
+void prenota_lezione(Cliente c, list l, hashtable_p h)
+{
+    printf("======================================================\n");
+    printf("\t    LISTA DELLE LEZIONI DISPONIBILI\n");
+    printf("======================================================\n");
+
+    list tmp = l;
+    int trovate = 0;
+
+    stampaMinimaList(l); 
+
+    printf("------------------------------------------------------\n");
+    char id_lezione_scelta[20];
+    printf("Inserisci l'ID della lezione da prenotare: ");
+    fgets(id_lezione_scelta, sizeof(id_lezione_scelta), stdin); 
+    id_lezione_scelta[strcspn(id_lezione_scelta, "\n")] = '\0';
+
+    // Cerca la lezione nella lista
+    Lezione l_selezionata = cerca_lezione_per_id(l, id_lezione_scelta);
+    if (l_selezionata == NULL)
+    {
+        printf("Lezione con ID %s non trovata.\n", id_lezione_scelta);
+        return;
+    }
+
+    int posti_occupati = get_posti_occupati(l_selezionata);
+    int posti_max = get_posti_max(l_selezionata);
+    int posti_disponibili = posti_max - posti_occupati;
+
+    if (posti_disponibili <= 0)
+    {
+        printf("Spiacente, non ci sono piu' posti disponibili per questa lezione.\n");
+        return;
+    }
+
+    // Verifica se il cliente è già prenotato alla lezione
+    Prenotazione* table = get_table_hash_p(h);
+    for (int i = 0; i < get_size_hash_p(h); i++)
+    {
+        Prenotazione curr = table[i];
+        while (curr != NULL)
+        {
+            if (strcmp(get_id_cliente_prenotazione(curr), get_id_cliente(c)) == 0 &&
+            strcmp(get_id_lezione_prenotazione(curr), get_id_lezione(l_selezionata)) == 0)
+            {
+                printf("Gia' sei prenotato a questa lezione.\n");
+                return;
+            }
+            curr = get_next_prenotazione(curr);
+        }
+    }
+
+    // Incrementa i posti occupati
+    set_posti_occupati(l_selezionata, posti_occupati + 1);
+
+    // Aggiorna il file con tutte le lezioni aggiornate
+    aggiorna_file_lezioni(l);
+
+    Data data_pre = data_oggi();
+
+
+    char *id_prenotazione = genera_id_generico("P", "prenotazioni.txt");
+    Prenotazione p = crea_prenotazione(id_prenotazione, get_id_cliente(c), get_id_lezione(l_selezionata), data_pre);
+
+    // Inserisci nella tabella hash delle prenotazioni
+    insertHash_p(h, p);
+
+    salva_prenotazione_file(p);
+
+    printf("Prenotazione effettuata con successo!\n");
+}
+
+
+void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp) 
 {
     int scelta;
     do 
@@ -154,7 +228,11 @@ void menu_cliente(Cliente c, hashtable h, list l)
                 break;
 
             case 3:
-                // Prenotazione lezione
+                pulisci_schermo();
+                prenota_lezione(c, l, hp);
+
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');
                 break;
 
             case 4:

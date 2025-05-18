@@ -5,7 +5,6 @@
 #include<string.h>
 #include"data.h"
 #include"cliente.h"
-#include "utils.h"
 
 // === Definizione della struttura ===
 
@@ -115,7 +114,7 @@ void salva_cliente_file(Cliente c)
         return;
     }
 
-   fprintf(fp, "ID: %s\n", c->id); 
+    fprintf(fp, "ID: %s\n", c->id); 
     fprintf(fp, "Nome: %s\n", c->nome);  
     fprintf(fp, "Cognome: %s\n", c->cognome);  
     fprintf(fp, "Durata abbonamento: %d\n", c->durata_abbonamento);  // Durata abbonamento

@@ -7,14 +7,18 @@
 #include"area_gestore.h"
 #include"lista_lezioni.h"
 #include"utils.h"
+#include "hash.h"
+#include "hash_prenotazioni.h"
 
 int main(void)
 {
     int sc;
-    hashtable h = newHashtable(20);  
+    hashtable h = newHashtable(50);  
     carica_clienti_da_file(h);
     list l = newList();
     l = carica_lezioni_da_file(l);
+    hashtable_p hp = newHashtable_p(50);
+    carica_prenotazioni_da_file(hp);
 
     do
     {
@@ -47,7 +51,7 @@ int main(void)
                 if (cliente != NULL)
                 {
                     pulisci_schermo();
-                    menu_cliente(cliente, h, l);
+                    menu_cliente(cliente, h, l, hp);
                 }
                 break;
             }
