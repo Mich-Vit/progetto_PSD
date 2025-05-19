@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "lezione.h"
 #include "orario.h"
+#include "hash_prenotazioni.h"
 
 void inserisci_cliente(hashtable h)
 {
@@ -226,7 +227,7 @@ void rimuovi_cliente(hashtable h)
     rename("temp.txt", "clienti.txt");
 }
 
-list rimuovi_lezione(list l)
+list rimuovi_lezione(list l, hashtable_p hp)
 {
     printf("==============================================\n");
     printf("\t      RIMUOVI UNA LEZIONE\n");
@@ -272,51 +273,42 @@ list rimuovi_lezione(list l)
     list nuova = reverseList(app); // Ripristina l'ordine
     printf("Lezione rimossa!\n");
 
-    FILE *file = fopen("lezioni.txt", "r");
-    FILE *temp = fopen("temp.txt", "w");
+    aggiorna_file_lezioni(nuova);
 
-    if (file == NULL || temp == NULL)
+    // === Rimuovi le prenotazioni collegate a quella lezione ===
+    Prenotazione* table = get_table_hash_p(hp);
+    int size = get_size_hash_p(hp);
+
+    for (int i = 0; i < size; i++)
     {
-        printf("Errore nell'apertura dei file.\n");
-        if (file) fclose(file);
-        if (temp) fclose(temp);
-        return l;
-    }
+        Prenotazione prev = NULL;
+        Prenotazione curr = table[i];
 
-    char riga[256];
-    int saltare = 0;
-
-    while (fgets(riga, sizeof(riga), file))
-    {
-        if (strncmp(riga, "ID:", 3) == 0)
+        while (curr != NULL)
         {
-            char id_letto[20];
-            sscanf(riga, "ID: %s", id_letto);
+            //Salva in anticipo il prossimo nodo
+            Prenotazione next = get_next_prenotazione(curr); 
 
-            if (strcmp(id_letto, id) == 0)
+            if (strcmp(get_id_lezione_prenotazione(curr), id) == 0)
             {
-                saltare = 1;
-                continue;  // salta la riga dell'ID
+                //Se è il primo nodo, la lista deve ora partire dal successivo 
+                if (prev == NULL)
+                    table[i] = next;
+                else //Altrimenti, salta il nodo corrente collegando prev → next
+                    set_next_prenotazione(prev, next);
+
+                libera_prenotazione(curr);
             }
             else
             {
-                saltare = 0;
+                prev = curr;
             }
+            curr = next;
         }
-
-        if (saltare)
-        {
-            continue;  // salta le righe del cliente da eliminare
-        }
-
-        fputs(riga, temp);
     }
 
-    fclose(file);
-    fclose(temp);
+    aggiorna_file_prenotazioni(hp);
 
-    remove("lezioni.txt");
-    rename("temp.txt", "lezioni.txt");
     return nuova;
 }
 
@@ -357,7 +349,7 @@ void ricerca_cliente(hashtable h)
 }
 
 
-void menu_gestore(hashtable h, list l) 
+void menu_gestore(hashtable h, list l, hashtable_p hp) 
 {
     int scelta;
 
@@ -425,7 +417,7 @@ void menu_gestore(hashtable h, list l)
                 printf("==============================================\n");
 
                 stampaMinimaList(l);
-                l = rimuovi_lezione(l);
+                l = rimuovi_lezione(l, hp);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;

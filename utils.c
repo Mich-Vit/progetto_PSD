@@ -168,6 +168,40 @@ void aggiorna_file_lezioni(list l)
     fclose(fp);
 }
 
+void aggiorna_file_prenotazioni(hashtable_p h)
+{
+    if (h == NULL)
+        return;
+
+    int size = get_size_hash_p(h);
+    Prenotazione* table = get_table_hash_p(h);
+
+    FILE* fp_out = fopen("prenotazioni.txt", "w");
+    if (fp_out != NULL)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            Prenotazione curr = table[i];
+            while (curr != NULL)
+            {
+                Data d = get_data_prenotazione(curr);
+                fprintf(fp_out, "ID: %s\n", get_id_prenotazione(curr));
+                fprintf(fp_out, "ID Cliente: %s\n", get_id_cliente_prenotazione(curr));
+                fprintf(fp_out, "ID Lezione: %s\n", get_id_lezione_prenotazione(curr));
+                fprintf(fp_out, "Data Prenotazione: %02d/%02d/%04d\n",
+                        get_giorno(d), get_mese(d), get_anno(d));
+                fprintf(fp_out, "-----------------------\n");
+                curr = get_next_prenotazione(curr);
+            }
+        }
+        fclose(fp_out);
+    }
+    else
+    {
+        printf("Errore durante il salvataggio delle prenotazioni aggiornate.\n");
+    }
+}
+
 // Funzione per pulire lo schermo, portabile su Windows, Linux e macOS
 void pulisci_schermo()
 {

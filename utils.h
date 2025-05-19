@@ -21,6 +21,7 @@ list carica_lezioni_da_file(list l);
 void carica_prenotazioni_da_file(hashtable_p h);
 
 void aggiorna_file_lezioni(list l);
+void aggiorna_file_prenotazioni(hashtable_p h);
 
 void pulisci_schermo();
 

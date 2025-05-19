@@ -10,7 +10,7 @@ orario.o: orario.c orario.h
 area_clienti.o: area_clienti.c cliente.h hash.h data.h lista_lezioni.h utils.h hash_prenotazioni.h
 	gcc -c area_clienti.c
 
-area_gestore.o: area_gestore.c area_gestore.h cliente.h lezione.h lista_lezioni.h hash.h utils.h orario.h data.h
+area_gestore.o: area_gestore.c area_gestore.h cliente.h lezione.h lista_lezioni.h hash.h utils.h orario.h data.h hash_prenotazioni.h
 	gcc -c area_gestore.c
 
 cliente.o: cliente.c cliente.h data.h

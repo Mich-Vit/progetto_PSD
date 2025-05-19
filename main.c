@@ -37,7 +37,7 @@ int main(void)
             case 1:
             {
                 pulisci_schermo();
-                menu_gestore(h, l);
+                menu_gestore(h, l, hp);
                 break;
             }
             case 2:
