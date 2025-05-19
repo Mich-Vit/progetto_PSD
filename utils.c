@@ -140,6 +140,45 @@ void carica_prenotazioni_da_file(hashtable_p h)
     fclose(fp);
 }
 
+void aggiorna_file_clienti(hashtable h)
+{
+    FILE *fp = fopen("clienti.txt", "w");
+    if (fp == NULL)
+    {
+        printf("Errore nell'apertura del file clienti.txt.\n");
+        return;
+    }
+
+    Cliente *table = get_table_hash(h); 
+    int size = get_size_hash(h);       
+
+    for (int i = 0; i < size; i++)
+    {
+        Cliente curr = table[i];
+        while (curr != NULL)
+        {
+            fprintf(fp, "ID: %s\n", get_id_cliente(curr));
+            fprintf(fp, "Nome: %s\n", get_nome_cliente(curr));
+            fprintf(fp, "Cognome: %s\n", get_cognome_cliente(curr));
+            fprintf(fp, "Durata abbonamento: %d\n", get_durata_abbonamento(curr));
+            fprintf(fp, "Data d'iscrizione: %02d/%02d/%04d\n",
+                    get_giorno(get_data_iscrizione(curr)),
+                    get_mese(get_data_iscrizione(curr)),
+                    get_anno(get_data_iscrizione(curr)));
+            fprintf(fp, "Data scadenza: %02d/%02d/%04d\n",
+                    get_giorno(get_data_scadenza(curr)),
+                    get_mese(get_data_scadenza(curr)),
+                    get_anno(get_data_scadenza(curr)));
+            fprintf(fp, "-----------------------\n");
+
+            curr = get_next_cliente(curr);
+        }
+    }
+
+    fclose(fp);
+}
+
+
 void aggiorna_file_lezioni(list l)
 {
     FILE *fp = fopen("lezioni.txt", "w");

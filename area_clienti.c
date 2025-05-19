@@ -127,6 +127,12 @@ void prenota_lezione(Cliente c, list l, hashtable_p h)
     list tmp = l;
     int trovate = 0;
 
+    if(emptyList(l))
+    {
+        printf("Nessuna lista di lezioni disponibile\n");
+        return;
+    }
+
     stampa_lezioni_libere(l); 
 
     printf("------------------------------------------------------\n");
@@ -190,6 +196,118 @@ void prenota_lezione(Cliente c, list l, hashtable_p h)
     printf("Prenotazione effettuata con successo!\n");
 }
 
+void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
+{
+    if (hp == NULL)
+    {
+        printf("Nessuna tabella di prenotazioni trovata.\n");
+        return;
+    }
+
+    char* id_cliente = get_id_cliente(c);
+    Prenotazione* table = get_table_hash_p(hp);
+    int size = get_size_hash_p(hp);
+    int trovata = 0;
+
+    printf("%-10s %-20s %-16s\n", "ID", "LEZIONE", "DATA\t    ORA");
+    
+
+    for (int i = 0; i < size; i++)
+    {
+        Prenotazione curr = table[i];
+        while (curr != NULL)
+        {
+            if (strcmp(get_id_cliente_prenotazione(curr), id_cliente) == 0)
+            {
+                trovata = 1;
+
+                char* id_lezione = get_id_lezione_prenotazione(curr);
+                char nome_lezione[50] = "Lezione non trovata";
+                int giorno = 0, mese = 0, anno = 0, ore = 0, minuti = 0;
+
+                // Cerca la lezione nella lista
+                list temp = l;
+                while (!emptyList(temp))
+                {
+                    Lezione le = getFirst(temp);
+                    if (strcmp(get_id_lezione(le), id_lezione) == 0)
+                    {
+                        strcpy(nome_lezione, get_nome_lezione(le));
+                        giorno = get_giorno(get_data_lezione(le));
+                        mese = get_mese(get_data_lezione(le));
+                        anno = get_anno(get_data_lezione(le));
+                        ore = get_ora(get_ora_lezione(le));
+                        minuti = get_minuti(get_ora_lezione(le));
+                        break;
+                    }
+                    temp = tailList(temp);
+                }
+
+                printf("%-10s %-20s %02d/%02d/%04d %02d:%02d\n",
+                       get_id_prenotazione(curr),
+                       nome_lezione,
+                       giorno, mese, anno,
+                       ore, minuti);
+            }
+            curr = get_next_prenotazione(curr);
+        }
+    }
+
+    if (!trovata)
+        printf("Nessuna prenotazione trovata per questo cliente.\n");
+}
+
+void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
+{
+    printf("======================================================\n");
+    printf("LISTA DELLE PRENOTAZIONI DI: %s %s!\n", get_nome_cliente(c), get_cognome_cliente(c));
+    printf("======================================================\n");
+
+    if(hp == NULL)
+    {
+        printf("Nessuna lista di prenotazioni trovata\n");
+        return;
+    }
+
+    stampa_prenotazioni_cliente(c, hp, l);
+
+    printf("------------------------------------------------------\n");
+    char id_prenotazione_scelta[20];
+    printf("Inserisci l'ID della prenotazione da disdire: ");
+    fgets(id_prenotazione_scelta, sizeof(id_prenotazione_scelta), stdin); 
+    id_prenotazione_scelta[strcspn(id_prenotazione_scelta, "\n")] = '\0';
+
+    Prenotazione rem = hashDelete_p(hp, id_prenotazione_scelta);
+
+    if(rem == NULL)
+    {
+        printf("Prenotazione con ID %s non trovato.\n", id_prenotazione_scelta);
+        return;
+    }
+
+    char* id_lezione = get_id_lezione_prenotazione(rem);
+
+    // Trova la lezione nella lista e decrementa i posti
+    list temp = l;
+    while (!emptyList(temp))
+    {
+        Lezione le = getFirst(temp);
+        if (strcmp(get_id_lezione(le), id_lezione) == 0)
+        {
+            // Decrementa i posti occupati
+            int attuali = get_posti_occupati(le);
+            set_posti_occupati(le, attuali - 1);
+            break;
+        }
+        temp = tailList(temp);
+    }
+    libera_prenotazione(rem);
+
+    aggiorna_file_prenotazioni(hp);  
+    aggiorna_file_lezioni(l);
+
+    printf("Prenotazione disdetta con successo!\n");
+}
 
 void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp) 
 {
@@ -203,7 +321,8 @@ void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp)
         printf("1) Visualizza informazioni sul tuo abbonamento\n");
         printf("2) Rinnova abbonamento\n");
         printf("3) Prenota una lezione\n");
-        printf("4) Visualizza lezioni\n");
+        printf("4) Disdici una prenotazione\n");
+        printf("5) Visualizza lezioni\n");
         printf("0) Esci\n");
         printf("==============================================\n");
         printf("Scegli un'opzione: ");
@@ -236,6 +355,13 @@ void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp)
                 break;
 
             case 4:
+                pulisci_schermo();
+                disdici_prenotazione(c, hp, l);
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');
+                break;    
+
+            case 5:
                 pulisci_schermo();
                 visualizza_lezioni(l);
                 printf("\nPremi INVIO per tornare al menu...");

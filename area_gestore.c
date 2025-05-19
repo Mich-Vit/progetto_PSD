@@ -151,7 +151,7 @@ list inserisci_lezione(list l)
     return l;
 }
 
-void rimuovi_cliente(hashtable h)
+void rimuovi_cliente(hashtable h, hashtable_p hp)
 {
     printf("==============================================\n");
     printf("\t      RIMUOVI UN CLIENTE\n");
@@ -177,54 +177,42 @@ void rimuovi_cliente(hashtable h)
         return;
     }
 
-    distruggi_cliente(rem);  // libera la memoria solo se rem non è NULL
+    distruggi_cliente(rem); 
 
     printf("Cliente rimosso!\n");
+    aggiorna_file_clienti(h);
 
-    FILE *file = fopen("clienti.txt", "r");
-    FILE *temp = fopen("temp.txt", "w");
+    // === Rimuovi le prenotazioni collegate a quel cliente ===
+    Prenotazione* table = get_table_hash_p(hp);
+    int size = get_size_hash_p(hp);
 
-    if (file == NULL || temp == NULL) {
-        printf("Errore nell'apertura dei file.\n");
-        if (file) fclose(file);
-        if (temp) fclose(temp);
-        return;
-    }
-
-    char riga[256];
-    int saltare = 0;
-
-    while (fgets(riga, sizeof(riga), file))
+    for (int i = 0; i < size; i++)
     {
-        if (strncmp(riga, "ID:", 3) == 0)
-        {
-            char id_letto[20];
-            sscanf(riga, "ID: %s", id_letto);
+        Prenotazione prev = NULL;
+        Prenotazione curr = table[i];
 
-            if (strcmp(id_letto, id) == 0)
+        while (curr != NULL)
+        {
+            Prenotazione next = get_next_prenotazione(curr);
+
+            if (strcmp(get_id_cliente_prenotazione(curr), id) == 0)
             {
-                saltare = 1;
-                continue;  // salta la riga dell'ID
+                if (prev == NULL)
+                    table[i] = next;
+                else
+                    set_next_prenotazione(prev, next);
+
+                libera_prenotazione(curr);
             }
             else
             {
-                saltare = 0;
+                prev = curr;
             }
+            curr = next;
         }
-
-        if (saltare)
-        {
-            continue;  // salta le righe del cliente da eliminare
-        }
-
-        fputs(riga, temp);
     }
 
-    fclose(file);
-    fclose(temp);
-
-    remove("clienti.txt");
-    rename("temp.txt", "clienti.txt");
+    aggiorna_file_prenotazioni(hp);
 }
 
 list rimuovi_lezione(list l, hashtable_p hp)
@@ -406,7 +394,7 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
 
                 stampaMinimaHash(h);
                 printf("\n");
-                rimuovi_cliente(h);
+                rimuovi_cliente(h, hp);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;

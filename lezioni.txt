@@ -10,14 +10,7 @@ Nome: Danza Classica
 Data: 19/05/2025
 Orario: 16:00
 Posti massimi: 20
-Posti occupati: 16
------------------------
-ID: L009
-Nome: Zumba
-Data: 17/03/2026
-Orario: 19:00
-Posti massimi: 12
-Posti occupati: 0
+Posti occupati: 15
 -----------------------
 ID: L010
 Nome: Zumba

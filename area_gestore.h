@@ -13,7 +13,7 @@ void inserisci_cliente(hashtable h);
 
 list inserisci_lezione(list l);
 
-void rimuovi_cliente(hashtable h);
+void rimuovi_cliente(hashtable h, hashtable_p hp);
 
 list rimuovi_lezione(list l, hashtable_p hp);
 
