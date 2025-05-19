@@ -127,7 +127,7 @@ void prenota_lezione(Cliente c, list l, hashtable_p h)
     list tmp = l;
     int trovate = 0;
 
-    stampaMinimaList(l); 
+    stampa_lezioni_libere(l); 
 
     printf("------------------------------------------------------\n");
     char id_lezione_scelta[20];

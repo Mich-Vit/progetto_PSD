@@ -25,6 +25,7 @@ list removeList(list l, int pos);
 
 void outputList(list l); //stampa tutti i nodi della lista
 void stampa_lezioni_libere(list l);
+void stampaMinimaList(list l);
 
 list ordina_Lista(list l);
 

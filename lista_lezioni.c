@@ -204,6 +204,19 @@ void outputList(list l)
     }
 }
 
+void stampaMinimaList(list l)
+{
+    Lezione le;
+    l = ordina_Lista(l);
+
+    while (!emptyList(l))
+    {
+        le = getFirst(l); 
+        visualizza_essenziale_lezione(le, get_posti_occupati(le), get_posti_max(le));
+        l = tailList(l);
+    }
+}
+
 void stampa_lezioni_libere(list l)
 {
     Lezione le;

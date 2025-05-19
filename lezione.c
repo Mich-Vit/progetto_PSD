@@ -126,7 +126,7 @@ void visualizza_essenziale_lezione(Lezione le, int posti_occupati, int posti_max
     snprintf(buffer_data, sizeof(buffer_data), "%02d/%02d/%04d", get_giorno(le->data), get_mese(le->data), get_anno(le->data));
 
     // Stampa allineata con posti disponibili
-    printf("%-8s %-15s %-10s %-12s %d/%d\n", le->id, le->nome, buffer_ora, buffer_data, posti_max - posti_occupati, posti_max);
+    printf("%-8s %-15s %-10s %-12s %d/%d\n", le->id, le->nome, buffer_ora, buffer_data, posti_occupati, posti_max);
 }
 
 char* get_id_lezione(Lezione l)
