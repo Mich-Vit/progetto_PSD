@@ -8,6 +8,11 @@ ID Cliente: C012
 ID Lezione: L008
 Data Prenotazione: 17/05/2025
 -----------------------
+ID: P006
+ID Cliente: C005
+ID Lezione: L013
+Data Prenotazione: 20/05/2025
+-----------------------
 ID: P005
 ID Cliente: C012
 ID Lezione: L011

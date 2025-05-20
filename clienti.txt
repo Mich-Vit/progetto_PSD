@@ -8,9 +8,9 @@ Data scadenza: 14/05/2027
 ID: C005
 Nome: Ezio
 Cognome: Auditore
-Durata abbonamento: 12
+Durata abbonamento: 13
 Data d'iscrizione: 14/05/2025
-Data scadenza: 14/05/2026
+Data scadenza: 14/06/2026
 -----------------------
 ID: C012
 Nome: Michele
@@ -26,6 +26,13 @@ Durata abbonamento: 1
 Data d'iscrizione: 18/04/2025
 Data scadenza: 18/05/2025
 -----------------------
+ID: C016
+Nome: Tobia
+Cognome: Cesarano
+Durata abbonamento: 4
+Data d'iscrizione: 20/05/2025
+Data scadenza: 20/09/2025
+-----------------------
 ID: C004
 Nome: Tony
 Cognome: Boy
@@ -36,7 +43,7 @@ Data scadenza: 14/03/2026
 ID: C013
 Nome: Gerardo
 Cognome: Vertolomo
-Durata abbonamento: 4
-Data d'iscrizione: 17/05/2025
-Data scadenza: 17/09/2025
+Durata abbonamento: 1
+Data d'iscrizione: 10/05/2025
+Data scadenza: 10/06/2025
 -----------------------

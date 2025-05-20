@@ -38,7 +38,7 @@ Nome: Difesa Personale
 Data: 22/05/2025
 Orario: 12:00
 Posti massimi: 20
-Posti occupati: 0
+Posti occupati: 1
 -----------------------
 ID: L014
 Nome: Power Lifting
