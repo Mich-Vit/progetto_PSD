@@ -35,6 +35,7 @@ int calcola_durata_in_mesi(Data data_inizio, Data data_fine);
 void riscrivi_file_clienti(hashtable h);
 
 void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l);
+void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp);
 
 int leggi_intero(); //controlla se l'input sia effettivamente un numero intero.
 

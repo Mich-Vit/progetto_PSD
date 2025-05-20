@@ -354,6 +354,36 @@ void visualizza_prenotazioni_cliente(hashtable h, hashtable_p hp, list l)
     stampa_prenotazioni_cliente(c, hp, l);
 }
 
+void visualizza_prenotazioni_lezione(hashtable h, hashtable_p hp, list l)
+{
+    printf("------------------------------------------------------\n");
+    char id_lezione[20];
+    printf("Inserisci l'ID della lezione: ");
+    fgets(id_lezione, sizeof(id_lezione), stdin);
+    id_lezione[strcspn(id_lezione, "\n")] = '\0';
+
+    Lezione lezione_trovata = NULL;
+    list temp = l;
+    while (!emptyList(temp))
+    {
+        Lezione le = getFirst(temp);
+        if (strcmp(get_id_lezione(le), id_lezione) == 0)
+        {
+            lezione_trovata = le;
+            break;
+        }
+        temp = tailList(temp);
+    }
+
+    if (lezione_trovata == NULL)
+    {
+        printf("Lezione con ID '%s' non trovata.\n", id_lezione);
+        return;
+    }
+
+    stampa_prenotazioni_lezione(h, lezione_trovata, hp);
+}
+
 
 void menu_gestore(hashtable h, list l, hashtable_p hp) 
 {
@@ -444,8 +474,7 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
 
             case 9:
                 pulisci_schermo();
-                //stampa i clienti che sono prenotati a quella lezione
-                // visualizza_prenotazioni_lezione(h, l);
+                visualizza_prenotazioni_lezione(h, hp, l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;

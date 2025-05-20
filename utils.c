@@ -456,6 +456,79 @@ void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
         printf("Nessuna prenotazione trovata per questo cliente.\n");
 }
 
+void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp)
+{
+    if (lezione == NULL || hp == NULL || h == NULL) {
+        printf("Errore: dati mancanti.\n");
+        return;
+    }
+
+    // Ottieni gli attributi della lezione tramite getter
+    char* id_lez = get_id_lezione(lezione);
+    char* nome_lez = get_nome_lezione(lezione);
+    Data data = get_data_lezione(lezione);
+    Orario orario = get_ora_lezione(lezione);
+
+    // Estrai giorno, mese, anno da Data
+    int giorno = get_giorno(data);
+    int mese = get_mese(data);
+    int anno = get_anno(data);
+
+    // Estrai ora e minuti da Orario
+    int ore = get_ora(orario);
+    int minuti = get_minuti(orario);
+
+    printf("======================================================\n");
+    printf("LISTA DELLE PRENOTAZIONI DELLA LEZIONE DI: %s!\n", nome_lez);
+    printf("DATA: %02d/%02d/%04d    ORARIO: %02d:%02d\n", giorno, mese, anno, ore, minuti);
+    printf("======================================================\n");
+
+    printf("%-10s %-15s %-15s\n", "ID", "CLIENTE", "COGNOME");
+
+    Prenotazione* tabella = get_table_hash_p(hp);  // ottieni array prenotazioni
+    int size = get_size_hash_p(hp);
+
+    int trovata = 0;
+
+    // Scorri tutta la tabella delle prenotazioni
+    for (int i = 0; i < size; i++) 
+    {
+        Prenotazione p = tabella[i];
+        while (p != NULL) 
+        {
+            // Verifica se la prenotazione è della lezione richiesta
+            if (strcmp(get_id_lezione_prenotazione(p), id_lez) == 0) 
+            {
+                trovata = 1;
+                char* id_cli = get_id_cliente_prenotazione(p);
+
+                // Cerca il cliente associato
+                Cliente cliente = hashSearch(h, id_cli);
+                if (cliente != NULL) 
+                {
+                    printf("%-10s %-15s %-15s\n",
+                           get_id_prenotazione(p),
+                           get_nome_cliente(cliente),
+                           get_cognome_cliente(cliente));
+                } 
+                else 
+                {
+                    printf("%-10s %-15s %-15s\n",
+                           get_id_prenotazione(p), "Cliente", "Non Trovato");
+                }
+            }
+            p = get_next_prenotazione(p);
+        }
+    }
+
+    if (!trovata) 
+    {
+        printf("Nessuna prenotazione trovata per questa lezione.\n");
+    }
+}
+
+
+
 Lezione cerca_lezione_per_id(list l, const char *id_lezione)
 {
     while (!emptyList(l))
@@ -518,7 +591,7 @@ int solo_lettere(char* s)
 {
     for (int i = 0; s[i] != '\0'; i++)
     {
-        if (!( (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') || (s[i] >= ' ') ))
+        if (s[i] >= '0' && s[i] <= '9')
         {
             return 0; // Non è una lettera
         }
