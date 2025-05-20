@@ -456,6 +456,47 @@ void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
         printf("Nessuna prenotazione trovata per questo cliente.\n");
 }
 
+Lezione cerca_lezione_per_id(list l, const char *id_lezione)
+{
+    while (!emptyList(l))
+    {
+        Lezione le = getFirst(l);
+        if (le != NULL && strcmp(get_id_lezione(le), id_lezione) == 0)
+        {
+            return le;
+        }
+        l = tailList(l);
+    }
+    return NULL;  // Non trovata
+}
+
+void stampa_lezioni_libere(list l)
+{
+    Lezione le;
+    l = ordina_Lista(l);
+
+    printf("%-8s %-15s %-10s %-12s %s\n", "ID", "NOME", "ORA", "DATA", "POSTI");
+    printf("======================================================\n");
+
+    while (!emptyList(l))
+    {
+        le = getFirst(l);
+
+        int posti_occupati = get_posti_occupati(le);
+        int posti_max = get_posti_max(le);
+        
+        int posti_disponibili = posti_max - posti_occupati;
+
+        // Stampa solo se ci sono posti disponibili
+        if (posti_disponibili > 0)
+        {
+            visualizza_essenziale_lezione(le, posti_occupati, posti_max);
+        }
+
+        l = tailList(l);
+    }
+}
+
 int leggi_intero()
 {
     char buffer[64];
@@ -477,7 +518,7 @@ int solo_lettere(char* s)
 {
     for (int i = 0; s[i] != '\0'; i++)
     {
-        if (!( (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') ))
+        if (!( (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z') || (s[i] >= ' ') ))
         {
             return 0; // Non è una lettera
         }

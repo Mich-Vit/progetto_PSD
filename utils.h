@@ -26,6 +26,10 @@ void aggiorna_file_prenotazioni(hashtable_p h);
 
 void pulisci_schermo();
 
+Lezione cerca_lezione_per_id(list l, const char *id_lezione);
+
+void stampa_lezioni_libere(list l);
+
 int calcola_durata_in_mesi(Data data_inizio, Data data_fine);
 
 void riscrivi_file_clienti(hashtable h);

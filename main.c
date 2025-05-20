@@ -38,6 +38,9 @@ int main(void)
             {
                 pulisci_schermo();
                 menu_gestore(h, l, hp);
+                // Dopo aver potenzialmente aggiunto o rimosso lezioni nel menu_gestore,
+                // ricarico da file per aggiornare la lista reale
+                l = carica_lezioni_da_file(newList());
                 break;
             }
             case 2:

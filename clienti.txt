@@ -22,9 +22,9 @@ Data scadenza: 17/05/2026
 ID: C015
 Nome: Giovanni
 Cognome: Scarico
-Durata abbonamento: 2
-Data d'iscrizione: 18/05/2025
-Data scadenza: 18/07/2025
+Durata abbonamento: 1
+Data d'iscrizione: 18/04/2025
+Data scadenza: 18/05/2025
 -----------------------
 ID: C004
 Nome: Tony

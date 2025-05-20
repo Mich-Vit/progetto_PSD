@@ -27,6 +27,13 @@ Cliente login_cliente(hashtable h)
         printf("\nPremi INVIO per tornare al menu...");
         while (getchar() != '\n');
     }
+    else if(!abbonamento_valido(data_oggi(), get_data_scadenza(c)))
+    {
+        printf("Abbonamento scaduto!\n");
+        printf("\nPremi INVIO per tornare al menu...");
+        while (getchar() != '\n');
+        return NULL;
+    }
 
     return c;
 }
