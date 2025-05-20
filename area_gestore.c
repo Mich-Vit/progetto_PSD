@@ -217,9 +217,9 @@ void rimuovi_cliente(hashtable h, hashtable_p hp)
 
 list rimuovi_lezione(list l, hashtable_p hp)
 {
-    printf("==============================================\n");
-    printf("\t      RIMUOVI UNA LEZIONE\n");
-    printf("==============================================\n");
+    printf("======================================================\n");
+    printf("\t            RIMUOVI UNA LEZIONE\n");
+    printf("======================================================\n");
 
     if (emptyList(l))
     {
@@ -400,9 +400,9 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
                 break;
             case 6:
                 pulisci_schermo();
-                printf("==============================================\n");
-                printf("\t      LISTA DELLE LEZIONI\n");
-                printf("==============================================\n");
+                printf("======================================================\n");
+                printf("\t            LISTA DELLE LEZIONI\n");
+                printf("======================================================\n");
 
                 stampaMinimaList(l);
                 l = rimuovi_lezione(l, hp);

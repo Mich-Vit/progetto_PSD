@@ -198,6 +198,10 @@ void prenota_lezione(Cliente c, list l, hashtable_p h)
 
 void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
 {
+    printf("======================================================\n");
+    printf("LISTA DELLE PRENOTAZIONI DI: %s %s!\n", get_nome_cliente(c), get_cognome_cliente(c));
+    printf("======================================================\n");
+
     if (hp == NULL)
     {
         printf("Nessuna tabella di prenotazioni trovata.\n");
@@ -259,10 +263,6 @@ void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
 
 void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
 {
-    printf("======================================================\n");
-    printf("LISTA DELLE PRENOTAZIONI DI: %s %s!\n", get_nome_cliente(c), get_cognome_cliente(c));
-    printf("======================================================\n");
-
     if(hp == NULL)
     {
         printf("Nessuna lista di prenotazioni trovata\n");
@@ -323,6 +323,7 @@ void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp)
         printf("3) Prenota una lezione\n");
         printf("4) Disdici una prenotazione\n");
         printf("5) Visualizza lezioni\n");
+        printf("6) Visualizza le tue prenotazione\n");
         printf("0) Esci\n");
         printf("==============================================\n");
         printf("Scegli un'opzione: ");
@@ -364,6 +365,13 @@ void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp)
             case 5:
                 pulisci_schermo();
                 visualizza_lezioni(l);
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');
+                break;
+
+            case 6:
+                pulisci_schermo();
+                stampa_prenotazioni_cliente(c, hp, l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
