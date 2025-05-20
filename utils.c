@@ -391,6 +391,71 @@ void riscrivi_file_clienti(hashtable h)
     fclose(fp);  // Chiudi il file
 }
 
+void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
+{
+    printf("======================================================\n");
+    printf("LISTA DELLE PRENOTAZIONI DI: %s %s!\n", get_nome_cliente(c), get_cognome_cliente(c));
+    printf("======================================================\n");
+
+    if (hp == NULL)
+    {
+        printf("Nessuna tabella di prenotazioni trovata.\n");
+        return;
+    }
+
+    char* id_cliente = get_id_cliente(c);
+    Prenotazione* table = get_table_hash_p(hp);
+    int size = get_size_hash_p(hp);
+    int trovata = 0;
+
+    printf("%-10s %-20s %-16s\n", "ID", "LEZIONE", "DATA\t    ORA");
+    
+
+    for (int i = 0; i < size; i++)
+    {
+        Prenotazione curr = table[i];
+        while (curr != NULL)
+        {
+            if (strcmp(get_id_cliente_prenotazione(curr), id_cliente) == 0)
+            {
+                trovata = 1;
+
+                char* id_lezione = get_id_lezione_prenotazione(curr);
+                char nome_lezione[50] = "Lezione non trovata";
+                int giorno = 0, mese = 0, anno = 0, ore = 0, minuti = 0;
+
+                // Cerca la lezione nella lista
+                list temp = l;
+                while (!emptyList(temp))
+                {
+                    Lezione le = getFirst(temp);
+                    if (strcmp(get_id_lezione(le), id_lezione) == 0)
+                    {
+                        strcpy(nome_lezione, get_nome_lezione(le));
+                        giorno = get_giorno(get_data_lezione(le));
+                        mese = get_mese(get_data_lezione(le));
+                        anno = get_anno(get_data_lezione(le));
+                        ore = get_ora(get_ora_lezione(le));
+                        minuti = get_minuti(get_ora_lezione(le));
+                        break;
+                    }
+                    temp = tailList(temp);
+                }
+
+                printf("%-10s %-20s %02d/%02d/%04d %02d:%02d\n",
+                       get_id_prenotazione(curr),
+                       nome_lezione,
+                       giorno, mese, anno,
+                       ore, minuti);
+            }
+            curr = get_next_prenotazione(curr);
+        }
+    }
+
+    if (!trovata)
+        printf("Nessuna prenotazione trovata per questo cliente.\n");
+}
+
 int leggi_intero()
 {
     char buffer[64];

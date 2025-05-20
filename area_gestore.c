@@ -336,6 +336,24 @@ void ricerca_cliente(hashtable h)
     visualizza_cliente(ricercato);
 }
 
+void visualizza_prenotazioni_cliente(hashtable h, hashtable_p hp, list l)
+{
+    printf("------------------------------------------------------\n");
+    char id[20];
+    printf("Inserisci l'ID del cliente: ");
+    fgets(id, sizeof(id), stdin);
+    id[strcspn(id, "\n")] = '\0';
+
+    Cliente c = hashSearch(h, id);
+    if (c == NULL)
+    {
+        printf("Cliente con ID %s non trovato.\n", id);
+        return;
+    }
+
+    stampa_prenotazioni_cliente(c, hp, l);
+}
+
 
 void menu_gestore(hashtable h, list l, hashtable_p hp) 
 {
@@ -354,7 +372,9 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
         printf("5) Rimuovi un cliente\n");
         printf("6) Rimuovi una lezione\n");
         printf("7) Ricerca un cliente\n");
-        printf("8) Visualizza il report mensile\n");
+        printf("8) Visualizza le prenotazioni di un cliente\n");
+        printf("9) Visualizza le prenotazioni di una lezione\n");
+        printf("10) Visualizza il report mensile\n");
         printf("0) Esci\n");
         printf("==============================================\n");
         printf("Scegli un'opzione: ");
@@ -417,10 +437,26 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
                 break;
             case 8:
                 pulisci_schermo();
+                visualizza_prenotazioni_cliente(h, hp, l);
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');
+                break;
+
+            case 9:
+                pulisci_schermo();
+                //stampa i clienti che sono prenotati a quella lezione
+                // visualizza_prenotazioni_lezione(h, l);
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');
+                break;
+            
+            case 10:
+                pulisci_schermo();
                 // visualizza_report_mensile(h, l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
+        
             case 0:
                 printf("Arrivederci!\n");
                 break;
