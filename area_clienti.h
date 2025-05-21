@@ -10,8 +10,6 @@
 
 Cliente login_cliente(hashtable h);
 
-void rinnova_abbonamento(Cliente c);
-
 void visualizza_lezioni(list l);
 
 void disdici_prenotazione(Cliente c, hashtable_p hp, list l);

@@ -9,7 +9,7 @@
 #include "lista_lezioni.h"
 #include "hash_prenotazioni.h"
 
-// Dichiarazione delle funzioni per la gestione del contatore di id
+void rinnova_abbonamento(Cliente c, hashtable h);
 
 char* genera_id_generico(const char* prefix_letter, const char* filename);
 int carica_contatore_generico(const char* filename, const char* prefix);
@@ -31,8 +31,6 @@ Lezione cerca_lezione_per_id(list l, const char *id_lezione);
 void stampa_lezioni_libere(list l);
 
 int calcola_durata_in_mesi(Data data_inizio, Data data_fine);
-
-void riscrivi_file_clienti(hashtable h);
 
 void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l);
 void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp);

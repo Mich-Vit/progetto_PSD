@@ -10,51 +10,6 @@
 #include"utils.h"
 #include "hash_prenotazioni.h"
 
-void rinnova_abbonamento(Cliente c, hashtable h)
-{
-    if (c == NULL)
-    {
-        printf("Cliente non valido.\n");
-        return;
-    }
-
-    Data data_scadenza_attuale = get_data_scadenza(c);
-
-    int durata;
-    char buffer[100];
-    int valido = 0;
-
-    do
-    {
-        printf("Inserisci la durata del rinnovo in mesi (numero intero positivo): ");
-        fgets(buffer, sizeof(buffer), stdin);
-
-        // Controlla che sia un numero intero e che non ci siano caratteri extra
-        if (sscanf(buffer, "%d", &durata) == 1 && durata >= 0)
-        {
-            valido = 1;
-        }
-        else
-        {
-            printf("Errore: inserisci un numero intero valido e positivo.\n");
-        }
-    } while (!valido);
-
-    // Calcola la nuova data di scadenza aggiungendo la durata all'abbonamento
-    Data nuova_data_scadenza = calcolo_scadenza_abbonamento(data_scadenza_attuale, durata);
-    set_data_scadenza(c, nuova_data_scadenza);
-
-    // Calcola la durata effettiva dell'abbonamento (differenza tra data di scadenza e data di iscrizione)
-    int durata_effettiva = calcola_durata_in_mesi(get_data_iscrizione(c), get_data_scadenza(c));    
-    set_durata(c, durata_effettiva);
-
-    riscrivi_file_clienti(h);
-
-    printf("Il tuo abbonamento e' stato rinnovato fino al ");
-    visualizza_data(nuova_data_scadenza);  // Funzione per visualizzare la data
-    printf("\n");
-}
-
 // Funzione di login: richiede l'ID cliente e cerca nella hashtable
 Cliente login_cliente(hashtable h)
 {

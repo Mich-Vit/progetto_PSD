@@ -398,13 +398,14 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
         printf("1) Inserisci un nuovo cliente\n");
         printf("2) Inserisci una nuova lezione\n");
         printf("3) Visualizza la lista dei clienti\n");
-        printf("4) Visualizza la lista delle lezioni\n");
-        printf("5) Rimuovi un cliente\n");
-        printf("6) Rimuovi una lezione\n");
-        printf("7) Ricerca un cliente\n");
-        printf("8) Visualizza le prenotazioni di un cliente\n");
-        printf("9) Visualizza le prenotazioni di una lezione\n");
-        printf("10) Visualizza il report mensile\n");
+        printf("4) Rinnova l'abbonamento di un cliente\n");
+        printf("5) Visualizza la lista delle lezioni\n");
+        printf("6) Rimuovi un cliente\n");
+        printf("7) Rimuovi una lezione\n");
+        printf("8) Ricerca un cliente\n");
+        printf("9) Visualizza le prenotazioni di un cliente\n");
+        printf("10) Visualizza le prenotazioni di una lezione\n");
+        printf("11) Visualizza il report mensile\n");
         printf("0) Esci\n");
         printf("==============================================\n");
         printf("Scegli un'opzione: ");
@@ -432,23 +433,48 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
                 break;
             case 4:
                 pulisci_schermo();
-                outputList(l);
+                printf("==============================================\n");
+                printf("\t      LISTA DEI CLIENTI\n");
+                printf("==============================================\n");
+
+                stampaMinimaHash(h);
+                printf("\nInserisci l'ID del cliente a cui rinnovare: ");
+                char id_cliente[20];
+                fgets(id_cliente, sizeof(id_cliente), stdin);
+                id_cliente[strcspn(id_cliente, "\n")] = '\0'; // Rimuove il newline
+
+                Cliente c = hashSearch(h, id_cliente);
+                if (c == NULL)
+                {
+                    printf("Cliente con ID %s non trovato.\n", id_cliente);
+                }
+                else
+                {   
+                    rinnova_abbonamento(c, h);
+                    printf("Abbonamento rinnovato con successo per %s.\n", get_nome_cliente(c));
+                }
+
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
             case 5:
+                pulisci_schermo();
+                outputList(l);
+                printf("\nPremi INVIO per tornare al menu...");
+                while (getchar() != '\n');
+                break;
+            case 6:
                 pulisci_schermo();
                 printf("==============================================\n");
                 printf("\t      LISTA DEI CLIENTI\n");
                 printf("==============================================\n");
 
                 stampaMinimaHash(h);
-                printf("\n");
                 rimuovi_cliente(h, hp);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
-            case 6:
+            case 7:
                 pulisci_schermo();
                 printf("======================================================\n");
                 printf("\t            LISTA DELLE LEZIONI\n");
@@ -459,27 +485,27 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
-            case 7:
+            case 8:
                 pulisci_schermo();
                 ricerca_cliente(h);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
-            case 8:
+            case 9:
                 pulisci_schermo();
                 visualizza_prenotazioni_cliente(h, hp, l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
 
-            case 9:
+            case 10:
                 pulisci_schermo();
                 visualizza_prenotazioni_lezione(h, hp, l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;
             
-            case 10:
+            case 11:
                 pulisci_schermo();
                 // visualizza_report_mensile(h, l);
                 printf("\nPremi INVIO per tornare al menu...");

@@ -13,6 +13,51 @@
 #include "hash_prenotazioni.h"
 #include "prenotazione.h"
 
+void rinnova_abbonamento(Cliente c, hashtable h)
+{
+    if (c == NULL)
+    {
+        printf("Cliente non valido.\n");
+        return;
+    }
+
+    Data data_scadenza_attuale = get_data_scadenza(c);
+
+    int durata;
+    char buffer[100];
+    int valido = 0;
+
+    do
+    {
+        printf("Inserisci la durata del rinnovo in mesi (numero intero positivo): ");
+        fgets(buffer, sizeof(buffer), stdin);
+
+        // Controlla che sia un numero intero e che non ci siano caratteri extra
+        if (sscanf(buffer, "%d", &durata) == 1 && durata >= 0)
+        {
+            valido = 1;
+        }
+        else
+        {
+            printf("Errore: inserisci un numero intero valido e positivo.\n");
+        }
+    } while (!valido);
+
+    // Calcola la nuova data di scadenza aggiungendo la durata all'abbonamento
+    Data nuova_data_scadenza = calcolo_scadenza_abbonamento(data_scadenza_attuale, durata);
+    set_data_scadenza(c, nuova_data_scadenza);
+
+    // Calcola la durata effettiva dell'abbonamento (differenza tra data di scadenza e data di iscrizione)
+    int durata_effettiva = calcola_durata_in_mesi(get_data_iscrizione(c), get_data_scadenza(c));    
+    set_durata(c, durata_effettiva);
+
+    aggiorna_file_clienti(h);
+
+    printf("Il tuo abbonamento e' stato rinnovato fino al ");
+    visualizza_data(nuova_data_scadenza);  // Funzione per visualizzare la data
+    printf("\n");
+}
+
 int carica_contatore_generico(const char* filename, const char* prefix)
 {
     FILE* file = fopen(filename, "r");
@@ -346,49 +391,6 @@ int calcola_durata_in_mesi(Data data_inizio, Data data_fine)
     }
 
     return durata_in_mesi;
-}
-
-void riscrivi_file_clienti(hashtable h)
-{
-    FILE* fp = fopen("clienti.txt", "w"); // "w" per riscrivere il file ogni volta
-    if (fp == NULL)
-    {
-        printf("Errore nell'apertura del file per la scrittura.\n");
-        return;
-    }
-
-    Cliente* table = get_table_hash(h); 
-
-    for (int i = 0; i < get_size_hash(h); i++)  // Scorri ogni slot della tabella hash
-    {
-        Cliente curr = table[i];  // Ottieni la lista di clienti in questo slot
-
-        while (curr != NULL)  // Scorri la lista concatenata
-        {
-            // Scrivi le informazioni del cliente nel file
-            fprintf(fp, "ID: %s\n", get_id_cliente(curr));
-            fprintf(fp, "Nome: %s\n", get_nome_cliente(curr));
-            fprintf(fp, "Cognome: %s\n", get_cognome_cliente(curr));
-            fprintf(fp, "Durata abbonamento: %d\n", get_durata_abbonamento(curr));
-            
-            // Scrivi le date (data iscrizione e scadenza)
-            fprintf(fp, "Data d'iscrizione: %02d/%02d/%04d\n",
-                get_giorno(get_data_iscrizione(curr)),
-                get_mese(get_data_iscrizione(curr)),
-                get_anno(get_data_iscrizione(curr)));
-                
-            fprintf(fp, "Data scadenza: %02d/%02d/%04d\n",
-                get_giorno(get_data_scadenza(curr)),
-                get_mese(get_data_scadenza(curr)),
-                get_anno(get_data_scadenza(curr)));
-                
-            fprintf(fp, "-----------------------\n");  // Separazione tra i clienti
-
-            curr = get_next_cliente(curr);  // Passa al prossimo cliente nella lista
-        }
-    }
-
-    fclose(fp);  // Chiudi il file
 }
 
 void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
