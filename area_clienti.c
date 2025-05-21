@@ -10,35 +10,6 @@
 #include"utils.h"
 #include "hash_prenotazioni.h"
 
-// Funzione di login: richiede l'ID cliente e cerca nella hashtable
-Cliente login_cliente(hashtable h)
-{
-    char id[20];
-
-    printf("Inserisci il tuo ID cliente: ");
-    fgets(id, sizeof(id), stdin); 
-    id[strcspn(id, "\n")] = '\0';  
-
-    Cliente c = hashSearch(h, id);
-
-    if (c == NULL)
-    {
-        printf("Cliente non trovato. Verifica l'ID inserito.\n");
-        printf("\nPremi INVIO per tornare al menu...");
-        while (getchar() != '\n');
-    }
-    else if(!abbonamento_valido(data_oggi(), get_data_scadenza(c)))
-    {
-        printf("Abbonamento scaduto!\n");
-        printf("\nPremi INVIO per tornare al menu...");
-        while (getchar() != '\n');
-        return NULL;
-    }
-
-    return c;
-}
-
-// Funzione di rinnovo dell'abbonamento
 void rinnova_abbonamento(Cliente c, hashtable h)
 {
     if (c == NULL)
@@ -82,6 +53,51 @@ void rinnova_abbonamento(Cliente c, hashtable h)
     printf("Il tuo abbonamento e' stato rinnovato fino al ");
     visualizza_data(nuova_data_scadenza);  // Funzione per visualizzare la data
     printf("\n");
+}
+
+// Funzione di login: richiede l'ID cliente e cerca nella hashtable
+Cliente login_cliente(hashtable h)
+{
+    char id[20];
+    int sc;
+
+    printf("Inserisci il tuo ID cliente: ");
+    fgets(id, sizeof(id), stdin); 
+    id[strcspn(id, "\n")] = '\0';  
+
+    Cliente c = hashSearch(h, id);
+
+    if (c == NULL)
+    {
+        printf("Cliente non trovato. Verifica l'ID inserito.\n");
+        printf("\nPremi INVIO per tornare al menu...");
+        while (getchar() != '\n');
+    }
+    else if(!abbonamento_valido(data_oggi(), get_data_scadenza(c)))
+    {
+        printf("Abbonamento scaduto!\n");
+
+        printf("1) Se vuoi rinnovare il tuo abbonamento\n");
+        printf("0) Per tornare indietro\n");
+        sc = leggi_intero();
+        switch (sc)
+        {
+            case 1:
+                rinnova_abbonamento(c, h);
+                break;
+            
+            default:
+                printf("Opzione non valida.\n");
+                printf("\nPremi INVIO...");
+                break;
+        }
+        
+        printf("\nPremi INVIO per tornare al menu...");
+        while (getchar() != '\n');
+        return NULL;
+    }
+
+    return c;
 }
 
 void visualizza_lezioni(list l)
