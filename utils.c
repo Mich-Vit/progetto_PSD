@@ -589,12 +589,22 @@ int leggi_intero()
 
 int solo_lettere(char* s)
 {
+    int contiene_lettera = 0;
+
     for (int i = 0; s[i] != '\0'; i++)
     {
-        if (s[i] >= '0' && s[i] <= '9')
+        if ((s[i] >= '0' && s[i] <= '9') ||        // Cifre non ammesse
+            !( (s[i] >= 'A' && s[i] <= 'Z') ||     // Lettere maiuscole
+               (s[i] >= 'a' && s[i] <= 'z') ||     // Lettere minuscole
+               s[i] == ' '))                      // Solo spazi ammessi
         {
-            return 0; // Non è una lettera
+            return 0; // Carattere non valido
+        }
+
+        if ((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z')) {
+            contiene_lettera = 1;
         }
     }
-    return 1; // Tutti i caratteri sono lettere
+
+    return contiene_lettera;
 }

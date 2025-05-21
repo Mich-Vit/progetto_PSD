@@ -15,9 +15,9 @@ Data scadenza: 14/06/2026
 ID: C012
 Nome: Michele
 Cognome: Vitiello
-Durata abbonamento: 16
+Durata abbonamento: 18
 Data d'iscrizione: 17/05/2025
-Data scadenza: 17/09/2026
+Data scadenza: 17/11/2026
 -----------------------
 ID: C015
 Nome: Giovanni
@@ -46,4 +46,32 @@ Cognome: Vertolomo
 Durata abbonamento: 1
 Data d'iscrizione: 10/05/2025
 Data scadenza: 10/06/2025
+-----------------------
+ID: C017
+Nome: Ezio
+Cognome: Auditore
+Durata abbonamento: 3
+Data d'iscrizione: 21/05/2025
+Data scadenza: 21/08/2025
+-----------------------
+ID: C018
+Nome: Rosa
+Cognome: Vitiello
+Durata abbonamento: 2
+Data d'iscrizione: 21/05/2025
+Data scadenza: 21/07/2025
+-----------------------
+ID: C019
+Nome: Domenico Dario
+Cognome: Aliberti
+Durata abbonamento: 1
+Data d'iscrizione: 21/05/2025
+Data scadenza: 21/06/2025
+-----------------------
+ID: C020
+Nome: Joel
+Cognome: Miller
+Durata abbonamento: 6
+Data d'iscrizione: 21/05/2025
+Data scadenza: 21/11/2025
 -----------------------

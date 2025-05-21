@@ -249,6 +249,13 @@ void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
         return;
     }
 
+    // Controlla che la prenotazione appartenga al cliente
+    if (strcmp(get_id_cliente_prenotazione(rem), get_id_cliente(c)) != 0)
+    {
+        printf("Errore: non puoi disdire una prenotazione che non ti appartiene.\n");
+        return;
+    }
+
     char* id_lezione = get_id_lezione_prenotazione(rem);
 
     // Trova la lezione nella lista e decrementa i posti
