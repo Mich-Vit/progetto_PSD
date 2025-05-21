@@ -549,6 +549,7 @@ void stampa_lezioni_libere(list l)
 {
     Lezione le;
     l = ordina_Lista(l);
+    Data oggi = data_oggi();
 
     printf("%-8s %-15s %-10s %-12s %s\n", "ID", "NOME", "ORA", "DATA", "POSTI");
     printf("======================================================\n");
@@ -559,17 +560,17 @@ void stampa_lezioni_libere(list l)
 
         int posti_occupati = get_posti_occupati(le);
         int posti_max = get_posti_max(le);
-        
         int posti_disponibili = posti_max - posti_occupati;
 
-        // Stampa solo se ci sono posti disponibili
-        if (posti_disponibili > 0)
+        if (posti_disponibili > 0 && confronta_date(get_data_lezione(le), oggi) >= 0)
         {
             visualizza_essenziale_lezione(le, posti_occupati, posti_max);
         }
 
         l = tailList(l);
     }
+
+    libera_data(oggi); // libera la memoria se data_oggi() restituisce data allocata dinamicamente
 }
 
 int leggi_intero()

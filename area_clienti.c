@@ -132,6 +132,11 @@ void prenota_lezione(Cliente c, list l, hashtable_p h)
         printf("Impossibile prenotare: la lezione si svolge dopo la scadenza del tuo abbonamento.\n");
         return;
     }
+    else if (confronta_date(data_oggi(), get_data_lezione(l_selezionata)) > 0)
+    {
+        printf("Impossibile prenotare: la lezione gia' si e' svolta.\n");
+        return;
+    }
 
     int posti_occupati = get_posti_occupati(l_selezionata);
     int posti_max = get_posti_max(l_selezionata);
