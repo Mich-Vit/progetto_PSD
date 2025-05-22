@@ -60,7 +60,7 @@ void visualizza_lezioni(list l)
     printf("==============================================\n");
     printf("\t      LISTA DELLE LEZIONI\n");
     printf("==============================================\n");
-    
+
     if (l == NULL || emptyList(l))
     {
         printf("Nessuna lista di lezioni trovata.\n");
@@ -70,25 +70,51 @@ void visualizza_lezioni(list l)
     int scelta;
     printf("Cosa vuoi visualizzare?\n");
     printf("1) Tutte le lezioni\n");
-    printf("2) Solo lezioni disponibili\n");
+    printf("2) Solo lezioni disponibili (non passate e con posti liberi)\n");
+    printf("0) Torna indietro\n");
     printf("Scelta: ");
     scelta = leggi_intero();
+
+    if(scelta == 0)
+    {
+        return;
+    }
 
     list tmp = l;
     int trovate = 0;
 
+    Data oggi_data = data_oggi(); 
+
     while (!emptyList(tmp))
     {
         Lezione le = getFirst(tmp);
+        int posti_disponibili = get_posti_max(le) - get_posti_occupati(le);
 
-        if (scelta == 1 || (scelta == 2 && (get_posti_max(le) - get_posti_occupati(le)) > 0))
+        int mostra = 0;
+
+        if (scelta == 1)
         {
-            visualizza_lezione(le); 
+            mostra = 1;
+        }
+        else if (scelta == 2)
+        {
+            Data data_le = get_data_lezione(le);
+            if (posti_disponibili > 0 && confronta_date(data_le, oggi_data) >= 0)
+            {
+                mostra = 1;
+            }
+        }
+
+        if (mostra)
+        {
+            visualizza_lezione(le);
             trovate++;
         }
 
         tmp = tailList(tmp);
     }
+
+    libera_data(oggi_data);  // libera la data corrente se è allocata dinamicamente
 
     if (trovate == 0)
     {
