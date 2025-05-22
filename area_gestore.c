@@ -12,6 +12,7 @@
 #include "lezione.h"
 #include "orario.h"
 #include "hash_prenotazioni.h"
+#include "report.h"
 
 void inserisci_cliente(hashtable h)
 {
@@ -81,13 +82,43 @@ void inserisci_cliente(hashtable h)
     }
 }
 
+int nome_lezione_valido(const char* nome)
+{
+    const char* lezioni_permesse[] =
+    {
+        "Sala pesi",
+        "Pugilato",
+        "Danza Classica",
+        "Yoga",
+        "Zumba",
+        "Pilates",
+        "Crossfit"
+    };
+    
+    //calcola il numero di elementi presenti in lezioni_permesse[]
+    const int num_lezioni = sizeof(lezioni_permesse) / sizeof(lezioni_permesse[0]);
+
+    for (int i = 0; i < num_lezioni; i++)
+    {
+        if (strcmp(nome, lezioni_permesse[i]) == 0)
+            return 1;
+    }
+
+    return 0;
+}
+
+
 list inserisci_lezione(list l)
 {
     char nome[50];
     int posti_max;
-    Data data;
+    Data data = NULL;
     Orario orario = NULL;
     int ore, min;
+
+    Data oggi = data_oggi();
+    int mese_corrente = get_mese(oggi);
+    int anno_corrente = get_anno(oggi);
 
     printf("==============================================\n");
     printf("\tINSERISCI UNA LEZIONE\n");
@@ -98,12 +129,22 @@ list inserisci_lezione(list l)
         printf("Inserisci il nome: ");
         fgets(nome, sizeof(nome), stdin);
         nome[strcspn(nome, "\n")] = '\0';
-    
+
         if (!solo_lettere(nome))
         {
             printf("Errore: il nome deve contenere solo lettere. Riprova.\n");
+            continue;
         }
-    } while (!solo_lettere(nome));
+
+        if (!nome_lezione_valido(nome))
+        {
+            printf("Errore: lezione non consentita. Le lezioni consentite sono:\n");
+            printf(" - Sala pesi\n - Pugilato\n - Danza Classica\n - Yoga\n - Zumba\n - Pilates\n - Crossfit\n");
+            continue;
+        }
+
+        break; 
+    } while (1);
 
     do
     {
@@ -111,10 +152,10 @@ list inserisci_lezione(list l)
         if (scanf("%d:%d", &ore, &min) != 2)
         {
             printf("Formato orario non valido. Riprova.\n");
-            while(getchar() != '\n'); // pulisce buffer
+            while(getchar() != '\n');
             continue;
         }
-        while(getchar() != '\n'); // pulisce buffer
+        while(getchar() != '\n'); 
 
         orario = crea_orario(ore, min);
         if (orario == NULL)
@@ -125,16 +166,55 @@ list inserisci_lezione(list l)
 
     do
     {
-        printf("Inserisci il numero massimo di posti: ");
+        // se data era stata allocata nel ciclo precedente, liberala prima
+        if (data != NULL)  
+        {
+            libera_data(data);
+            data = NULL;
+        }
+
+        data = leggi_data();
+
+        int mese_data = get_mese(data);
+        int anno_data = get_anno(data);
+
+        int mese_successivo;
+        int anno_successivo;
+
+        if (mese_corrente == 12)
+        {
+            mese_successivo = 1;
+            anno_successivo = anno_corrente + 1;
+        }
+        else
+        {
+            mese_successivo = mese_corrente + 1; 
+            anno_successivo = anno_corrente;   
+        }
+
+        if (!((anno_data == anno_corrente && mese_data == mese_corrente) ||
+              (anno_data == anno_successivo && mese_data == mese_successivo)))
+        {
+            printf("Errore: la data deve essere nel mese corrente o nel mese successivo.\n");
+            libera_data(data);
+            data = NULL;
+        }
+    } while (data == NULL);
+
+    do
+    {
+        printf("Inserisci il numero massimo di posti (max 30): ");
         posti_max = leggi_intero();
 
         if (posti_max <= 0)
         {
             printf("Errore: il numero di posti deve essere positivo. Riprova.\n");
         }
-    } while (posti_max <= 0);
-
-    data = copia_data(leggi_data());
+        else if (posti_max > 30)
+        {
+            printf("Errore: il numero massimo consentito e' 30. Riprova.\n");
+        }
+    } while (posti_max <= 0 || posti_max > 30);
 
     char* id = genera_id_generico("L", "lezioni.txt");
 
@@ -351,6 +431,8 @@ void visualizza_prenotazioni_cliente(hashtable h, hashtable_p hp, list l)
         return;
     }
 
+    pulisci_schermo();
+
     stampa_prenotazioni_cliente(c, hp, l);
 }
 
@@ -381,6 +463,8 @@ void visualizza_prenotazioni_lezione(hashtable h, hashtable_p hp, list l)
         return;
     }
 
+    pulisci_schermo();
+
     stampa_prenotazioni_lezione(h, lezione_trovata, hp);
 }
 
@@ -405,7 +489,7 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
         printf("8) Ricerca un cliente\n");
         printf("9) Visualizza le prenotazioni di un cliente\n");
         printf("10) Visualizza le prenotazioni di una lezione\n");
-        printf("11) Visualizza il report mensile\n");
+        printf("11) Genera il report mensile\n");
         printf("0) Esci\n");
         printf("==============================================\n");
         printf("Scegli un'opzione: ");
@@ -493,6 +577,11 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
                 break;
             case 9:
                 pulisci_schermo();
+                printf("=====================================================\n");
+                printf("\t      VISUALIZZA PRENOTAZIONI\n");
+                printf("=====================================================\n");
+                
+                stampaMinimaHash(h);
                 visualizza_prenotazioni_cliente(h, hp, l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
@@ -500,6 +589,11 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
 
             case 10:
                 pulisci_schermo();
+                printf("=====================================================\n");
+                printf("\t      VISUALIZZA PRENOTAZIONI\n");
+                printf("=====================================================\n");
+
+                stampaMinimaList(l);
                 visualizza_prenotazioni_lezione(h, hp, l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
@@ -507,7 +601,7 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
             
             case 11:
                 pulisci_schermo();
-                // visualizza_report_mensile(h, l);
+                genera_report_mensile(hp, l);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;

@@ -12,6 +12,7 @@
         "lezione.h": "c",
         "text_encoding": "c",
         "hash_prenotazioni.h": "c",
-        "utils.h": "c"
+        "utils.h": "c",
+        "report.h": "c"
     }
 }

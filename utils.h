@@ -39,5 +39,7 @@ int leggi_intero(); //controlla se l'input sia effettivamente un numero intero.
 
 int solo_lettere(char* s);
 
+const char* nome_mese(int mese);
+
 #endif /* UTILS_H */
 

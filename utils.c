@@ -529,8 +529,6 @@ void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp)
     }
 }
 
-
-
 Lezione cerca_lezione_per_id(list l, const char *id_lezione)
 {
     while (!emptyList(l))
@@ -610,4 +608,14 @@ int solo_lettere(char* s)
     }
 
     return contiene_lettera;
+}
+
+// Converte mese numerico in nome
+const char* nome_mese(int mese)
+{
+    const char* mesi[] = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+                          "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
+    if (mese >= 1 && mese <= 12)
+        return mesi[mese - 1];
+    return "Mese sconosciuto";
 }

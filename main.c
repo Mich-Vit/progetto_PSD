@@ -9,6 +9,7 @@
 #include"utils.h"
 #include "hash.h"
 #include "hash_prenotazioni.h"
+#include "report.h"
 
 int main(void)
 {
@@ -61,6 +62,7 @@ int main(void)
             case 0:
             {
                 printf("Uscita dal programma.\n");
+                genera_report_mensile(hp, l);
                 break;
             }
             default:
