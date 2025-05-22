@@ -123,10 +123,13 @@ list inserisci_lezione(list l)
     int mese_corrente = get_mese(oggi);
     int anno_corrente = get_anno(oggi);
 
-    printf("==============================================\n");
-    printf("\tINSERISCI UNA LEZIONE\n");
-    printf("==============================================\n");
+    printf("===============================================\n");
+    printf("\t    INSERISCI UNA LEZIONE\n");
+    printf("===============================================\n");
 
+    printf("\tLe lezioni consentite sono:\n");
+    printf(" - Sala pesi - Pugilato - Danza Classica - Yoga\n - Zumba - Pilates - Crossfit\n");
+    printf("-----------------------------------------------\n");
     do
     {
         printf("Inserisci il nome: ");
@@ -141,8 +144,7 @@ list inserisci_lezione(list l)
 
         if (!nome_lezione_valido(nome))
         {
-            printf("Errore: lezione non consentita. Le lezioni consentite sono:\n");
-            printf(" - Sala pesi\n - Pugilato\n - Danza Classica\n - Yoga\n - Zumba\n - Pilates\n - Crossfit\n");
+            printf("Errore: lezione non consentita, riprova.\n");
             continue;
         }
 
