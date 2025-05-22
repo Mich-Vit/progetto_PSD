@@ -13,6 +13,7 @@
         "text_encoding": "c",
         "hash_prenotazioni.h": "c",
         "utils.h": "c",
-        "report.h": "c"
+        "report.h": "c",
+        "vector": "c"
     }
 }

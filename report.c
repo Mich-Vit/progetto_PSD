@@ -24,7 +24,7 @@ struct statistica
 
 // Funzione per trovare o aggiungere una lezione all'array di statistiche
 // Cerca se esiste già una statistica per quella lezione. Se sì, incrementa. Se no, aggiunge.
-int aggiorna_statistica(Stats* stats, int* n, int* capacity, const char* id_lezione)
+int aggiorna_statistica(Stats* stats, int* n, int* size_stats, const char* id_lezione)
 {
     for (int i = 0; i < *n; i++)
     {
@@ -36,11 +36,11 @@ int aggiorna_statistica(Stats* stats, int* n, int* capacity, const char* id_lezi
     }
 
     //Controlla se c’è abbastanza spazio
-    if (*n >= *capacity)
+    if (*n >= *size_stats)
     {
         //Se non c’è, raddoppia la capacità con realloc
-        *capacity *= 2;
-        *stats = realloc(*stats, (*capacity) * sizeof(struct statistica));
+        *size_stats = (*size_stats) * 2;
+        *stats = realloc(*stats, (*size_stats) * sizeof(struct statistica));
         if (*stats == NULL)
         {
             printf("Errore di memoria in realloc.\n");
@@ -69,10 +69,10 @@ void genera_report_mensile(hashtable_p hp, list l)
     Prenotazione* table = get_table_hash_p(hp);
     int size = get_size_hash_p(hp);
 
-    int capacity = 10;
-    int count_stats = 0;
+    int size_stats = 10; //Spazio disponibile nell’array stats
+    int count_stats = 0; //Numero reale di lezioni diverse già contate nel report
     int totale = 0; //conteggio totale delle prenotazioni del mese.
-    Stats stats = malloc(capacity * sizeof(struct statistica));
+    Stats stats = malloc(size_stats * sizeof(struct statistica));
     if (stats == NULL)
     {
         printf("Errore di memoria in malloc.\n");
@@ -90,7 +90,7 @@ void genera_report_mensile(hashtable_p hp, list l)
             if (get_mese(d) == mese_attuale && get_anno(d) == anno_attuale)
             {
                 totale++;
-                aggiorna_statistica(&stats, &count_stats, &capacity, get_id_lezione_prenotazione(p));
+                aggiorna_statistica(&stats, &count_stats, &size_stats, get_id_lezione_prenotazione(p));
             }
             p = get_next_prenotazione(p);
         }
