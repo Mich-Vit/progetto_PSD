@@ -176,7 +176,7 @@ void prenota_lezione(Cliente c, list l, hashtable_p h)
 
     char *id_prenotazione = genera_id_generico("P", "prenotazioni.txt");
     Prenotazione p = crea_prenotazione(id_prenotazione, get_id_cliente(c), get_id_lezione(l_selezionata), data_pre);
-
+    free(id_prenotazione);
     // Inserisci nella tabella hash delle prenotazioni
     insertHash_p(h, p);
 
@@ -201,7 +201,7 @@ void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
     fgets(id_prenotazione_scelta, sizeof(id_prenotazione_scelta), stdin); 
     id_prenotazione_scelta[strcspn(id_prenotazione_scelta, "\n")] = '\0';
 
-    Prenotazione rem = hashDelete_p(hp, id_prenotazione_scelta);
+    Prenotazione rem = hashSearch_p(hp, id_prenotazione_scelta);
 
     if(rem == NULL)
     {
@@ -215,6 +215,8 @@ void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
         printf("Errore: non puoi disdire una prenotazione che non ti appartiene.\n");
         return;
     }
+
+    rem = hashDelete_p(hp, id_prenotazione_scelta);
 
     char* id_lezione = get_id_lezione_prenotazione(rem);
 
