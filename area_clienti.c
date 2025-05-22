@@ -40,6 +40,9 @@ Cliente login_cliente(hashtable h)
             case 1:
                 rinnova_abbonamento(c, h);
                 break;
+            case 0: 
+                printf("Uscita dal menu'.\n");
+                break;
             
             default:
                 printf("Opzione non valida.\n");
@@ -55,7 +58,7 @@ Cliente login_cliente(hashtable h)
     return c;
 }
 
-void visualizza_lezioni(list l)
+static void visualizza_lezioni(list l)
 {
     printf("==============================================\n");
     printf("\t      LISTA DELLE LEZIONI\n");
@@ -122,7 +125,7 @@ void visualizza_lezioni(list l)
     }
 }
 
-void prenota_lezione(Cliente c, list l, hashtable_p h)
+static void prenota_lezione(Cliente c, list l, hashtable_p h)
 {
     printf("======================================================\n");
     printf("\t    LISTA DELLE LEZIONI DISPONIBILI\n");
@@ -211,7 +214,7 @@ void prenota_lezione(Cliente c, list l, hashtable_p h)
     printf("Prenotazione effettuata con successo!\n");
 }
 
-void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
+static void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
 {
     if(hp == NULL)
     {

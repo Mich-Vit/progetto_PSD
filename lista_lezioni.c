@@ -133,7 +133,7 @@ list removeList(list l, int pos)
     return l2;  // Restituisci la lista modificata
 }
 
-list copiaLista(list l)
+static list copiaLista(list l)
 {
     list copia = newList();
     list temp = newList();

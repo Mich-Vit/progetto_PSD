@@ -590,6 +590,45 @@ int data_valida_per_lezione(Data data)
             (anno_data == anno_successivo && mese_data == mese_successivo));
 }
 
+Data calcolo_scadenza_abbonamento(Data data_inizio, int durata_abbonamento) 
+{
+    int giorno = get_giorno(data_inizio);
+    int mese = get_mese(data_inizio);
+    int anno = get_anno(data_inizio);
+
+    mese += durata_abbonamento;
+
+    // Gestione overflow mesi
+    while (mese > 12) 
+    {
+        mese -= 12;
+        anno += 1;
+    }
+
+    Data data_scadenza = crea_data(giorno, mese, anno);
+
+    return data_scadenza;
+}
+
+int abbonamento_valido(Data oggi, Data scadenza) // Ritorna 1 se e' valido, 0 altrimenti
+{
+    if (confronta_date(oggi, scadenza) == -1) 
+    {
+        // oggi è prima della scadenza
+        return 1;
+    } 
+    else if (confronta_date(oggi, scadenza) == 0) 
+    {
+        // oggi è il giorno stesso della scadenza
+        return 1;
+    } 
+    else 
+    {
+        // oggi è dopo la scadenza
+        return 0;
+    }
+}
+
 int leggi_intero()
 {
     char buffer[64];

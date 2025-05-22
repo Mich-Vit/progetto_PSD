@@ -61,8 +61,8 @@ int main(void)
             }
             case 0:
             {
-                printf("Uscita dal programma.\n");
                 genera_report_mensile(hp, l);
+                printf("Uscita dal programma.\n");
                 break;
             }
             default:

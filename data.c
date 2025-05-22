@@ -38,24 +38,6 @@ void visualizza_data(Data data)
     }
 }
 
-//calcola la data di scadenza dell'abbonamento
-Data calcolo_scadenza_abbonamento(Data data_inizio, int durata_abbonamento) 
-{
-    Data data_scadenza = crea_data(data_inizio->giorno, data_inizio->mese, data_inizio->anno);
-
-    // Aggiungi la durata (in mesi) alla nuova data di scadenza
-    data_scadenza->mese += durata_abbonamento;
-
-    // Gestisci l'overflow dei mesi (se i mesi superano 12, si passa all'anno successivo)
-    while (data_scadenza->mese > 12) 
-    {
-        data_scadenza->mese -= 12;  // Reset mese a gennaio
-        data_scadenza->anno += 1;   // Aggiungi un anno
-    }
-
-    return data_scadenza; 
-}
-
 int confronta_date(Data d1, Data d2)// -1 se d1 < d2, 0 se d1 == d2, 1 se d1 > d2
 {
     if (d1->anno > d2->anno)
@@ -135,25 +117,6 @@ Data leggi_data()
         }
 
         return inserita;
-    }
-}
-
-int abbonamento_valido(Data oggi, Data scadenza) // Ritorna 1 se e' valido, 0 altrimenti
-{
-    if (confronta_date(oggi, scadenza) == -1) 
-    {
-        // oggi è prima della scadenza
-        return 1;
-    } 
-    else if (confronta_date(oggi, scadenza) == 0) 
-    {
-        // oggi è il giorno stesso della scadenza
-        return 1;
-    } 
-    else 
-    {
-        // oggi è dopo la scadenza
-        return 0;
     }
 }
 

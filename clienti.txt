@@ -64,7 +64,7 @@ Data scadenza: 21/08/2025
 ID: C003
 Nome: Ezio
 Cognome: Auditore
-Durata abbonamento: 15
-Data d'iscrizione: 14/05/2025
-Data scadenza: 14/08/2026
+Durata abbonamento: 1
+Data d'iscrizione: 14/04/2025
+Data scadenza: 14/05/2025
 -----------------------

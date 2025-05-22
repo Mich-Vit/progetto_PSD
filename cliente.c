@@ -5,6 +5,7 @@
 #include<string.h>
 #include"data.h"
 #include"cliente.h"
+#include"utils.h"
 
 // === Definizione della struttura ===
 

@@ -1,29 +1,36 @@
-ID: L010
-Nome: Crossfit
-Data: 20/06/2025
-Orario: 16:00
-Posti massimi: 25
-Posti occupati: 1
+ID: L001
+Nome: Yoga
+Data: 15/05/2025
+Orario: 10:00
+Posti massimi: 15
+Posti occupati: 0
 -----------------------
-ID: L009
-Nome: Pugilato
-Data: 15/06/2025
-Orario: 18:00
+ID: L002
+Nome: Sala pesi
+Data: 17/05/2025
+Orario: 09:00
 Posti massimi: 18
 Posti occupati: 0
 -----------------------
-ID: L008
-Nome: Pugilato
-Data: 12/06/2025
-Orario: 12:00
-Posti massimi: 12
-Posti occupati: 4
+ID: L003
+Nome: Crossfit
+Data: 27/05/2025
+Orario: 18:00
+Posti massimi: 20
+Posti occupati: 2
 -----------------------
-ID: L007
-Nome: Danza Classica
-Data: 10/06/2025
-Orario: 14:00
-Posti massimi: 10
+ID: L004
+Nome: Sala pesi
+Data: 29/05/2025
+Orario: 19:30
+Posti massimi: 22
+Posti occupati: 1
+-----------------------
+ID: L005
+Nome: Zumba
+Data: 02/06/2025
+Orario: 17:00
+Posti massimi: 20
 Posti occupati: 0
 -----------------------
 ID: L006
@@ -33,38 +40,31 @@ Orario: 15:30
 Posti massimi: 15
 Posti occupati: 0
 -----------------------
-ID: L005
-Nome: Zumba
-Data: 02/06/2025
-Orario: 17:00
-Posti massimi: 20
+ID: L007
+Nome: Danza Classica
+Data: 10/06/2025
+Orario: 14:00
+Posti massimi: 10
 Posti occupati: 0
 -----------------------
-ID: L004
-Nome: Sala pesi
-Data: 29/05/2025
-Orario: 19:30
-Posti massimi: 22
-Posti occupati: 1
+ID: L008
+Nome: Pugilato
+Data: 12/06/2025
+Orario: 12:00
+Posti massimi: 12
+Posti occupati: 4
 -----------------------
-ID: L003
-Nome: Crossfit
-Data: 27/05/2025
+ID: L009
+Nome: Pugilato
+Data: 15/06/2025
 Orario: 18:00
-Posti massimi: 20
-Posti occupati: 2
------------------------
-ID: L002
-Nome: Sala pesi
-Data: 17/05/2025
-Orario: 09:00
 Posti massimi: 18
 Posti occupati: 0
 -----------------------
-ID: L001
-Nome: Yoga
-Data: 15/05/2025
-Orario: 10:00
-Posti massimi: 15
-Posti occupati: 0
+ID: L010
+Nome: Crossfit
+Data: 20/06/2025
+Orario: 16:00
+Posti massimi: 25
+Posti occupati: 1
 -----------------------

@@ -24,7 +24,7 @@ struct statistica
 
 // Funzione per trovare o aggiungere una lezione all'array di statistiche
 // Cerca se esiste già una statistica per quella lezione. Se sì, incrementa. Se no, aggiunge.
-int aggiorna_statistica(Stats* stats, int* n, int* size_stats, const char* id_lezione)
+static int aggiorna_statistica(Stats* stats, int* n, int* size_stats, const char* id_lezione)
 {
     for (int i = 0; i < *n; i++)
     {

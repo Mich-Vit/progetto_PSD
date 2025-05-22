@@ -14,7 +14,7 @@
 #include "hash_prenotazioni.h"
 #include "report.h"
 
-void inserisci_cliente(hashtable h)
+static void inserisci_cliente(hashtable h)
 {
     char nome[50], cognome[50];
     int durata;
@@ -85,7 +85,7 @@ void inserisci_cliente(hashtable h)
     }
 }
 
-int nome_lezione_valido(const char* nome)
+static int nome_lezione_valido(const char* nome)
 {
     const char* lezioni_permesse[] =
     {
@@ -110,8 +110,7 @@ int nome_lezione_valido(const char* nome)
     return 0;
 }
 
-
-list inserisci_lezione(list l)
+static list inserisci_lezione(list l)
 {
     char nome[50];
     int posti_max;
@@ -218,7 +217,7 @@ list inserisci_lezione(list l)
     return l;
 }
 
-void rimuovi_cliente(hashtable h, hashtable_p hp)
+static void rimuovi_cliente(hashtable h, hashtable_p hp)
 {
     printf("==============================================\n");
     printf("\t      RIMUOVI UN CLIENTE\n");
@@ -282,7 +281,7 @@ void rimuovi_cliente(hashtable h, hashtable_p hp)
     aggiorna_file_prenotazioni(hp);
 }
 
-list rimuovi_lezione(list l, hashtable_p hp)
+static list rimuovi_lezione(list l, hashtable_p hp)
 {
     printf("======================================================\n");
     printf("\t            RIMUOVI UNA LEZIONE\n");
@@ -367,7 +366,7 @@ list rimuovi_lezione(list l, hashtable_p hp)
     return nuova;
 }
 
-void ricerca_cliente(hashtable h)
+static void ricerca_cliente(hashtable h)
 {
     printf("==============================================\n");
     printf("\t      RICERCA UN CLIENTE\n");
@@ -403,7 +402,7 @@ void ricerca_cliente(hashtable h)
     visualizza_cliente(ricercato);
 }
 
-void visualizza_prenotazioni_cliente(hashtable h, hashtable_p hp, list l)
+static void visualizza_prenotazioni_cliente(hashtable h, hashtable_p hp, list l)
 {
     printf("------------------------------------------------------\n");
     char id[20];
@@ -423,7 +422,7 @@ void visualizza_prenotazioni_cliente(hashtable h, hashtable_p hp, list l)
     stampa_prenotazioni_cliente(c, hp, l);
 }
 
-void visualizza_prenotazioni_lezione(hashtable h, hashtable_p hp, list l)
+static void visualizza_prenotazioni_lezione(hashtable h, hashtable_p hp, list l)
 {
     printf("------------------------------------------------------\n");
     char id_lezione[20];

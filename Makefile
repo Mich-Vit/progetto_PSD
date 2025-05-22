@@ -13,7 +13,7 @@ area_clienti.o: area_clienti.c cliente.h hash.h data.h lista_lezioni.h utils.h h
 area_gestore.o: area_gestore.c area_gestore.h cliente.h lezione.h lista_lezioni.h hash.h utils.h orario.h data.h hash_prenotazioni.h report.h
 	gcc -c area_gestore.c
 
-cliente.o: cliente.c cliente.h data.h
+cliente.o: cliente.c cliente.h data.h utils.h
 	gcc -c cliente.c
 
 data.o: data.c data.h

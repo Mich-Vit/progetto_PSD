@@ -10,10 +10,6 @@
 
 Cliente login_cliente(hashtable h);
 
-void visualizza_lezioni(list l);
-
-void disdici_prenotazione(Cliente c, hashtable_p hp, list l);
-
 void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp);
 
 #endif /* AREA_CLIENTI_H */

@@ -37,6 +37,9 @@ void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp);
 
 int data_valida_per_lezione(Data data);
 
+int abbonamento_valido(Data oggi, Data scadenza);
+Data calcolo_scadenza_abbonamento(Data data_inizio, int durata_abbonamento);;
+
 int leggi_intero(); //controlla se l'input sia effettivamente un numero intero.
 
 int solo_lettere(char* s);
