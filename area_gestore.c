@@ -24,17 +24,20 @@ void inserisci_cliente(hashtable h)
     printf("\tINSERISCI UN CLIENTE\n");
     printf("==============================================\n");
 
+    int valido;
     do
     {
         printf("Inserisci il nome: ");
         fgets(nome, sizeof(nome), stdin);
         nome[strcspn(nome, "\n")] = '\0';
-    
-        if (!solo_lettere(nome))
+
+        valido = solo_lettere(nome);
+        if (!valido)
         {
             printf("Errore: il nome deve contenere solo lettere. Riprova.\n");
         }
-    } while (!solo_lettere(nome));
+    } while (!valido);
+
 
     do
     {
@@ -166,34 +169,16 @@ list inserisci_lezione(list l)
 
     do
     {
-        // se data era stata allocata nel ciclo precedente, liberala prima
+        // Se la data era stata allocata nel ciclo precedente, liberala
         if (data != NULL)  
-        {
+        {   
             libera_data(data);
             data = NULL;
         }
 
         data = leggi_data();
 
-        int mese_data = get_mese(data);
-        int anno_data = get_anno(data);
-
-        int mese_successivo;
-        int anno_successivo;
-
-        if (mese_corrente == 12)
-        {
-            mese_successivo = 1;
-            anno_successivo = anno_corrente + 1;
-        }
-        else
-        {
-            mese_successivo = mese_corrente + 1; 
-            anno_successivo = anno_corrente;   
-        }
-
-        if (!((anno_data == anno_corrente && mese_data == mese_corrente) ||
-              (anno_data == anno_successivo && mese_data == mese_successivo)))
+        if (!data_valida_per_lezione(data))
         {
             printf("Errore: la data deve essere nel mese corrente o nel mese successivo.\n");
             libera_data(data);
@@ -383,7 +368,7 @@ list rimuovi_lezione(list l, hashtable_p hp)
 void ricerca_cliente(hashtable h)
 {
     printf("==============================================\n");
-    printf("\t      RICERCA UN CLIENTI\n");
+    printf("\t      RICERCA UN CLIENTE\n");
     printf("==============================================\n");
 
     if (h == NULL)

@@ -129,7 +129,7 @@ Data leggi_data()
 
         if (confronta_date(inserita, data_oggi()) <= 0)
         {
-            printf("Errore: la data non può essere precedente o uguale ad oggi.\n");
+            printf("Errore: la data non puo' essere precedente o uguale ad oggi.\n");
             libera_data(inserita);
             continue;
         }
