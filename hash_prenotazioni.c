@@ -13,10 +13,10 @@
 struct hash_p 
 {
     int size;              // Dimensione della tabella hash.
-    Prenotazione *table;        // Vettore di puntatori a Cliente.
+    Prenotazione *table;        // Vettore di puntatori a Prenotazione.
 };
 
- /*
+/*
 * Funzione: fnv1aHash32
 * ----------------------------------------
 * Calcola l'hash FNV-1a a 32 bit per una stringa.
@@ -251,7 +251,7 @@ Prenotazione hashSearch_p(hashtable_p h, char *id)
 /*
  * Funzione: deleteList_p
  * ----------------------------------------
- * Elimina ricorsivamente una lista collegata di prenotazioni.
+ * Elimina una lista collegata di prenotazioni.
  *
  * Parametri:
  *   p: testa della lista da eliminare.

@@ -16,22 +16,28 @@ struct hash
     Cliente *table;        // Vettore di puntatori a Cliente.
 };
 
-
 /*
- * Calcola l'hash FNV-1a a 32 bit per una stringa.
- * 
- * L'algoritmo FNV-1a è noto per la sua semplicità, velocità 
- * e buona distribuzione dei valori. Utilizza due costanti:
- * - offset basis (2166136261) come valore iniziale
- * - FNV prime (16777619) per la moltiplicazione
- *
- * Il processo:
- * 1. Inizializza il valore hash con l'offset basis
- * 2. Per ogni carattere nella stringa:
- *    - Applica un XOR tra l'hash e il carattere corrente
- *    - Moltiplica il risultato per il FNV prime
- * 3. Restituisce l'hash risultante
- */
+* Funzione: fnv1aHash32
+* ----------------------------------------
+* Calcola l'hash FNV-1a a 32 bit per una stringa.
+*
+* Parametri:
+*   key: la stringa da trasformare in hash.
+*
+* Valore di ritorno:
+*   Valore hash a 32 bit generato dalla stringa.
+*
+* Dettagli:
+* - L'algoritmo FNV-1a è rapido e produce buone distribuzioni.
+* - Utilizza costanti predefinite per inizializzazione e moltiplicazione.
+* 
+* Come funziona:
+* 1. Inizializza il valore hash con l'offset basis
+* 2. Per ogni carattere nella stringa:
+*    - Applica un XOR tra l'hash e il carattere corrente
+*    - Moltiplica il risultato per il FNV prime
+* 3. Restituisce l'hash risultante
+*/
 static uint32_t fnv1aHash32(const char *key)
 {
     uint32_t hash = 2166136261u;
@@ -44,7 +50,21 @@ static uint32_t fnv1aHash32(const char *key)
     return hash;
 }
 
-// Funzione che calcola un valore hash limitato alla dimensione di una tabella
+/*
+* Funzione: hashFun
+* ----------------------------------------
+* Calcola un indice valido per una tabella hash a partire da una chiave stringa.
+*
+* Parametri:
+*   key: chiave stringa da convertire.
+*   size: dimensione della tabella hash.
+*
+* Valore di ritorno:
+*   Intero nell'intervallo [0, size-1].
+*
+* Uso:
+* - Garantisce che l'indice sia all'interno dei limiti della tabella.
+*/
 static int hashFun(const char *key, int size) 
 {
     // Calcola l'hash a 32 bit della chiave usando FNV-1a
@@ -52,33 +72,73 @@ static int hashFun(const char *key, int size)
     return fnv1aHash32(key) % size;
 }
 
+/*
+* Funzione: newHashtable
+* ----------------------------------------
+* Crea una nuova tabella hash per i clienti.
+*
+* Parametri:
+*   size: dimensione della tabella.
+*
+* Pre-condizione:
+*   size > 0
+*
+* Post-condizione:
+*   Viene restituito un nuovo oggetto hashtable correttamente allocato.
+*
+* Come funziona:
+* - Alloca la struttura principale.
+* - Se fallisce ritorna NULL.
+* - Imposta la dimensione della tabella.
+* - Inizializza la tabella con calloc (tutti NULL).
+*/
 hashtable newHashtable(int size) 
 {
-    // Allocazione della memoria per la struttura hash.
     hashtable h = (struct hash *) malloc(sizeof(struct hash));
     if (h == NULL) 
     {       
         return NULL;
     }
 
-    h->size = size;  // Imposta la dimensione della tabella.
+    h->size = size;  
 
     // Allocazione della memoria per gli elementi della tabella,
     // inizializzando tutti i puntatori a NULL utilizzando calloc.
     h->table = calloc(size, sizeof(Cliente));
     if (h->table == NULL) 
     { 
-        free(h); // Libera la memoria allocata per la struttura hash se la tabella non può essere creata.
+        free(h);
         return NULL;
     }
 
-    return h;  // Ritorna il puntatore alla nuova tabella hash.
+    return h;  
 }
 
-
+/*
+* Funzione: insertHash
+* ----------------------------------------
+* Inserisce un nuovo cliente nella tabella hash.
+*
+* Parametri:
+*   h: puntatore alla hash table.
+*   c: cliente da inserire.
+*
+* Pre-condizione:
+*   h e c devono essere validi;
+*   c deve avere un ID diverso da quelle presenti.
+*
+* Post-condizione:
+*   c viene inserita nella tabella.
+*
+* Come funziona:
+* - Calcola l’indice della tabella hash usando hushFun
+* - Inserisce in testa alla lista nella posizione hash.
+* - Non permette duplicati (controllo su ID).
+* - Ritorna: 1 se l'inserimento ha successo, 0 altrimenti.
+*/
 int insertHash(hashtable h, Cliente c) 
 {
-    // Calcola l’indice della tabella hash usando l’ID del cliente e la dimensione della tabella
+    
     int idx = hashFun(get_id_cliente(c), h->size);
 
     // Recupera la testa della lista nella posizione 'idx' della tabella
@@ -90,43 +150,58 @@ int insertHash(hashtable h, Cliente c)
     // Scorri la lista per verificare se esiste già un cliente con lo stesso ID
     while (curr) 
     {
-        // Confronta l’ID del cliente corrente con quello del cliente da inserire
         if (strcmp(get_id_cliente(curr), get_id_cliente(c)) == 0)
         {
-            return 0;  // Cliente già presente: non si inserisce
+            return 0; 
         }
-
-        // Passa al prossimo nodo della lista
         curr = get_next_cliente(curr);
     }
 
-    // Inserisci il nuovo cliente in testa alla lista
-    set_next_cliente(c, head);   // Collega il nuovo cliente alla lista esistente
-    h->table[idx] = c;           // Aggiorna la testa della lista nella tabella
+    set_next_cliente(c, head); 
+    h->table[idx] = c;  
 
-    return 1;  // Inserimento riuscito
+    return 1;
 }
 
-
-// Funzione per eliminare un cliente dalla tabella hash basandosi sull'ID del cliente
+/*
+* Funzione: hashDelete
+* ----------------------------------------
+* Elimina un cliente dalla tabella hash dato un ID.
+*
+* Parametri:
+*   h: puntatore alla hash table.
+*   id: identificativo del cliente da eliminare.
+*
+* Pre-condizione:
+*   La tabella hash deve essere valida;
+*   L'ID non deve essere NULL;
+*   Il numero di elementi nella tabella deve essere > 0
+*
+* Post-condizione:
+*   il cliente viene rimosso dalla tabella, se esiste.
+*
+* Come funziona:
+* - Calcola l’indice della tabella hash usando hushFun
+* - Gestisce eliminazione in testa e in mezzo alla lista.
+* - Ritorna: il cliente rimosso, o NULL se non trovata.
+*/
 Cliente hashDelete(hashtable h, char *id) 
 {
-    int idx;               // Indice calcolato dalla funzione hash
+    int idx; 
     Cliente prev, curr, head;
-
-    // Calcola l’indice nella tabella hash usando l’ID
     idx = hashFun(id, h->size);
 
     // Inizializza i puntatori:
     // 'head' punta alla testa della lista alla posizione 'idx'
     // 'curr' serve per scorrere la lista
     // 'prev' tiene traccia del nodo precedente a 'curr'
-    prev = curr = head = h->table[idx];
+    head = h->table[idx];
+    curr = head;
+    prev = NULL;
 
     // Scorri la lista finché ci sono elementi
     while (curr) 
     {
-        // Confronta l’ID dell’elemento corrente con quello da cercare
         if (strcmp(get_id_cliente(curr), id) == 0) 
         {
             // Caso 1: l’elemento da eliminare è il primo della lista
@@ -141,12 +216,8 @@ Cliente hashDelete(hashtable h, char *id)
                 // Rimuove 'curr' collegando 'prev' direttamente al nodo successivo
                 set_next_cliente(prev, get_next_cliente(curr));
             }
-
-            // Restituisce il puntatore all’elemento rimosso (utile se vuoi liberarne la memoria dopo)
             return curr;
         }
-
-        // Avanza nella lista: 'prev' diventa 'curr', e 'curr' avanza al nodo successivo
         prev = curr;
         curr = get_next_cliente(curr);
     }
@@ -155,66 +226,118 @@ Cliente hashDelete(hashtable h, char *id)
     return NULL;
 }
 
-
+/*
+* Funzione: hashSearch
+* ----------------------------------------
+* Cerca un cliente nella tabella tramite ID.
+*
+* Parametri:
+*   h: puntatore alla hash table.
+*   id: identificativo della prenotazione da cercare.
+*
+* Pre-condizione:
+*   La tabella hash deve essere valida;
+*   L'ID non deve essere NULL;
+*   Il numero di elementi nella tabella deve essere > 0
+*
+* Ritorna:
+*   Il cliente trovata, o NULL se non esiste.
+*
+* Come funziona:
+* - Calcola l’indice della tabella hash usando hushFun
+* - Scorre la lista delle prenotazioni di quell'indice
+* - Ritorna: la prenotazione ricercata, oppure NULL se non la trova
+*/
 Cliente hashSearch(hashtable h, char *id) 
 {
     if (h == NULL || id == NULL) 
-        return NULL;  // Se la tabella hash o la chiave sono NULL, restituisce NULL.
+        return NULL; 
     
-    int idx = hashFun(id, h->size);  // Calcola l'indice nella tabella hash.
-    Cliente curr = h->table[idx];     // Inizia dalla testa della lista nella posizione hash.
+    int idx = hashFun(id, h->size);  
+    Cliente curr = h->table[idx];    
 
     // Scorre la lista nella posizione 'idx' della tabella hash.
     while (curr != NULL)
     {
-        // Confronta l'ID del cliente corrente con quello cercato.
         if (strcmp(get_id_cliente(curr), id) == 0) 
         {
-            return curr;  // Cliente trovato! Restituisce il puntatore al cliente.
+            return curr;
         }
-        curr = get_next_cliente(curr);  // Passa al prossimo cliente nella lista.
+        curr = get_next_cliente(curr);  
     }
 
-    return NULL;  // Se il cliente non è trovato, restituisce NULL.
+    return NULL; 
 }
 
-// Versione iterativa di deleteList per evitare l'overflow dello stack su liste lunghe.
+/*
+ * Funzione: deleteList
+ * ----------------------------------------
+ * Elimina una lista collegata di prenotazioni.
+ *
+ * Parametri:
+ *   p: testa della lista da eliminare.
+ *
+ * Uso:
+ * - Chiamata internamente da destroyHashtable_p.
+ */
 static void deleteList(Cliente p) 
 {
     Cliente current = p;
     Cliente temp;
 
-    // Itera attraverso tutta la lista e libera ogni nodo
     while (current != NULL) 
     {
-        temp = current;               // Salva il nodo corrente
-        current = get_next_cliente(current); // Passa al prossimo nodo
-        free(temp);                   // Libera il nodo corrente
+        temp = current;  
+        current = get_next_cliente(current);
+        free(temp);            
     }
     return;
 }
   
-// Funzione per distruggere (eliminare completamente) una tabella hash.
+/*
+ * Funzione: destroyHashtable
+ * ----------------------------------------
+ * Libera tutta la memoria associata alla tabella hash.
+ *
+ * Parametri:
+ *   h: tabella hash da distruggere.
+ *
+ * Come funziona:
+ * - Elimina tutte le liste collegate chiamando la funzione deleteList.
+ * - Libera l’array e la struttura.
+ */
 void destroyHashtable(hashtable h) 
 {
     int i;
 
-    // Scorre ogni posizione dell'array (cioè ogni "slot" della tabella hash)
     for (i = 0; i < h->size; i++) 
     {
-        // Elimina (libera) la lista concatenata di clienti presente in quella posizione, se esiste.
         deleteList(h->table[i]);
     }
 
-    // Libera la memoria dell'array di puntatori (cioè h->table),
-    // che rappresenta la tabella hash vera e propria.
     free(h->table);
 
-    // Libera la memoria della struttura `hashtable` stessa.
     free(h);
 }
 
-// Funzione per stampare tutti i clienti nella tabella hash
+/*
+* Funzione: stampaHash_p
+* ----------------------------------------
+* Stampa tutti i clienti nella tabella.
+*
+* Parametri:
+*   h: puntatore alla tabella hash.
+*
+* Pre-condizione:
+*   Il puntatore h deve essere valido.
+*
+* Post-condizione:
+*   Le informazioni di tutti clienti vengono stampate.
+*
+* Come funziona:
+* - Scorre l’intera tabella e chiama la funzione visualizza_prenotazione.
+* - Conta il numero totale di prenotazioni.
+*/
 void stampaHash(hashtable h)
 {
     if (h == NULL)
@@ -250,6 +373,23 @@ void stampaHash(hashtable h)
     }
 }
 
+/*
+* Funzione: stampaMinimaHash
+* ----------------------------------------
+* Stampa una versione ridotta dei clienti.
+*
+* Parametri:
+*   h: puntatore alla tabella hash.
+*
+* Pre-condizione:
+*   Il puntatore h deve essere valido.
+*
+* Post-condizione:
+*   Le informazioni minime delle prenotazioni vengono stampate.
+*
+* Come funziona:
+* - Scorre l’intera tabella e chiama la funzione visualizza_essenziale_cliente.
+*/
 void stampaMinimaHash(hashtable h)
 {
     for (int i = 0; i < h->size; i++)
@@ -264,12 +404,33 @@ void stampaMinimaHash(hashtable h)
 }
 
 
-// === Getter ===
+/*
+ * Funzione: get_size_hash
+ * ----------------------------------------
+ * Restituisce la dimensione della tabella hash.
+ *
+ * Parametri:
+ *   h: tabella hash.
+ *
+ * Valore di ritorno:
+ *   Dimensione della tabella.
+ */
 int get_size_hash(hashtable h)
 {
     return h->size;
 }
 
+/*
+ * Funzione: get_table_hash
+ * ----------------------------------------
+ * Restituisce l’array delle liste di clienti.
+ *
+ * Parametri:
+ *   h: tabella hash.
+ *
+ * Valore di ritorno:
+ *   Puntatore all’array di clienti.
+ */
 Cliente* get_table_hash(hashtable h)
 {
     return h->table;
