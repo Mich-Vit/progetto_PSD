@@ -355,7 +355,6 @@ void aggiorna_file_clienti(hashtable h)
 * - Apre il file in modalità "w".
 * - Itera sulla lista e scrive le informazioni di ogni lezione.
 */
-
 void aggiorna_file_lezioni(list l)
 {
     FILE *fp = fopen("lezioni.txt", "w");
