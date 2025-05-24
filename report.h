@@ -8,9 +8,6 @@
 
 typedef struct statistica *Stats;
 
-
-;
-
 /*
 * Funzione: genera_report_mensile
 * -------------------------------

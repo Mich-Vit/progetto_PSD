@@ -13,6 +13,28 @@
 #include "hash_prenotazioni.h"
 #include "prenotazione.h"
 
+/*
+* Funzione: rinnova_abbonamento
+* ----------------------------------------
+* Rinnova l’abbonamento di un cliente per un numero specificato di mesi.
+*
+* Parametri:
+*   c: puntatore al cliente da rinnovare.
+*   h: hashtable contenente i clienti.
+*
+* Pre-condizione:
+*   c e h devono essere diversi da NULL.
+*
+* Post-condizione:
+*   L'abbonamento del cliente viene esteso, aggiornato nei dati e salvato su file.
+*
+* Come funziona:
+* - Controlla la validità dei parametri.
+* - Chiede all’utente la durata del rinnovo in mesi.
+* - Calcola la nuova data di scadenza e aggiorna il cliente.
+* - Ricalcola la durata dell'abbonamento.
+* - Aggiorna il file con i dati modificati.
+*/
 void rinnova_abbonamento(Cliente c, hashtable h)
 {
     if (c == NULL || h == NULL)
@@ -43,7 +65,6 @@ void rinnova_abbonamento(Cliente c, hashtable h)
         }
     } while (!valido);
 
-    // Calcola la nuova data di scadenza aggiungendo la durata all'abbonamento
     Data nuova_data_scadenza = calcolo_scadenza_abbonamento(data_scadenza_attuale, durata);
     set_data_scadenza(c, nuova_data_scadenza);
 
@@ -54,10 +75,30 @@ void rinnova_abbonamento(Cliente c, hashtable h)
     aggiorna_file_clienti(h);
 
     printf("Il tuo abbonamento e' stato rinnovato fino al ");
-    visualizza_data(nuova_data_scadenza);  // Funzione per visualizzare la data
+    visualizza_data(nuova_data_scadenza);
     printf("\n");
 }
 
+/*
+* Funzione: carica_contatore_generico
+* ----------------------------------------
+* Carica il valore massimo di un ID generico da un file, basandosi su un prefisso.
+*
+* Parametri:
+*   filename: nome del file da cui leggere gli ID.
+*   prefix: prefisso che identifica il tipo di ID (es. "ID: C").
+*
+* Pre-condizione:
+*   filename e prefix devono essere validi e non NULL.
+*
+* Post-condizione:
+*   Restituisce il valore massimo trovato per il prefisso specificato.
+*
+* Come funziona:
+* - Apre il file e cerca righe che iniziano con il prefisso.
+* - Estrae la parte numerica e aggiorna il contatore massimo.
+* - Ritorna il valore massimo trovato.
+*/
 int carica_contatore_generico(const char* filename, const char* prefix)
 {
     FILE* file = fopen(filename, "r");
@@ -85,6 +126,26 @@ int carica_contatore_generico(const char* filename, const char* prefix)
     return max_id;
 }
 
+/*
+* Funzione: genera_id_generico
+* ----------------------------------------
+* Genera un nuovo ID univoco basato su un prefisso e un file di contatori.
+*
+* Parametri:
+*   prefix_letter: carattere identificativo dell'entità (es. "C" per Cliente).
+*   filename: nome del file da cui leggere il contatore esistente.
+*
+* Pre-condizione:
+*   prefix_letter deve essere "C", "L" o "P".
+*
+* Post-condizione:
+*   Ritorna una nuova stringa ID allocata dinamicamente.
+*
+* Come funziona:
+* - Identifica quale contatore usare in base al prefisso.
+* - Se non inizializzato, lo carica da file.
+* - Incrementa il contatore e genera l’ID nel formato 'Prefisso + numero'.
+*/
 char* genera_id_generico(const char* prefix_letter, const char* filename)
 {
     static int contatore_clienti = -1;
@@ -123,6 +184,24 @@ char* genera_id_generico(const char* prefix_letter, const char* filename)
     return id;
 }
 
+/*
+* Funzione: carica_clienti_da_file
+* ----------------------------------------
+* Carica i dati dei clienti da un file e li inserisce nella hashtable.
+*
+* Parametri:
+*   h: hashtable in cui inserire i clienti caricati.
+*
+* Pre-condizione:
+*   Il file "clienti.txt" deve essere presente e formattato correttamente.
+*
+* Post-condizione:
+*   Tutti i clienti vengono caricati e inseriti nella hashtable.
+*
+* Come funziona:
+* - Apre il file e legge i dati dei clienti.
+* - Crea le strutture cliente e le inserisce nella tabella hash.
+*/
 void carica_clienti_da_file(hashtable h)
 {
     FILE *fp = fopen("clienti.txt", "r");
@@ -155,6 +234,24 @@ void carica_clienti_da_file(hashtable h)
     fclose(fp);
 }
 
+/*
+* Funzione: carica_prenotazioni_da_file
+* ----------------------------------------
+* Carica tutte le prenotazioni dal file e le inserisce nella hashtable delle prenotazioni.
+*
+* Parametri:
+*   h: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   Il file "prenotazioni.txt" deve essere presente e formattato correttamente.
+*
+* Post-condizione:
+*   Tutte le prenotazioni vengono inserite nella tabella.
+*
+* Come funziona:
+* - Apre il file e legge le informazioni delle prenotazioni.
+* - Crea le strutture prenotazione e le inserisce nella hashtable.
+*/
 void carica_prenotazioni_da_file(hashtable_p h)
 {
     FILE *fp = fopen("prenotazioni.txt", "r");
@@ -176,7 +273,6 @@ void carica_prenotazioni_da_file(hashtable_p h)
 
         Data data_pre = crea_data(giorno, mese, anno);
 
-        // Passo id_pren, id_cli, id_lez e data_pre secondo la nuova firma
         Prenotazione p = crea_prenotazione(id_pren, id_cli, id_lez, data_pre);
 
         insertHash_p(h, p);
@@ -185,6 +281,24 @@ void carica_prenotazioni_da_file(hashtable_p h)
     fclose(fp);
 }
 
+/*
+* Funzione: aggiorna_file_clienti
+* ----------------------------------------
+* Salva tutti i clienti dalla hashtable su file.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*
+* Pre-condizione:
+*   h deve contenere una tabella valida con clienti.
+*
+* Post-condizione:
+*   I dati dei clienti vengono scritti nel file "clienti.txt".
+*
+* Come funziona:
+* - Apre il file in modalità scrittura.
+* - Itera su ogni cliente della tabella hash e ne scrive i dati su file.
+*/
 void aggiorna_file_clienti(hashtable h)
 {
     FILE *fp = fopen("clienti.txt", "w");
@@ -223,6 +337,24 @@ void aggiorna_file_clienti(hashtable h)
     fclose(fp);
 }
 
+/*
+* Funzione: aggiorna_file_lezioni
+* ----------------------------------------
+* Salva la lista delle lezioni su file.
+*
+* Parametri:
+*   l: lista delle lezioni.
+*
+* Pre-condizione:
+*   l deve contenere lezioni valide.
+*
+* Post-condizione:
+*   I dati delle lezioni vengono scritti nel file "lezioni.txt".
+*
+* Come funziona:
+* - Apre il file in modalità "w".
+* - Itera sulla lista e scrive le informazioni di ogni lezione.
+*/
 
 void aggiorna_file_lezioni(list l)
 {
@@ -252,6 +384,24 @@ void aggiorna_file_lezioni(list l)
     fclose(fp);
 }
 
+/*
+* Funzione: aggiorna_file_prenotazioni
+* ----------------------------------------
+* Scrive tutte le prenotazioni presenti nella hashtable su file.
+*
+* Parametri:
+*   h: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   h deve essere non NULL e contenere dati validi.
+*
+* Post-condizione:
+*   Il file "prenotazioni.txt" viene aggiornato con tutte le prenotazioni.
+*
+* Come funziona:
+* - Apre il file e itera su ogni prenotazione della tabella hash.
+* - Scrive i dettagli su file.
+*/
 void aggiorna_file_prenotazioni(hashtable_p h)
 {
     if (h == NULL)
@@ -286,7 +436,23 @@ void aggiorna_file_prenotazioni(hashtable_p h)
     }
 }
 
-// Funzione per pulire lo schermo, portabile su Windows, Linux e macOS
+/*
+* Funzione: pulisci_schermo
+* ----------------------------------------
+* Pulisce lo schermo della console.
+*
+* Parametri:
+*   Nessuno.
+*
+* Pre-condizione:
+*   Nessuna.
+*
+* Post-condizione:
+*   La console viene ripulita.
+*
+* Come funziona:
+* - Utilizza "cls" su Windows e "clear" su altri sistemi tramite `system()`.
+*/
 void pulisci_schermo()
 {
     #ifdef _WIN32  // Verifica se il sistema è Windows
@@ -296,6 +462,24 @@ void pulisci_schermo()
     #endif
 }
 
+/*
+* Funzione: carica_lezioni_da_file
+* ----------------------------------------
+* Carica le lezioni da file e le inserisce in una lista.
+*
+* Parametri:
+*   l: lista iniziale (può essere NULL).
+*
+* Pre-condizione:
+*   Il file "lezioni.txt" deve esistere e avere il formato corretto.
+*
+* Post-condizione:
+*   La lista l viene popolata con le lezioni lette da file.
+*
+* Come funziona:
+* - Apre il file e legge le informazioni delle lezioni.
+* - Converte le stringhe lette in strutture dati e aggiorna la lista.
+*/
 list carica_lezioni_da_file(list l)
 {
     FILE *fp = fopen("lezioni.txt", "r");
@@ -369,6 +553,25 @@ list carica_lezioni_da_file(list l)
     return l;
 }
 
+/*
+* Funzione: calcola_durata_in_mesi
+* ----------------------------------------
+* Calcola la durata in mesi tra due date.
+*
+* Parametri:
+*   data_inizio: data iniziale.
+*   data_fine: data finale.
+*
+* Pre-condizione:
+*   Le due date devono essere valide e data_fine >= data_inizio.
+*
+* Post-condizione:
+*   Ritorna la differenza in mesi interi tra le due date.
+*
+* Come funziona:
+* - Calcola la differenza in anni e mesi.
+* - Se la data finale è prima nel giorno rispetto a quella iniziale, sottrae un mese.
+*/
 int calcola_durata_in_mesi(Data data_inizio, Data data_fine)
 {
     int anni_diff = get_anno(data_fine) - get_anno(data_inizio);
@@ -388,6 +591,27 @@ int calcola_durata_in_mesi(Data data_inizio, Data data_fine)
     return durata_in_mesi;
 }
 
+/*
+* Funzione: stampa_prenotazioni_cliente
+* ----------------------------------------
+* Stampa tutte le prenotazioni associate a un cliente.
+*
+* Parametri:
+*   c: cliente di cui stampare le prenotazioni.
+*   hp: hashtable delle prenotazioni.
+*   l: lista delle lezioni per trovare i dettagli delle lezioni prenotate.
+*
+* Pre-condizione:
+*   c deve essere valido, hp deve contenere prenotazioni.
+*
+* Post-condizione:
+*   Vengono stampate le prenotazioni del cliente, se presenti.
+*
+* Come funziona:
+* - Scorre la tabella delle prenotazioni cercando quelle con l’ID del cliente.
+* - Per ogni prenotazione trovata, cerca nella lista la lezione corrispondente.
+* - Stampa ID, nome della lezione, data e orario.
+*/
 void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
 {
     printf("======================================================\n");
@@ -453,6 +677,29 @@ void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l)
         printf("Nessuna prenotazione trovata per questo cliente.\n");
 }
 
+/*
+* Funzione: stampa_prenotazioni_lezione
+* ----------------------------------------
+* Stampa tutte le prenotazioni associate a una specifica lezione.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*   lezione: lezione di cui stampare le prenotazioni.
+*   hp: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   h, lezione e hp devono essere validi e non NULL.
+*
+* Post-condizione:
+*   Vengono stampate tutte le prenotazioni della lezione specificata, se presenti.
+*
+* Come funziona:
+* - Ottiene l’ID, nome, data e orario della lezione.
+* - Scorre tutta la tabella delle prenotazioni.
+* - Per ogni prenotazione che corrisponde all’ID della lezione, recupera il cliente.
+* - Stampa ID prenotazione, nome e cognome cliente.
+* - Se non ci sono prenotazioni per la lezione, stampa un messaggio di assenza.
+*/
 void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp)
 {
     if (lezione == NULL || hp == NULL || h == NULL) {
@@ -482,7 +729,7 @@ void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp)
 
     printf("%-10s %-15s %-15s\n", "ID", "CLIENTE", "COGNOME");
 
-    Prenotazione* tabella = get_table_hash_p(hp);  // ottieni array prenotazioni
+    Prenotazione* tabella = get_table_hash_p(hp);
     int size = get_size_hash_p(hp);
 
     int trovata = 0;
@@ -493,7 +740,6 @@ void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp)
         Prenotazione p = tabella[i];
         while (p != NULL) 
         {
-            // Verifica se la prenotazione è della lezione richiesta
             if (strcmp(get_id_lezione_prenotazione(p), id_lez) == 0) 
             {
                 trovata = 1;
@@ -524,6 +770,26 @@ void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp)
     }
 }
 
+/*
+* Funzione: cerca_lezione_per_id
+* ----------------------------------------
+* Cerca una lezione nella lista in base al suo ID.
+*
+* Parametri:
+*   l: lista di lezioni.
+*   id_lezione: stringa contenente l’ID della lezione da cercare.
+*
+* Pre-condizione:
+*   La lista deve essere valida.
+*
+* Post-condizione:
+*   Restituisce la lezione con l’ID specificato, oppure NULL se non trovata.
+*
+* Come funziona:
+* - Scorre la lista iterativamente.
+* - Confronta l’ID della lezione corrente con quello cercato.
+* - Restituisce la lezione appena l'ha trovata.
+*/
 Lezione cerca_lezione_per_id(list l, const char *id_lezione)
 {
     while (!emptyList(l))
@@ -535,9 +801,28 @@ Lezione cerca_lezione_per_id(list l, const char *id_lezione)
         }
         l = tailList(l);
     }
-    return NULL;  // Non trovata
+    return NULL;
 }
 
+/*
+* Funzione: stampa_lezioni_libere
+* ----------------------------------------
+* Stampa la lista delle lezioni che hanno posti disponibili e che non sono passate.
+*
+* Parametri:
+*   l: lista di lezioni.
+*
+* Pre-condizione:
+*   La lista deve essere valida.
+*
+* Post-condizione:
+*   Vengono stampate tutte le lezioni con posti liberi e data odierna o futura.
+*
+* Come funziona:
+* - Ordina la lista delle lezioni.
+* - Per ogni lezione verifica se ci sono posti disponibili e la data è valida.
+* - Stampa i dettagli essenziali della lezione.
+*/
 void stampa_lezioni_libere(list l)
 {
     Lezione le;
@@ -563,9 +848,29 @@ void stampa_lezioni_libere(list l)
         l = tailList(l);
     }
 
-    libera_data(oggi); // libera la memoria se data_oggi() restituisce data allocata dinamicamente
+    libera_data(oggi); 
 }
 
+/*
+* Funzione: calcolo_scadenza_abbonamento
+* ----------------------------------------
+* Calcola la data di scadenza dell’abbonamento dato l’inizio e la durata in mesi.
+*
+* Parametri:
+*   data_inizio: data di inizio abbonamento.
+*   durata_abbonamento: durata in mesi dell’abbonamento.
+*
+* Pre-condizione:
+*   data_inizio deve essere valida.
+*
+* Post-condizione:
+*   Restituisce la data di scadenza calcolata.
+*
+* Come funziona:
+* - Estrae giorno, mese e anno dalla data di inizio.
+* - Somma i mesi della durata, gestendo il superamento dell’anno.
+* - Crea e restituisce la data di scadenza.
+*/
 Data calcolo_scadenza_abbonamento(Data data_inizio, int durata_abbonamento) 
 {
     int giorno = get_giorno(data_inizio);
@@ -586,7 +891,27 @@ Data calcolo_scadenza_abbonamento(Data data_inizio, int durata_abbonamento)
     return data_scadenza;
 }
 
-int abbonamento_valido(Data oggi, Data scadenza) // Ritorna 1 se e' valido, 0 altrimenti
+/*
+* Funzione: abbonamento_valido
+* ----------------------------------------
+* Verifica se un abbonamento è valido
+*
+* Parametri:
+*   oggi: data odierna.
+*   scadenza: data di scadenza dell’abbonamento.
+*
+* Pre-condizione:
+*   Le date devono essere valide.
+*
+* Post-condizione:
+*   Ritorna 1 se l’abbonamento è valido (oggi <= scadenza), 0 altrimenti.
+*
+* Come funziona:
+* - Confronta le due date.
+* - Restituisce 1 se oggi è precedente o uguale alla scadenza.
+* - Altrimenti restituisce 0.
+*/
+int abbonamento_valido(Data oggi, Data scadenza) 
 {
     if (confronta_date(oggi, scadenza) == -1) 
     {
@@ -605,6 +930,25 @@ int abbonamento_valido(Data oggi, Data scadenza) // Ritorna 1 se e' valido, 0 al
     }
 }
 
+/*
+* Funzione: leggi_intero
+* ----------------------------------------
+* Legge un intero da input, gestendo errori di input non valido.
+*
+* Parametri:
+*   Nessuno.
+*
+* Pre-condizione:
+*   L’input deve essere da stdin.
+*
+* Post-condizione:
+*   Restituisce il valore intero letto dall’utente.
+*
+* Come funziona:
+* - Legge una riga da stdin.
+* - Tenta di convertire in intero.
+* - Se fallisce, chiede nuovamente l’input.
+*/
 int leggi_intero()
 {
     char buffer[64];
@@ -622,6 +966,27 @@ int leggi_intero()
     }
 }
 
+/*
+* Funzione: solo_lettere
+* ----------------------------------------
+* Verifica se una stringa contiene solo lettere (maiuscole o minuscole) e spazi.
+*
+* Parametri:
+*   s: stringa da verificare.
+*
+* Pre-condizione:
+*   s deve essere una stringa valida terminata da '\0'.
+*
+* Post-condizione:
+*   Ritorna 1 se la stringa contiene almeno una lettera e nessun carattere non ammesso.
+*   Ritorna 0 altrimenti.
+*
+* Come funziona:
+* - Scorre la stringa carattere per carattere.
+* - Controlla che ogni carattere sia una lettera o uno spazio.
+* - Se trova numeri o caratteri non ammessi, ritorna 0.
+* - Se almeno una lettera è presente e nessun carattere non ammesso, ritorna 1.
+*/
 int solo_lettere(char* s)
 {
     int contiene_lettera = 0;
@@ -636,7 +1001,8 @@ int solo_lettere(char* s)
             return 0; // Carattere non valido
         }
 
-        if ((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z')) {
+        if ((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z'))
+        {
             contiene_lettera = 1;
         }
     }
@@ -644,7 +1010,25 @@ int solo_lettere(char* s)
     return contiene_lettera;
 }
 
-// Converte mese numerico in nome
+/*
+* Funzione: nome_mese
+* ----------------------------------------
+* Converte un numero di mese in una stringa con il nome del mese.
+*
+* Parametri:
+*   mese: intero da 1 a 12 rappresentante il mese.
+*
+* Pre-condizione:
+*   mese deve essere compreso tra 1 e 12.
+*
+* Post-condizione:
+*   Restituisce il nome del mese come stringa.
+*   Se il mese è fuori range, restituisce "Mese sconosciuto".
+*
+* Come funziona:
+* - Usa un array statico di stringhe con i nomi dei mesi.
+* - Ritorna il nome corrispondente all’indice.
+*/
 const char* nome_mese(int mese)
 {
     const char* mesi[] = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
