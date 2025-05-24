@@ -14,6 +14,27 @@
 #include "hash_prenotazioni.h"
 #include "report.h"
 
+/*
+* Funzione: inserisci_cliente
+* ----------------------------------------
+* Permette di inserire un nuovo cliente nella hashtable e nel file di testo.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*
+* Pre-condizione:
+*   h deve essere valida.
+*
+* Post-condizione:
+*   Un nuovo cliente viene aggiunto alla hashtable e salvato su file.
+*   In caso di ID duplicato, viene segnalato un errore.
+*
+* Come funziona:
+* - Legge nome, cognome e durata abbonamento da input, con controlli di validità.
+* - Genera un ID univoco per il cliente con genera_id_generico.
+* - Crea il cliente e lo salva su file.
+* - Inserisce il cliente nella hashtable e nel file di testo.
+*/
 static void inserisci_cliente(hashtable h)
 {
     char nome[50], cognome[50];
@@ -64,17 +85,12 @@ static void inserisci_cliente(hashtable h)
 
     data_iscrizione = data_oggi();
 
-    // Genera automaticamente l'ID
     char* id = genera_id_generico("C", "clienti.txt");
 
-    // Creazione del cliente
     Cliente nuovo_cliente = crea_cliente(id, nome, cognome, durata, data_iscrizione);
-    free(id);  // Libera la memoria allocata da genera_id_cliente()
-
-    // Salvataggio nel file
+    free(id); 
     salva_cliente_file(nuovo_cliente);
 
-    // Inserimento nella hash
     if (insertHash(h, nuovo_cliente))
     {
         printf("Cliente inserito con successo!\n");
@@ -85,6 +101,25 @@ static void inserisci_cliente(hashtable h)
     }
 }
 
+/*
+* Funzione: nome_lezione_valido
+* ----------------------------------------
+* Verifica se il nome della lezione è uno tra quelli permessi.
+*
+* Parametri:
+*   nome: stringa che rappresenta il nome della lezione da validare.
+*
+* Pre-condizione:
+*   nome deve essere una stringa valida (non NULL).
+*
+* Post-condizione:
+*   1 se il nome è valido (presente nella lista delle lezioni permesse),
+*   0 altrimenti.
+*
+* Come funziona:
+* - Confronta il nome fornito con ogni nome nella lista delle lezioni permesse.
+* - Restituisce 1 se trova una corrispondenza, altrimenti 0.
+*/
 static int nome_lezione_valido(const char* nome)
 {
     const char* lezioni_permesse[] =
@@ -110,6 +145,29 @@ static int nome_lezione_valido(const char* nome)
     return 0;
 }
 
+/*
+* Funzione: data_valida_per_lezione
+* ----------------------------------------
+* Verifica che la data della lezione sia valida,
+* cioè che sia nel mese corrente o in quello successivo.
+*
+* Parametri:
+*   data: oggetto Data da controllare.
+*
+* Pre-condizione:
+*   data deve essere un oggetto Data valido (non NULL).
+*
+* Valore di ritorno:
+*   1 se la data è valida (nel mese corrente o nel successivo),
+*   0 altrimenti.
+*
+* Come funziona:
+* - Ottiene la data odierna.
+* - Estrae mese e anno sia dalla data odierna che dalla data da controllare.
+* - Calcola mese e anno del mese successivo.
+* - Controlla se la data fornita appartiene al mese corrente o a quello successivo.
+* - Libera la memoria della data odierna.
+*/
 static int data_valida_per_lezione(Data data)
 {
     if (data == NULL)
@@ -143,7 +201,28 @@ static int data_valida_per_lezione(Data data)
     return valida;
 }
 
-
+/*
+* Funzione: inserisci_lezione
+* ----------------------------------------
+* Permette di inserire una nuova lezione nella lista e nel file di testo.
+*
+* Parametri:
+*   l: lista corrente delle lezioni.
+*
+* Pre-condizione:
+*   l deve essere valida.
+*
+* Post-condizione:
+*   Viene aggiunta una nuova lezione alla lista e salvata nel file.
+*
+* Come funziona:
+* - Richiede nome lezione, orario, data e numero max di posti con controlli di validità.
+* - Verifica che il nome lezione sia consentito.
+* - Verifica che la data sia nel mese corrente o successivo.
+* - Crea la lezione con un ID generato.
+* - Inserisce la lezione in testa alla lista.
+* - Salva la lezione nel file.
+*/
 static list inserisci_lezione(list l)
 {
     char nome[50];
@@ -251,6 +330,29 @@ static list inserisci_lezione(list l)
     return l;
 }
 
+/*
+* Funzione: rimuovi_cliente
+* ----------------------------------------
+* Rimuove un cliente dalla hashtable e tutte le sue prenotazioni.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*   hp: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   h e hp devono essere validi.
+*
+* Post-condizione:
+*   Il cliente con l’ID specificato viene rimosso da h e da file di testo.
+*   Vengono rimosse tutte le prenotazioni associate a quel cliente in hp.
+*   I file di clienti e prenotazioni vengono aggiornati.
+*
+* Come funziona:
+* - Legge l’ID cliente da input.
+* - Cerca e rimuove il cliente dalla hashtable.
+* - Scorre la hash table delle prenotazioni rimuovendo quelle collegate a quel cliente.
+* - Aggiorna i file di clienti e prenotazioni.
+*/
 static void rimuovi_cliente(hashtable h, hashtable_p hp)
 {
     printf("==============================================\n");
@@ -315,6 +417,29 @@ static void rimuovi_cliente(hashtable h, hashtable_p hp)
     aggiorna_file_prenotazioni(hp);
 }
 
+/*
+* Funzione: rimuovi_lezione
+* ----------------------------------------
+* Rimuove una lezione dalla lista e tutte le prenotazioni associate ad essa.
+*
+* Parametri:
+*   l: lista delle lezioni.
+*   hp: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   l e hp devono essere validi.
+*
+* Post-condizione:
+*   La lezione con l’ID specificato viene rimossa dalla lista e dal file.
+*   Vengono rimosse tutte le prenotazioni associate a quella lezione.
+*   I file delle lezioni e prenotazioni vengono aggiornati.
+*
+* Come funziona:
+* - Legge l’ID lezione da input.
+* - Rimuove la lezione dalla lista, liberando la memoria.
+* - Scorre la tabella delle prenotazioni eliminando quelle collegate alla lezione.
+* - Aggiorna i file di lezioni e prenotazioni.
+*/
 static list rimuovi_lezione(list l, hashtable_p hp)
 {
     printf("======================================================\n");
@@ -400,6 +525,25 @@ static list rimuovi_lezione(list l, hashtable_p hp)
     return nuova;
 }
 
+/*
+* Funzione: ricerca_cliente
+* ----------------------------------------
+* Permette di cercare un cliente nella hashtable tramite il suo ID.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*
+* Pre-condizione:
+*   h deve essere una hashtable valida.
+*
+* Post-condizione:
+*   Visualizza i dati del cliente se trovato, altrimenti mostra un messaggio di errore.
+*
+* Come funziona:
+* - Legge l’ID cliente da input.
+* - Cerca il cliente nella hashtable.
+* - Se trovato, mostra i dati del cliente.
+*/
 static void ricerca_cliente(hashtable h)
 {
     printf("==============================================\n");
@@ -436,6 +580,27 @@ static void ricerca_cliente(hashtable h)
     visualizza_cliente(ricercato);
 }
 
+/*
+* Funzione: visualizza_prenotazioni_cliente
+* ----------------------------------------
+* Visualizza tutte le prenotazioni associate a un cliente.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*   hp: hashtable delle prenotazioni.
+*   l: lista delle lezioni.
+*
+* Pre-condizione:
+*   h, hp e l devono essere validi.
+*
+* Post-condizione:
+*   Mostra le prenotazioni attive per il cliente.
+*
+* Come funziona:
+* - Legge l’ID cliente da input.
+* - Verifica se il cliente esiste nella hashtable.
+* - Visualizza tutte le prenotazioni di quel cliente.
+*/
 static void visualizza_prenotazioni_cliente(hashtable h, hashtable_p hp, list l)
 {
     printf("------------------------------------------------------\n");
@@ -456,8 +621,33 @@ static void visualizza_prenotazioni_cliente(hashtable h, hashtable_p hp, list l)
     stampa_prenotazioni_cliente(c, hp, l);
 }
 
+/*
+* Funzione: visualizza_prenotazioni_lezione
+* ----------------------------------------
+* Permette di visualizzare tutte le prenotazioni associate a una specifica lezione.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*   hp: hashtable delle prenotazioni.
+*   l: lista delle lezioni.
+*
+* Pre-condizione:
+*   h, hp e l devono essere validi.
+*
+* Post-condizione:
+*   Vengono stampate tutte le prenotazioni relative alla lezione specificata dall’utente.
+*
+* Come funziona:
+* - Chiede all’utente di inserire l’ID della lezione.
+* - Cerca la lezione nella lista.
+* - Se la lezione esiste, pulisce lo schermo e stampa le prenotazioni associate.
+* - Se la lezione non esiste, mostra un messaggio di errore.
+*/
 static void visualizza_prenotazioni_lezione(hashtable h, hashtable_p hp, list l)
 {
+    if (h == NULL || hp == NULL || l == NULL) 
+        return;
+
     printf("------------------------------------------------------\n");
     char id_lezione[20];
     printf("Inserisci l'ID della lezione: ");
@@ -488,7 +678,30 @@ static void visualizza_prenotazioni_lezione(hashtable h, hashtable_p hp, list l)
     stampa_prenotazioni_lezione(h, lezione_trovata, hp);
 }
 
-
+/*
+* Funzione: menu_gestore
+* ----------------------------------------
+* Gestisce il menu interattivo per l’area gestore, con tutte le operazioni disponibili.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*   l: lista delle lezioni.
+*   hp: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   h, l e hp devono essere validi e inizializzati.
+*
+* Post-condizione:
+*   Esegue l’azione selezionata dall’utente modificando le strutture dati e
+*   i file di testo di conseguenza.
+*
+* Come funziona:
+* - Mostra un menu con le opzioni disponibili.
+* - Legge la scelta dell’utente.
+* - Esegue la funzione corrispondente alla scelta.
+* - Dopo ogni operazione, attende che l’utente prema INVIO prima di tornare al menu.
+* - Continua finché l’utente non sceglie di uscire.
+*/
 void menu_gestore(hashtable h, list l, hashtable_p hp) 
 {
     int scelta;
@@ -545,7 +758,7 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
                 printf("\nInserisci l'ID del cliente a cui rinnovare: ");
                 char id_cliente[20];
                 fgets(id_cliente, sizeof(id_cliente), stdin);
-                id_cliente[strcspn(id_cliente, "\n")] = '\0'; // Rimuove il newline
+                id_cliente[strcspn(id_cliente, "\n")] = '\0';
 
                 Cliente c = hashSearch(h, id_cliente);
                 if (c == NULL)

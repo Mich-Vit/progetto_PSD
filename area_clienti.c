@@ -10,7 +10,35 @@
 #include"utils.h"
 #include "hash_prenotazioni.h"
 
-// Funzione di login: richiede l'ID cliente e cerca nella hashtable
+/* 
+* Funzione: login_cliente
+* -----------------------
+* Richiede all'utente di inserire l'ID cliente tramite input da tastiera.
+* Cerca il cliente nella tabella hash dei clienti.
+* Se il cliente non esiste, informa l'utente e ritorna NULL.
+* Se il cliente esiste ma l'abbonamento è scaduto, offre la possibilità di rinnovarlo.
+* Ritorna il cliente autenticato in caso di successo.
+* 
+* Parametri:
+*   h: hashtable contenente i dati dei clienti registrati.
+*
+* Pre-condizione:
+*   La tabella hash 'h' deve essere inizializzata e contenere eventuali clienti.
+*
+* Post-condizione:
+*   Viene restituito un oggetto Cliente corrispondente alle credenziali inserite,
+*   se il login ha successo.
+*
+* Ritorna:
+*   Il cliente autenticato (di tipo Cliente).
+* 
+* Come funziona:
+* - Legge l'input dall'utente.
+* - Usa hashSearch per trovare il cliente.
+* - Controlla la validità dell'abbonamento con abbonamento_valido.
+* - Gestisce l'opzione di rinnovo richiamando rinnova_abbonamento.
+* - Attende un invio per tornare al menu.
+*/
 Cliente login_cliente(hashtable h)
 {
     char id[20];
@@ -58,6 +86,26 @@ Cliente login_cliente(hashtable h)
     return c;
 }
 
+/*
+* Funzione: visualizza_lezioni 
+* --------------------------------------
+* Mostra la lista delle lezioni in base a criteri scelti dall’utente.
+*
+* Parametri:
+*   l: lista delle lezioni disponibili.
+*
+* Pre-condizione:
+*   La lista 'l' deve essere inizializzata (anche vuota).
+*
+* Post-condizione:
+*   Vengono stampate a video le lezioni che corrispondono al filtro scelto.
+*
+* Come funziona:
+* - Chiede se visualizzare tutte o solo le lezioni disponibili (non passate e con posti liberi).
+* - Scorre la lista controllando data e disponibilità.
+* - Visualizza solo le lezioni che soddisfano il filtro.
+* - Gestisce il caso in cui non ci siano lezioni da mostrare.
+*/
 static void visualizza_lezioni(list l)
 {
     printf("==============================================\n");
@@ -117,7 +165,7 @@ static void visualizza_lezioni(list l)
         tmp = tailList(tmp);
     }
 
-    libera_data(oggi_data);  // libera la data corrente se è allocata dinamicamente
+    libera_data(oggi_data);
 
     if (trovate == 0)
     {
@@ -125,6 +173,33 @@ static void visualizza_lezioni(list l)
     }
 }
 
+/*
+* Funzione: prenota_lezione 
+* -----------------------------------
+* Permette a un cliente di prenotare una lezione.
+*
+* Parametri:
+*   c: cliente autenticato che vuole prenotare.
+*   l: lista delle lezioni disponibili.
+*   h: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   Il cliente deve avere un abbonamento valido.
+*   l e h devono essere valide.
+*
+* Post-condizione:
+*   Viene creata una nuova prenotazione se possibile.
+*   Vengono aggiornati i posti occupati della lezione 
+*   e aggiorna il file di testo con tutte le lezioni aggiornate.
+*
+* Come funziona:
+* - Mostra la lista delle lezioni libere.
+* - Legge l’ID lezione da prenotare.
+* - Verifica l’esistenza, disponibilità e validità di prenotazione.
+* - Controlla che il cliente non sia già prenotato.
+* - Incrementa i posti occupati.
+* - Crea una nuova prenotazione e la inserisce nella hashtable e nel file di testo.
+*/
 static void prenota_lezione(Cliente c, list l, hashtable_p h)
 {
     printf("======================================================\n");
@@ -194,10 +269,7 @@ static void prenota_lezione(Cliente c, list l, hashtable_p h)
         }
     }
 
-    // Incrementa i posti occupati
     set_posti_occupati(l_selezionata, posti_occupati + 1);
-
-    // Aggiorna il file con tutte le lezioni aggiornate
     aggiorna_file_lezioni(l);
 
     Data data_pre = data_oggi();
@@ -206,7 +278,7 @@ static void prenota_lezione(Cliente c, list l, hashtable_p h)
     char *id_prenotazione = genera_id_generico("P", "prenotazioni.txt");
     Prenotazione p = crea_prenotazione(id_prenotazione, get_id_cliente(c), get_id_lezione(l_selezionata), data_pre);
     free(id_prenotazione);
-    // Inserisci nella tabella hash delle prenotazioni
+
     insertHash_p(h, p);
 
     salva_prenotazione_file(p);
@@ -214,6 +286,31 @@ static void prenota_lezione(Cliente c, list l, hashtable_p h)
     printf("Prenotazione effettuata con successo!\n");
 }
 
+/*
+* Funzione: disdici_prenotazione  
+* ----------------------------------------
+* Permette a un cliente di disdire una prenotazione.
+*
+* Parametri:
+*   c: cliente autenticato.
+*   hp: hashtable delle prenotazioni.
+*   l: lista delle lezioni.
+*
+* Pre-condizione:
+*   c, hp e l devo essere validi.
+*
+* Post-condizione:
+*   La prenotazione viene rimossa dalla struttura dati e dal file di testo.
+*   Viene aggiornato il numero di posti occupati nella lezione.
+*
+* Come funziona:
+* - Mostra le prenotazioni attive del cliente.
+* - Legge l’ID prenotazione da disdire.
+* - Verifica che la prenotazione appartenga al cliente.
+* - Rimuove la prenotazione dalla hashtable.
+* - Decrementa i posti occupati della lezione corrispondente.
+* - Aggiorna il file di testo.
+*/
 static void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
 {
     if(hp == NULL)
@@ -256,7 +353,6 @@ static void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
         Lezione le = getFirst(temp);
         if (strcmp(get_id_lezione(le), id_lezione) == 0)
         {
-            // Decrementa i posti occupati
             int attuali = get_posti_occupati(le);
             set_posti_occupati(le, attuali - 1);
             break;
@@ -271,6 +367,32 @@ static void disdici_prenotazione(Cliente c, hashtable_p hp, list l)
     printf("Prenotazione disdetta con successo!\n");
 }
 
+/*
+* Funzione: menu_cliente
+* ----------------------
+* Gestisce il menu interattivo riservato a un cliente autenticato.
+*
+* Parametri:
+*   c: cliente autenticato.
+*   h: hashtable dei clienti.
+*   l: lista delle lezioni disponibili.
+*   hp: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   Il cliente deve essere autenticato.
+*   Le strutture dati devono essere correttamente inizializzate.
+*
+* Post-condizione:
+*   Aggiorna eventuali modifiche effettuate dal cliente (es. prenotazioni).
+*
+* Come funziona:
+* - Mostra un menu con varie opzioni:
+*    visualizza abbonamento, rinnova, prenota lezione, disdici prenotazione, 
+*    visualizza lezioni, visualizza le tue prenotazioni.
+* - Legge l’input dell’utente.
+* - Richiama le funzioni appropriate in base alla scelta.
+* - Continua finché l’utente non sceglie di uscire.
+*/
 void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp) 
 {
     int scelta;
