@@ -35,8 +35,6 @@ int calcola_durata_in_mesi(Data data_inizio, Data data_fine);
 void stampa_prenotazioni_cliente(Cliente c, hashtable_p hp, list l);
 void stampa_prenotazioni_lezione(hashtable h, Lezione lezione, hashtable_p hp);
 
-int data_valida_per_lezione(Data data);
-
 int abbonamento_valido(Data oggi, Data scadenza);
 Data calcolo_scadenza_abbonamento(Data data_inizio, int durata_abbonamento);;
 

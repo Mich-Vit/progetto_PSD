@@ -110,6 +110,40 @@ static int nome_lezione_valido(const char* nome)
     return 0;
 }
 
+static int data_valida_per_lezione(Data data)
+{
+    if (data == NULL)
+        return 0;  
+
+    Data oggi = data_oggi(); 
+
+    int mese_oggi = get_mese(oggi);
+    int anno_oggi = get_anno(oggi);
+
+    int mese_le = get_mese(data);
+    int anno_le = get_anno(data);
+
+    // Calcola mese e anno del mese successivo
+    int mese_prossimo = (mese_oggi % 12) + 1;
+    int anno_prossimo;
+    if (mese_oggi == 12)
+        anno_prossimo = anno_oggi + 1;
+    else
+        anno_prossimo = anno_oggi;
+
+    // Verifica se la data fornita è nel mese corrente o in quello successivo
+    int valida = 0;
+    if ((anno_le == anno_oggi && mese_le == mese_oggi) ||
+        (anno_le == anno_prossimo && mese_le == mese_prossimo))
+    {
+        valida = 1;
+    }
+
+    libera_data(oggi); 
+    return valida;
+}
+
+
 static list inserisci_lezione(list l)
 {
     char nome[50];

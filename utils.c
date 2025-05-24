@@ -571,25 +571,6 @@ void stampa_lezioni_libere(list l)
     libera_data(oggi); // libera la memoria se data_oggi() restituisce data allocata dinamicamente
 }
 
-int data_valida_per_lezione(Data data)
-{
-    if (data == NULL)
-        return 0;
-
-    Data oggi = data_oggi();
-    int mese_corrente = get_mese(oggi);
-    int anno_corrente = get_anno(oggi);
-
-    int mese_data = get_mese(data);
-    int anno_data = get_anno(data);
-
-    int mese_successivo = (mese_corrente % 12) + 1;
-    int anno_successivo = (mese_corrente == 12) ? anno_corrente + 1 : anno_corrente;
-
-    return ((anno_data == anno_corrente && mese_data == mese_corrente) ||
-            (anno_data == anno_successivo && mese_data == mese_successivo));
-}
-
 Data calcolo_scadenza_abbonamento(Data data_inizio, int durata_abbonamento) 
 {
     int giorno = get_giorno(data_inizio);
