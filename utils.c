@@ -15,9 +15,9 @@
 
 void rinnova_abbonamento(Cliente c, hashtable h)
 {
-    if (c == NULL)
+    if (c == NULL || h == NULL)
     {
-        printf("Cliente non valido.\n");
+        printf("Cliente o tabella non valida.\n");
         return;
     }
 
@@ -314,7 +314,6 @@ list carica_lezioni_da_file(list l)
 
     while (1)
     {
-        // Leggi ID
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
         if (sscanf(buffer, "ID: %s", id) != 1)
@@ -326,25 +325,21 @@ list carica_lezioni_da_file(list l)
         if (sscanf(buffer, "Nome: %[^\n]", nome) != 1)
             break;
 
-        // Leggi Data
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
         if (sscanf(buffer, "Data: %d/%d/%d", &giorno, &mese, &anno) != 3)
             break;
 
-        // Leggi Orario (stringa)
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
         if (sscanf(buffer, "Orario: %s", orario_str) != 1)
             break;
 
-        // Leggi posti massimi
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
         if (sscanf(buffer, "Posti massimi: %d", &posti_max) != 1)
             break;
 
-        // Leggi posti occupati
         if (fgets(buffer, sizeof(buffer), fp) == NULL)
             break;
         if (sscanf(buffer, "Posti occupati: %d", &posti_occupati) != 1)

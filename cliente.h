@@ -262,7 +262,7 @@ Data get_data_scadenza(Cliente c);
 /*
 * Funzione: get_next_cliente
 * --------------------------
-* Restituisce il puntatore al cliente successivo nella struttura (tabella hash).
+* Restituisce il puntatore al cliente successivo nella lista.
 *
 * Parametri:
 *   c: puntatore al Cliente corrente.
@@ -281,7 +281,7 @@ Cliente get_next_cliente(Cliente c);
 /*
 * Funzione: set_next_cliente
 * --------------------------
-* Imposta il cliente successivo nella struttura dati (tabella hash).
+* Imposta il cliente successivo nella lista.
 *
 * Parametri:
 *   c: cliente corrente
