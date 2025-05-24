@@ -54,7 +54,6 @@ static int hashFun(const char *key, int size)
 
 hashtable newHashtable(int size) 
 {
-    int i;
     // Allocazione della memoria per la struttura hash.
     hashtable h = (struct hash *) malloc(sizeof(struct hash));
     if (h == NULL) 

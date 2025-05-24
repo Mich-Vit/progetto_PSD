@@ -16,21 +16,28 @@ struct hash_p
     Prenotazione *table;        // Vettore di puntatori a Cliente.
 };
 
-/*
- * Calcola l'hash FNV-1a a 32 bit per una stringa.
- * 
- * L'algoritmo FNV-1a è noto per la sua semplicità, velocità 
- * e buona distribuzione dei valori. Utilizza due costanti:
- * - offset basis (2166136261) come valore iniziale
- * - FNV prime (16777619) per la moltiplicazione
- *
- * Il processo:
- * 1. Inizializza il valore hash con l'offset basis
- * 2. Per ogni carattere nella stringa:
- *    - Applica un XOR tra l'hash e il carattere corrente
- *    - Moltiplica il risultato per il FNV prime
- * 3. Restituisce l'hash risultante
- */
+ /*
+* Funzione: fnv1aHash32
+* ----------------------------------------
+* Calcola l'hash FNV-1a a 32 bit per una stringa.
+*
+* Parametri:
+*   key: la stringa da trasformare in hash.
+*
+* Valore di ritorno:
+*   Valore hash a 32 bit generato dalla stringa.
+*
+* Dettagli:
+* - L'algoritmo FNV-1a è rapido e produce buone distribuzioni.
+* - Utilizza costanti predefinite per inizializzazione e moltiplicazione.
+* 
+* Come funziona:
+* 1. Inizializza il valore hash con l'offset basis
+* 2. Per ogni carattere nella stringa:
+*    - Applica un XOR tra l'hash e il carattere corrente
+*    - Moltiplica il risultato per il FNV prime
+* 3. Restituisce l'hash risultante
+*/
 static uint32_t fnv1aHash32(const char *key)
 {
     uint32_t hash = 2166136261u;
@@ -43,7 +50,21 @@ static uint32_t fnv1aHash32(const char *key)
     return hash;
 }
 
-// Funzione che calcola un valore hash limitato alla dimensione di una tabella
+/*
+* Funzione: hashFun
+* ----------------------------------------
+* Calcola un indice valido per una tabella hash a partire da una chiave stringa.
+*
+* Parametri:
+*   key: chiave stringa da convertire.
+*   size: dimensione della tabella hash.
+*
+* Valore di ritorno:
+*   Intero nell'intervallo [0, size-1].
+*
+* Uso:
+* - Garantisce che l'indice sia all'interno dei limiti della tabella.
+*/
 static int hashFun(const char *key, int size) 
 {
     // Calcola l'hash a 32 bit della chiave usando FNV-1a
@@ -51,46 +72,78 @@ static int hashFun(const char *key, int size)
     return fnv1aHash32(key) % size;
 }
 
+/*
+* Funzione: newHashtable_p
+* ----------------------------------------
+* Crea una nuova tabella hash per le prenotazioni.
+*
+* Parametri:
+*   size: dimensione della tabella.
+*
+* Pre-condizione:
+*   size > 0
+*
+* Post-condizione:
+*   Viene restituito un nuovo oggetto hashtable_p correttamente allocato.
+*
+* Come funziona:
+* - Alloca la struttura principale.
+* - Se fallisce ritorna NULL.
+* - Imposta la dimensione della tabella.
+* - Inizializza la tabella con calloc (tutti NULL).
+*/
 hashtable_p newHashtable_p(int size) 
 {
-    int i;
-    // Allocazione della memoria per la struttura hash.
     hashtable_p h = (struct hash_p *) malloc(sizeof(struct hash_p));
     if (h == NULL) 
     {       
         return NULL;
     }
 
-    h->size = size;  // Imposta la dimensione della tabella.
+    h->size = size;
 
-    // Allocazione della memoria per gli elementi della tabella,
-    // inizializzando tutti i puntatori a NULL utilizzando calloc.
     h->table = calloc(size, sizeof(Prenotazione));
     if (h->table == NULL) 
     { 
-        free(h); // Libera la memoria allocata per la struttura hash se la tabella non può essere creata.
+        free(h); 
         return NULL;
     }
 
-    return h;  // Ritorna il puntatore alla nuova tabella hash.
+    return h;
 }
 
-
+/*
+* Funzione: insertHash_p
+* ----------------------------------------
+* Inserisce una nuova prenotazione nella tabella hash.
+*
+* Parametri:
+*   h: puntatore alla hash table.
+*   p: prenotazione da inserire.
+*
+* Pre-condizione:
+*   La tabella hash e la prenotazione devono essere validi;
+*   p deve avere un ID diverso da quelle presenti.
+*
+* Post-condizione:
+*   La prenotazione viene inserita nella tabella.
+*
+* Come funziona:
+* - Calcola l’indice della tabella hash usando hushFun
+* - Inserisce in testa alla lista nella posizione hash.
+* - Non permette duplicati (controllo su ID).
+* - Ritorna: 1 se l'inserimento ha successo, 0 altrimenti.
+*/
 int insertHash_p(hashtable_p h, Prenotazione p) 
 {
-    // Calcola l’indice della tabella hash usando l’ID del cliente e la dimensione della tabella
     int idx = hashFun(get_id_prenotazione(p), h->size);
 
-    // Recupera la testa della lista nella posizione 'idx' della tabella
     Prenotazione head = h->table[idx];
-
-    // Puntatore per scorrere la lista dei clienti già presenti in quella posizione
     Prenotazione curr = head;
 
-    // Scorri la lista per verificare se esiste già un cliente con lo stesso ID
+    // Scorri la lista per verificare se esiste già una prenotazione con lo stesso ID
     while (curr) 
     {
-        // Controlla se esiste già una prenotazione con lo stesso id
         if (strcmp(get_id_prenotazione(curr), get_id_prenotazione(p)) == 0)
         {
             return 0;  // già presente, non inserisco
@@ -104,8 +157,28 @@ int insertHash_p(hashtable_p h, Prenotazione p)
     return 1;
 }
 
-
-// Funzione per eliminare un cliente dalla tabella hash basandosi sull'ID del cliente
+/*
+* Funzione: hashDelete_p
+* ----------------------------------------
+* Elimina una prenotazione dalla tabella hash dato un ID.
+*
+* Parametri:
+*   h: puntatore alla hash table.
+*   id: identificativo della prenotazione da eliminare.
+*
+* Pre-condizione:
+*   La tabella hash deve essere valida;
+*   L'ID non deve essere NULL;
+*   Il numero di elementi nella tabella deve essere > 0
+*
+* Post-condizione:
+*   La prenotazione viene rimossa dalla tabella, se esiste.
+*
+* Come funziona:
+* - Calcola l’indice della tabella hash usando hushFun
+* - Gestisce eliminazione in testa e in mezzo alla lista.
+* - Ritorna: la prenotazione rimossa, o NULL se non trovata.
+*/
 Prenotazione hashDelete_p(hashtable_p h, char *id) 
 {
     if (h == NULL || id == NULL)
@@ -136,7 +209,28 @@ Prenotazione hashDelete_p(hashtable_p h, char *id)
     return NULL;
 }
 
-
+/*
+* Funzione: hashSearch_p
+* ----------------------------------------
+* Cerca una prenotazione nella tabella tramite ID.
+*
+* Parametri:
+*   h: puntatore alla hash table.
+*   id: identificativo della prenotazione da cercare.
+*
+* Pre-condizione:
+*   La tabella hash deve essere valida;
+*   L'ID non deve essere NULL;
+*   Il numero di elementi nella tabella deve essere > 0
+*
+* Ritorna:
+*   La prenotazione trovata, o NULL se non esiste.
+*
+* Come funziona:
+* - Calcola l’indice della tabella hash usando hushFun
+* - Scorre la lista delle prenotazioni di quell'indice
+* - Ritorna: la prenotazione ricercata, oppure NULL se non la trova
+*/
 Prenotazione hashSearch_p(hashtable_p h, char *id) 
 {
     if (h == NULL || id == NULL)
@@ -154,6 +248,17 @@ Prenotazione hashSearch_p(hashtable_p h, char *id)
     return NULL;
 }
 
+/*
+ * Funzione: deleteList_p
+ * ----------------------------------------
+ * Elimina ricorsivamente una lista collegata di prenotazioni.
+ *
+ * Parametri:
+ *   p: testa della lista da eliminare.
+ *
+ * Uso:
+ * - Chiamata internamente da destroyHashtable_p.
+ */
 static void deleteList_p(Prenotazione p) 
 {
     Prenotazione current = p;
@@ -167,7 +272,18 @@ static void deleteList_p(Prenotazione p)
     }
 }
   
-// Funzione per distruggere (eliminare completamente) una tabella hash.
+/*
+ * Funzione: destroyHashtable_p
+ * ----------------------------------------
+ * Libera tutta la memoria associata alla tabella hash.
+ *
+ * Parametri:
+ *   h: tabella hash da distruggere.
+ *
+ * Come funziona:
+ * - Elimina tutte le liste collegate chiamando la funzione deleteList_p.
+ * - Libera l’array e la struttura.
+ */
 void destroyHashtable_p(hashtable_p h) 
 {
     if (h == NULL)
@@ -182,6 +298,24 @@ void destroyHashtable_p(hashtable_p h)
     free(h);
 }
 
+/*
+* Funzione: stampaHash_p
+* ----------------------------------------
+* Stampa tutte le prenotazioni nella tabella.
+*
+* Parametri:
+*   h: puntatore alla tabella hash.
+*
+* Pre-condizione:
+*   Il puntatore h deve essere valido.
+*
+* Post-condizione:
+*   Le informazioni di tutte le prenotazioni vengono stampate.
+*
+* Come funziona:
+* - Scorre l’intera tabella e chiama la funzione visualizza_prenotazione.
+* - Conta il numero totale di prenotazioni.
+*/
 void stampaHash_p(hashtable_p h)
 {
     if (h == NULL) 
@@ -212,6 +346,23 @@ void stampaHash_p(hashtable_p h)
         printf("Totale prenotazioni: %d\n", count);
 }
 
+/*
+* Funzione: stampaMinimaHash_p
+* ----------------------------------------
+* Stampa una versione ridotta delle prenotazioni.
+*
+* Parametri:
+*   h: puntatore alla tabella hash.
+*
+* Pre-condizione:
+*   Il puntatore h deve essere valido.
+*
+* Post-condizione:
+*   Le informazioni minime delle prenotazioni vengono stampate.
+*
+* Come funziona:
+* - Scorre l’intera tabella e chiama la funzione visualizza_essenziale_prenotazione.
+*/
 void stampaMinimaHash_p(hashtable_p h)
 {
     if (h == NULL)
@@ -228,13 +379,35 @@ void stampaMinimaHash_p(hashtable_p h)
     }
 }
 
-
 // === Getter ===
+
+/*
+ * Funzione: get_size_hash_p
+ * ----------------------------------------
+ * Restituisce la dimensione della tabella hash.
+ *
+ * Parametri:
+ *   h: tabella hash.
+ *
+ * Valore di ritorno:
+ *   Dimensione della tabella.
+ */
 int get_size_hash_p(hashtable_p h)
 {
     return h->size;
 }
 
+/*
+ * Funzione: get_table_hash_p
+ * ----------------------------------------
+ * Restituisce l’array delle liste di prenotazioni.
+ *
+ * Parametri:
+ *   h: tabella hash.
+ *
+ * Valore di ritorno:
+ *   Puntatore all’array di prenotazioni.
+ */
 Prenotazione* get_table_hash_p(hashtable_p h)
 {
     return h->table;
