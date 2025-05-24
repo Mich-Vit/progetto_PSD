@@ -54,6 +54,11 @@ void salva_lezione_file(Lezione l)
         return;
     }
 
+    if(l == NULL)
+    {
+        return;
+    }
+
     fprintf(fp, "ID: %s\n", l->id);
     fprintf(fp, "Nome: %s\n", l->nome);
     fprintf(fp, "Data: %02d/%02d/%04d\n",
@@ -68,15 +73,14 @@ void salva_lezione_file(Lezione l)
     fclose(fp);
 }
 
-
 void libera_lezione(Lezione l) 
 {
     if (l != NULL) 
     {
-        free(l->id);               // libera l'ID (se mallocato)
-        libera_data(l->data);      // libera la data
-        libera_orario(l->ora_lezione);  // libera l'orario
-        free(l);                   // libera la struttura Lezione
+        free(l->id);              
+        libera_data(l->data);      
+        libera_orario(l->ora_lezione); 
+        free(l);                
     }
 }
 
@@ -131,16 +135,22 @@ void visualizza_essenziale_lezione(Lezione le, int posti_occupati, int posti_max
 
 char* get_id_lezione(Lezione l)
 {
+    if (l == NULL)
+        return NULL;
     return l->id; 
 }
 
 int get_posti_occupati(Lezione l)
 {
+    if (l == NULL)
+        return -1;
     return l->posti_occupati; 
 }
 
 int get_posti_max(Lezione l)
 {
+    if (l == NULL)
+        return -1;
     return l->posti_max; 
 }
 
