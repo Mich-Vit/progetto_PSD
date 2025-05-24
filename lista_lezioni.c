@@ -12,12 +12,45 @@ struct node
     struct node *next;
 };
 
-
+/*
+* Funzione: newList
+* ----------------------------------------
+* Crea una nuova lista vuota.
+*
+* Parametri:
+*   Nessuno.
+*
+* Pre-condizione:
+*   Nessuna.
+*
+* Post-condizione:
+*   Restituisce una lista vuota (NULL).
+*
+* Come funziona:
+* - Ritorna NULL per rappresentare una lista vuota.
+*/
 list newList(void)
 {
     return NULL;
 }
 
+/*
+* Funzione: emptyList
+* ----------------------------------------
+* Verifica se una lista è vuota.
+*
+* Parametri:
+*   l: lista da controllare.
+*
+* Pre-condizione:
+*   Lista valida.
+*
+* Post-condizione:
+*   Ritorna 1 se la lista è vuota, 0 altrimenti.
+*
+* Come funziona:
+* - Controlla se il puntatore alla lista è NULL.
+*/
 int emptyList(list l)
 {
     if(l == NULL)
@@ -30,16 +63,36 @@ int emptyList(list l)
     }
 }
 
-
+/*
+* Funzione: consList
+* ----------------------------------------
+* Aggiunge una lezione all'inizio della lista.
+*
+* Parametri:
+*   le: la Lezione da aggiungere.
+*   l: la lista a cui aggiungere la lezione.
+*
+* Pre-condizione:
+*   Lezione valida.
+*
+* Post-condizione:
+*   Restituisce la nuova lista con la lezione in testa.
+*
+* Come funziona:
+* - Alloca dinamicamente un nuovo nodo.
+* - Assegna la lezione al nuovo nodo.
+* - Collega il nuovo nodo alla lista esistente.
+* - Ritorna il nuovo nodo come testa della lista.
+*/
 list consList(Lezione le, list l)
 {
     struct node *nuovo = malloc(sizeof(struct node));
 
     if (nuovo != NULL)
     {
-        nuovo->lez = le;       // Assegna la lezione al nodo
-        nuovo->next = l;     // Collega il nuovo nodo alla lista esistente
-        l = nuovo;           // Il nuovo nodo diventa la testa della lista
+        nuovo->lez = le;      
+        nuovo->next = l;  // Collega il nuovo nodo alla lista esistente
+        l = nuovo;        // Il nuovo nodo diventa la testa della lista
     }
     else
     {
@@ -50,6 +103,24 @@ list consList(Lezione le, list l)
     return l;
 }
 
+/*
+* Funzione: tailList
+* ----------------------------------------
+* Restituisce la coda della lista, escludendo il primo elemento.
+*
+* Parametri:
+*   l: lista originale.
+*
+* Pre-condizione:
+*   Lista valida o NULL.
+*
+* Post-condizione:
+*   Restituisce la lista senza la testa (primo nodo).
+*
+* Come funziona:
+* - Se la lista è NULL, ritorna NULL.
+* - Altrimenti, ritorna il campo "next" del primo nodo.
+*/
 list tailList(list l)
 {
     list temp;
@@ -63,16 +134,51 @@ list tailList(list l)
     return temp;
 }
 
+/*
+* Funzione: getFirst
+* ----------------------------------------
+* Ottiene la prima lezione nella lista.
+*
+* Parametri:
+*   l: lista da cui prelevare la lezione.
+*
+* Pre-condizione:
+*   Lista non NULL.
+*
+* Post-condizione:
+*   Restituisce la lezione contenuta nel primo nodo della lista.
+*
+* Come funziona:
+* - Se la lista è NULL, ritorna NULL.
+* - Altrimenti, ritorna il campo "lez" del primo nodo.
+*/
 Lezione getFirst(list l)
 {
     if (l == NULL)
     {
         return NULL; 
     }
-    return l->lez;  // Restituisce la lezione nella testa della lista
+    return l->lez; 
 }
 
-
+/*
+* Funzione: sizeList
+* ----------------------------------------
+* Calcola la lunghezza della lista.
+*
+* Parametri:
+*   l: lista da misurare.
+*
+* Pre-condizione:
+*   Lista valida o NULL.
+*
+* Post-condizione:
+*   Ritorna il numero di elementi nella lista.
+*
+* Come funziona:
+* - Scorre tutta la lista contando i nodi uno ad uno.
+* - Ritorna il conteggio.
+*/
 int sizeList(list l)
 {
     int n = 0;  // Inizializza n a zero
@@ -84,6 +190,25 @@ int sizeList(list l)
     return n;
 }
 
+/*
+* Funzione: reverseList
+* ----------------------------------------
+* Inverte l'ordine degli elementi nella lista.
+*
+* Parametri:
+*   l: lista da invertire.
+*
+* Pre-condizione:
+*   Lista valida.
+*
+* Post-condizione:
+*   Ritorna una nuova lista con gli stessi elementi in ordine inverso.
+*
+* Come funziona:
+* - Scorre la lista originale.
+* - Aggiunge ciascun elemento in testa a una nuova lista.
+* - Ritorna la nuova lista.
+*/
 list reverseList(list l)
 {
     list rev = newList();
@@ -99,6 +224,26 @@ list reverseList(list l)
     return rev;
 }
 
+/*
+* Funzione: removeList
+* ----------------------------------------
+* Rimuove l'elemento in posizione specificata dalla lista.
+*
+* Parametri:
+*   l: lista originale.
+*   pos: posizione (zero-based) dell'elemento da rimuovere.
+*
+* Pre-condizione:
+*   Lista valida, posizione >= 0.
+*
+* Post-condizione:
+*   Ritorna la lista senza l’elemento alla posizione indicata.
+*
+* Come funziona:
+* - Copia i nodi precedenti alla posizione in una lista temporanea.
+* - Salta il nodo da rimuovere.
+* - Ricompone la lista con i nodi rimanenti.
+*/
 list removeList(list l, int pos)
 {
     int i = 0;
@@ -133,6 +278,24 @@ list removeList(list l, int pos)
     return l2;  // Restituisci la lista modificata
 }
 
+/*
+* Funzione: copiaLista
+* ----------------------------------------
+* Crea una copia della lista preservando l'ordine degli elementi.
+*
+* Parametri:
+*   l: lista da copiare.
+*
+* Pre-condizione:
+*   Lista valida.
+*
+* Post-condizione:
+*   Ritorna una nuova lista con le stesse lezioni in ordine originale.
+*
+* Come funziona:
+* - Inverte la lista copiandola in ordine inverso (temp).
+* - Poi la reinverte per ottenere l’ordine originale (copia).
+*/
 static list copiaLista(list l)
 {
     list copia = newList();
@@ -157,6 +320,26 @@ static list copiaLista(list l)
     return copia;
 }
 
+/*
+* Funzione: ordina_Lista
+* ----------------------------------------
+* Ordina la lista delle lezioni per data e orario crescenti.
+*
+* Parametri:
+*   l: lista da ordinare.
+*
+* Pre-condizione:
+*   Lista valida.
+*
+* Post-condizione:
+*   Ritorna una nuova lista ordinata.
+*
+* Come funziona:
+* - Copia la lista originale.
+* - Seleziona ripetutamente la lezione "minima" (più imminente).
+* - La rimuove dalla copia e la inserisce in una nuova lista ordinata.
+* - Alla fine, inverte la lista ordinata per ottenere l'ordine corretto.
+*/
 list ordina_Lista(list l)
 {
     list copia = copiaLista(l); // Per non modificare l'originale
@@ -188,6 +371,24 @@ list ordina_Lista(list l)
     return reverseList(l_ord); // Riporta in ordine crescente
 }
 
+/*
+* Funzione: outputList
+* ----------------------------------------
+* Stampa tutte le lezioni della lista in formato completo.
+*
+* Parametri:
+*   l: lista delle lezioni.
+*
+* Pre-condizione:
+*   Lista valida.
+*
+* Post-condizione:
+*   Le lezioni vengono stampate su console in ordine cronologico.
+*
+* Come funziona:
+* - Ordina la lista.
+* - Scorre la lista e stampa ogni lezione con la funzione `visualizza_lezione`.
+*/
 void outputList(list l)
 {
     Lezione le;
@@ -204,6 +405,24 @@ void outputList(list l)
     }
 }
 
+/*
+* Funzione: stampaMinimaList
+* ----------------------------------------
+* Stampa le lezioni in formato compatto (essenziale).
+*
+* Parametri:
+*   l: lista delle lezioni.
+*
+* Pre-condizione:
+*   Lista valida.
+*
+* Post-condizione:
+*   Le lezioni vengono stampate su console in formato tabellare ridotto.
+*
+* Come funziona:
+* - Ordina la lista.
+* - Scorre la lista e stampa ogni lezione con la funzione visualizza_essenziale_lezione.
+*/
 void stampaMinimaList(list l)
 {
     Lezione le;

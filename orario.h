@@ -117,7 +117,7 @@ void libera_orario(Orario o);
 *   Nessuna modifica all'orario.
 *
 * Ritorna:
-*   Valore intero corrispondente alle ore (0–23).
+*   Valore intero corrispondente alle ore (0–23), -1 se o è non valido.
 */
 int get_ora(Orario o);
 
@@ -136,6 +136,6 @@ int get_ora(Orario o);
 *   Nessuna modifica all'orario.
 *
 * Ritorna:
-*   Valore intero corrispondente ai minuti (0–59).
+*   Valore intero corrispondente ai minuti (0–59), -1 se o è non valido.
 */
 int get_minuti(Orario o);

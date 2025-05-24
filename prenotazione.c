@@ -19,7 +19,28 @@ struct prenotazione
     struct prenotazione *next;
 };
 
-
+/*
+* Funzione: crea_prenotazione
+* ----------------------------------------
+* Alloca e inizializza una nuova prenotazione con i dati specificati.
+*
+* Parametri:
+*   id_pren: identificativo univoco della prenotazione.
+*   id_cli: identificativo del cliente.
+*   id_lez: identificativo della lezione.
+*   data_prenotazione: data in cui viene effettuata la prenotazione.
+*
+* Pre-condizione:
+*   Tutti i parametri devono essere validi e non NULL.
+*
+* Post-condizione:
+*   Ritorna un nuovo oggetto Prenotazione con i dati copiati.
+*
+* Come funziona:
+* - Alloca memoria per la struttura e per ciascuna stringa ID.
+* - Copia i valori dei parametri nella struttura.
+* - Imposta il campo `next` a NULL.
+*/
 Prenotazione crea_prenotazione(char *id_pren, char* id_cli, char* id_lez, Data data_prenotazione) 
 {
     Prenotazione nuova_prenotazione = malloc(sizeof(struct prenotazione));
@@ -65,7 +86,25 @@ Prenotazione crea_prenotazione(char *id_pren, char* id_cli, char* id_lez, Data d
     return nuova_prenotazione;
 }
 
-
+/*
+* Funzione: salva_prenotazione_file
+* ----------------------------------------
+* Salva su file la prenotazione.
+*
+* Parametri:
+*   p: puntatore alla prenotazione da salvare.
+*
+* Pre-condizione:
+*   p deve essere un puntatore valido a una Prenotazione.
+*
+* Post-condizione:
+*   I dati vengono scritti in fondo al file "prenotazioni.txt".
+*
+* Come funziona:
+* - Apre il file in modalità append.
+* - Scrive i campi della prenotazione.
+* - Chiude il file.
+*/
 void salva_prenotazione_file(Prenotazione p)
 {
     FILE *fp = fopen("prenotazioni.txt", "a");
@@ -88,7 +127,24 @@ void salva_prenotazione_file(Prenotazione p)
     fclose(fp);
 }
 
-
+/*
+* Funzione: visualizza_prenotazione
+* ----------------------------------------
+* Stampa tutte le informazioni di una prenotazione.
+*
+* Parametri:
+*   p: puntatore alla prenotazione da stampare.
+*
+* Pre-condizione:
+*   p non deve essere NULL.
+*
+* Post-condizione:
+*   I dati della prenotazione vengono stampati a video.
+*
+* Come funziona:
+* - Controlla se la prenotazione è NULL.
+* - Se valida, stampa ID prenotazione, cliente, lezione e data.
+*/
 void visualizza_prenotazione(Prenotazione p)
 {
     if (p == NULL)
@@ -105,6 +161,24 @@ void visualizza_prenotazione(Prenotazione p)
     printf("\n");
 }
 
+/*
+* Funzione: visualizza_essenziale_prenotazione
+* ----------------------------------------
+* Stampa solo i dati essenziali della prenotazione.
+*
+* Parametri:
+*   p: puntatore alla prenotazione.
+*
+* Pre-condizione:
+*   p non deve essere NULL.
+*
+* Post-condizione:
+*   Vengono stampati ID prenotazione, ID cliente e ID lezione.
+*
+* Come funziona:
+* - Verifica se p è NULL.
+* - Stampa i tre ID.
+*/
 void visualizza_essenziale_prenotazione(Prenotazione p)
 {
     if (p == NULL)
@@ -119,7 +193,24 @@ void visualizza_essenziale_prenotazione(Prenotazione p)
            p->id_lezione);
 }
 
-
+/*
+* Funzione: libera_prenotazione
+* ----------------------------------------
+* Libera la memoria occupata da una prenotazione.
+*
+* Parametri:
+*   p: puntatore alla prenotazione da liberare.
+*
+* Pre-condizione:
+*   p può essere NULL o valido.
+*
+* Post-condizione:
+*   Tutta la memoria allocata dinamicamente per la prenotazione viene liberata.
+*
+* Come funziona:
+* - Libera ogni campo stringa e la data.
+* - Infine libera la struttura stessa.
+*/
 void libera_prenotazione(Prenotazione p)
 {
     if (p != NULL)
@@ -132,8 +223,23 @@ void libera_prenotazione(Prenotazione p)
     }
 }
 
-//====GETTER===
-
+/*
+* Funzione: get_id_prenotazione
+* ----------------------------------------
+* Restituisce l'ID della prenotazione.
+*
+* Parametri:
+*   p: puntatore alla prenotazione.
+*
+* Pre-condizione:
+*   p deve essere valido.
+*
+* Post-condizione:
+*   Restituisce una stringa con l'ID della prenotazione, NULL se p non è valido.
+*
+* Come funziona:
+* - Accede direttamente al campo `id_prenotazione`.
+*/
 char* get_id_prenotazione(Prenotazione p)
 {
     if (p == NULL)
@@ -141,6 +247,23 @@ char* get_id_prenotazione(Prenotazione p)
     return p->id_prenotazione;
 }
 
+/*
+* Funzione: get_id_cliente_prenotazione
+* ----------------------------------------
+* Restituisce l'ID del cliente associato alla prenotazione.
+*
+* Parametri:
+*   p: prenotazione da cui estrarre l'informazione.
+*
+* Pre-condizione:
+*   p deve essere valido.
+*
+* Post-condizione:
+*   Restituisce una stringa con l'ID cliente, NULL se p non è valido.
+*
+* Come funziona:
+* - Restituisce il campo `id_cliente` della struttura.
+*/
 char* get_id_cliente_prenotazione(Prenotazione p)
 {
     if (p == NULL)
@@ -148,6 +271,23 @@ char* get_id_cliente_prenotazione(Prenotazione p)
     return p->id_cliente;
 }
 
+/*
+* Funzione: get_id_lezione_prenotazione
+* ----------------------------------------
+* Restituisce l'ID della lezione associata.
+*
+* Parametri:
+*   p: prenotazione da cui estrarre l’informazione.
+*
+* Pre-condizione:
+*   p deve essere valido.
+*
+* Post-condizione:
+*   Restituisce l’ID della lezione prenotata, NULL se p non è valido.
+*
+* Come funziona:
+* - Restituisce il campo `id_lezione` della struttura.
+*/
 char* get_id_lezione_prenotazione(Prenotazione p)
 {
     if (p == NULL)
@@ -155,6 +295,23 @@ char* get_id_lezione_prenotazione(Prenotazione p)
     return p->id_lezione;
 }
 
+/*
+* Funzione: get_data_prenotazione
+* ----------------------------------------
+* Restituisce la data in cui è stata effettuata la prenotazione.
+*
+* Parametri:
+*   p: prenotazione.
+*
+* Pre-condizione:
+*   p deve essere valido.
+*
+* Post-condizione:
+*   Ritorna un oggetto Data, NULL se p non è valido.
+*
+* Come funziona:
+* - Ritorna il campo `data_prenotazione` della struttura.
+*/
 Data get_data_prenotazione(Prenotazione p)
 {
     if (p == NULL)
@@ -162,6 +319,23 @@ Data get_data_prenotazione(Prenotazione p)
     return p->data_prenotazione;
 }
 
+/*
+* Funzione: get_next_prenotazione
+* ----------------------------------------
+* Restituisce il puntatore alla prossima prenotazione (nella lista collegata).
+*
+* Parametri:
+*   p: prenotazione corrente.
+*
+* Pre-condizione:
+*   p può essere NULL o valido.
+*
+* Post-condizione:
+*   Ritorna il campo `next`, o NULL se p non è valido.
+*
+* Come funziona:
+* - Restituisce il campo `next`, cioè il nodo successivo nella lista.
+*/
 Prenotazione get_next_prenotazione(Prenotazione p)
 {
     if (p == NULL)
@@ -169,7 +343,24 @@ Prenotazione get_next_prenotazione(Prenotazione p)
     return p->next;
 }
 
-// Setter 
+/*
+* Funzione: set_next_prenotazione
+* ----------------------------------------
+* Imposta il puntatore alla prossima prenotazione.
+*
+* Parametri:
+*   p: prenotazione corrente.
+*   next: prenotazione successiva da collegare.
+*
+* Pre-condizione:
+*   p deve essere valido.
+*
+* Post-condizione:
+*   Imposta il campo `next` della struttura.
+*
+* Come funziona:
+* - Assegna a `p->next` il puntatore `next`.
+*/
 void set_next_prenotazione(Prenotazione p, Prenotazione next)
 {
     if (p != NULL)

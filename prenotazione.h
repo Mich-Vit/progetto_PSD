@@ -122,7 +122,7 @@ void salva_prenotazione_file(Prenotazione p);
 *   Nessuna modifica alla struttura.
 *
 * Ritorna:
-*   Stringa contenente l'ID della prenotazione.
+*   Stringa contenente l'ID della prenotazione, o NULL se p non è valido.
 */
 char* get_id_prenotazione(Prenotazione p);
 
@@ -141,7 +141,7 @@ char* get_id_prenotazione(Prenotazione p);
 *   Nessuna modifica alla struttura.
 *
 * Ritorna:
-*   Stringa contenente l'ID del cliente associato alla prenotazione.
+*   Stringa contenente l'ID del cliente associato alla prenotazione, o NULL se p non è valido.
 */
 char* get_id_cliente_prenotazione(Prenotazione p);
 
@@ -160,7 +160,7 @@ char* get_id_cliente_prenotazione(Prenotazione p);
 *   Nessuna modifica alla struttura.
 *
 * Ritorna:
-*   Stringa contenente l'ID della lezione alla prenotazione.
+*   Stringa contenente l'ID della lezione alla prenotazione, o NULL se p non è valido.
 */
 char* get_id_lezione_prenotazione(Prenotazione p);
 
@@ -179,7 +179,7 @@ char* get_id_lezione_prenotazione(Prenotazione p);
 *   Nessuna modifica alla struttura.
 *
 * Ritorna:
-*   Oggetto Data associato alla prenotazione.
+*   Oggetto Data associato alla prenotazione, o NULL se p non è valido.
 */
 Data get_data_prenotazione(Prenotazione p);
 

@@ -22,8 +22,32 @@ struct statistica
     int conteggio; //numero di prenotazioni su quella lezione
 };
 
-// Funzione per trovare o aggiungere una lezione all'array di statistiche
-// Cerca se esiste già una statistica per quella lezione. Se sì, incrementa. Se no, aggiunge.
+/*
+ * Funzione: aggiorna_statistica
+ * -----------------------------
+ * Aggiorna un array dinamico di statistiche. Se esiste già la lezione nell'array, 
+ * incrementa il conteggio. Altrimenti, la aggiunge.
+ *
+ * Parametri:
+ *   stats: puntatore al puntatore all'array di statistiche.
+ *   n: puntatore al numero corrente di elementi nell'array.
+ *   size_stats: puntatore alla dimensione attuale dell'array.
+ *   id_lezione: ID della lezione da cercare o aggiungere.
+ *
+ * Pre-condizioni:
+ *   - stats deve puntare a un array valido (eventualmente allocato via malloc).
+ *   - n e size_stats devono essere inizializzati.
+ *
+ * Post-condizioni:
+ *   - stats viene aggiornato con il nuovo conteggio o una nuova voce.
+ *   - In caso di realloc, la dimensione dell’array viene raddoppiata.
+ *
+ * Come funziona:
+ * - Cerca la lezione già presente.
+ * - Se trovata, incrementa il conteggio.
+ * - Se non trovata e lo spazio è insufficiente, raddoppia l’array con 
+ *   realloc e inserisce la nuova voce.
+ */
 static int aggiorna_statistica(Stats* stats, int* n, int* size_stats, const char* id_lezione)
 {
     for (int i = 0; i < *n; i++)
@@ -56,10 +80,33 @@ static int aggiorna_statistica(Stats* stats, int* n, int* size_stats, const char
 
 
 /*
-*  1) Filtra tutte le prenotazioni del mese corrente
-*  2) Conta quante prenotazioni ha ogni lezione
-*  3) Ordina le lezioni in base al numero di prenotazioni
-*/
+ * Funzione: genera_report_mensile
+ * -------------------------------
+ * Genera un report testuale delle lezioni più prenotate nel mese corrente.
+ *
+ * Parametri:
+ *   hp: tabella hash contenente tutte le prenotazioni.
+ *   l: lista contenente tutte le lezioni disponibili (per risalire a nome/data/ora).
+ *
+ * Pre-condizioni:
+ *   hp deve essere una tabella hash valida con prenotazioni.
+ *   l deve essere una lista valida contenente le lezioni.
+ *
+ * Post-condizioni:
+ *   - Viene generato un file di testo con il nome `report_<mese>_<anno>.txt`.
+ *   - Il file contiene:
+ *       1. Totale delle prenotazioni del mese corrente.
+ *       2. Le 3 lezioni più prenotate (o meno se ce ne sono meno).
+ *
+ * Come funziona:
+ * 1. Ottiene la data odierna e filtra le prenotazioni del mese corrente dalla hash table.
+ * 2. Per ciascuna prenotazione, aggiorna l’array `stats` con conteggi per le lezioni.
+ * 3. Ordina l’array `stats` in ordine decrescente di prenotazioni.
+ * 4. Crea un file `report_<mese>_<anno>.txt` e scrive:
+ *    - numero totale prenotazioni
+ *    - fino a 3 lezioni più prenotate con nome, data e ora.
+ * 5. Stampa un messaggio di conferma a schermo.
+ */
 void genera_report_mensile(hashtable_p hp, list l)
 {
     Data oggi = data_oggi();
@@ -79,7 +126,7 @@ void genera_report_mensile(hashtable_p hp, list l)
         return;
     }
 
-    // Scansiona la tabella hash
+    // scorre la tabella hash
     for (int i = 0; i < size; i++)
     {
         Prenotazione p = table[i];
@@ -127,8 +174,8 @@ void genera_report_mensile(hashtable_p hp, list l)
 
     
     /*
-    Se ci sono meno di 3 lezioni, stampa solo quelle esistenti.
-    Altrimenti, stampa le prime 3.
+    * Se ci sono meno di 3 lezioni, stampa solo quelle esistenti.
+    * Altrimenti, stampa le prime 3.
     */
     int max;
     if (count_stats < 3)
