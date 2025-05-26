@@ -578,6 +578,10 @@ static void ricerca_cliente(hashtable h)
 
     printf("Cliente trovato:\n");
     visualizza_cliente(ricercato);
+    if((abbonamento_valido(data_oggi(), get_data_scadenza(ricercato))))
+        printf("Stato abbonamento: Valido\n");
+    else
+    printf("Stato abbonamento: Scaduto\n");
 }
 
 /*
