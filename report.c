@@ -78,7 +78,6 @@ static int aggiorna_statistica(Stats* stats, int* n, int* size_stats, const char
     return 1;
 }
 
-
 /*
  * Funzione: genera_report_mensile
  * -------------------------------
@@ -95,17 +94,22 @@ static int aggiorna_statistica(Stats* stats, int* n, int* size_stats, const char
  * Post-condizioni:
  *   - Viene generato un file di testo con il nome `report_<mese>_<anno>.txt`.
  *   - Il file contiene:
- *       1. Totale delle prenotazioni del mese corrente.
- *       2. Le 3 lezioni più prenotate (o meno se ce ne sono meno).
+ *       1. Totale delle prenotazioni effettuate nel mese corrente (indipendentemente 
+ *          dalla data della lezione).
+ *       2. Le 3 lezioni più prenotate che si svolgono nel mese corrente (o meno 
+ *          se ce ne sono meno).
  *
  * Come funziona:
- * 1. Ottiene la data odierna e filtra le prenotazioni del mese corrente dalla hash table.
- * 2. Per ciascuna prenotazione, aggiorna l’array `stats` con conteggi per le lezioni.
- * 3. Ordina l’array `stats` in ordine decrescente di prenotazioni.
- * 4. Crea un file `report_<mese>_<anno>.txt` e scrive:
- *    - numero totale prenotazioni
- *    - fino a 3 lezioni più prenotate con nome, data e ora.
- * 5. Stampa un messaggio di conferma a schermo.
+ * 1. Ottiene la data odierna e filtra le prenotazioni effettuate nel mese corrente.
+ * 2. Per ciascuna prenotazione del mese corrente, aggiorna un array di statistiche 
+ *    sul numero di prenotazioni per ciascuna lezione.
+ * 3. Ordina l’array di statistiche in ordine decrescente di prenotazioni.
+ * 4. Tra queste, seleziona fino a 3 lezioni che si svolgono effettivamente nel 
+ *    mese corrente.
+ * 5. Crea un file `report_<mese>_<anno>.txt` e scrive:
+ *    - il numero totale di prenotazioni del mese corrente,
+ *    - fino a 3 lezioni più frequentate (che si svolgono nel mese).
+ * 6. Stampa un messaggio di conferma a schermo.
  */
 void genera_report_mensile(hashtable_p hp, list l)
 {
@@ -116,9 +120,12 @@ void genera_report_mensile(hashtable_p hp, list l)
     Prenotazione* table = get_table_hash_p(hp);
     int size = get_size_hash_p(hp);
 
-    int size_stats = 10; //Spazio disponibile nell’array stats
-    int count_stats = 0; //Numero reale di lezioni diverse già contate nel report
-    int totale = 0; //conteggio totale delle prenotazioni del mese.
+    int size_stats = 10;
+    int count_stats = 0;
+
+    // Conta tutte le prenotazioni del mese corrente (indipendentemente dalla data della lezione)
+    int totale = 0; 
+    
     Stats stats = malloc(size_stats * sizeof(struct statistica));
     if (stats == NULL)
     {
@@ -126,25 +133,26 @@ void genera_report_mensile(hashtable_p hp, list l)
         return;
     }
 
-    // scorre la tabella hash
+    // Scorri tutte le prenotazioni
     for (int i = 0; i < size; i++)
     {
         Prenotazione p = table[i];
         while (p != NULL)
         {
-            Data d = get_data_prenotazione(p);
-            //Controlla se la prenotazione è del mese corrente
-            if (get_mese(d) == mese_attuale && get_anno(d) == anno_attuale)
+            Data data_pren = get_data_prenotazione(p);
+
+            // Prenotazione fatta nel mese corrente
+            if (get_mese(data_pren) == mese_attuale && get_anno(data_pren) == anno_attuale)
             {
                 totale++;
                 aggiorna_statistica(&stats, &count_stats, &size_stats, get_id_lezione_prenotazione(p));
             }
+
             p = get_next_prenotazione(p);
         }
     }
 
-    // Ordina le statistiche per prenotazioni (in ordine decrescente)
-    //Ordina il vettore stats in modo che le lezioni con più prenotazioni vengano prima
+    // Ordina le lezioni in base al numero di prenotazioni
     for (int i = 0; i < count_stats - 1; i++)
     {
         for (int j = i + 1; j < count_stats; j++)
@@ -158,6 +166,7 @@ void genera_report_mensile(hashtable_p hp, list l)
         }
     }
 
+    // Scrive il file
     char nome_file[50];
     sprintf(nome_file, "report_%s_%04d.txt", nome_mese(mese_attuale), anno_attuale);
     FILE* fp = fopen(nome_file, "w");
@@ -170,46 +179,34 @@ void genera_report_mensile(hashtable_p hp, list l)
 
     fprintf(fp, "REPORT MENSILE - %s %d\n\n", nome_mese(mese_attuale), anno_attuale);
     fprintf(fp, "Totale prenotazioni effettuate: %d\n\n", totale);
-    fprintf(fp, "Lezioni più frequentate:\n");
+    fprintf(fp, "Lezioni più frequentate (solo quelle di %s):\n", nome_mese(mese_attuale));
 
-    
-    /*
-    * Se ci sono meno di 3 lezioni, stampa solo quelle esistenti.
-    * Altrimenti, stampa le prime 3.
-    */
-    int max;
-    if (count_stats < 3)
-    {
-        max = count_stats;
-    }
-    else
-    {
-        max = 3;
-    }
-
-    for (int i = 0; i < max; i++)
+    int stampati = 0;
+    for (int i = 0; i < count_stats && stampati < 3; i++)
     {
         Lezione lez = cerca_lezione_per_id(l, stats[i].id_lezione);
-        const char* nome;
-
         if (lez != NULL)
         {
-            nome = get_nome_lezione(lez);
+            Data data_lez = get_data_lezione(lez);
+            if (get_mese(data_lez) == mese_attuale && get_anno(data_lez) == anno_attuale)
+            {
+                // Stampa solo se la lezione si tiene nel mese corrente
+                fprintf(fp, "%d. %s - %d prenotazioni\n", stampati + 1, get_nome_lezione(lez), stats[i].conteggio);
+                fprintf(fp, "    Data: %02d/%02d/%04d | Ora: %02d:%02d\n",
+                        get_giorno(data_lez),
+                        get_mese(data_lez),
+                        get_anno(data_lez),
+                        get_ora(get_ora_lezione(lez)),
+                        get_minuti(get_ora_lezione(lez)));
 
-            fprintf(fp, "%d. %s - %d prenotazioni\n", i + 1, nome, stats[i].conteggio);
-            fprintf(fp, "    Data: %02d/%02d/%04d | Ora: %02d:%02d\n",
-                    get_giorno(get_data_lezione(lez)),
-                    get_mese(get_data_lezione(lez)),
-                    get_anno(get_data_lezione(lez)),
-                    get_ora(get_ora_lezione(lez)),
-                    get_minuti(get_ora_lezione(lez)));
+                stampati++;
+            }
         }
-        else
-        {
-            nome = "Nome non disponibile";
-            fprintf(fp, "%d. %s - %d prenotazioni\n", i + 1, nome, stats[i].conteggio);
-            fprintf(fp, "    Data: Data N/D | Ora: Ora N/D\n");
-        }
+    }
+
+    if (stampati == 0)
+    {
+        fprintf(fp, "Nessuna lezione in questo mese tra quelle prenotate.\n");
     }
 
     fclose(fp);
