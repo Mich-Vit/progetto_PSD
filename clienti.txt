@@ -15,9 +15,9 @@ Data scadenza: 21/07/2025
 ID: C012
 Nome: Michele
 Cognome: Vitiello
-Durata abbonamento: 20
+Durata abbonamento: 21
 Data d'iscrizione: 17/05/2025
-Data scadenza: 17/01/2027
+Data scadenza: 17/02/2027
 -----------------------
 ID: C008
 Nome: Tony

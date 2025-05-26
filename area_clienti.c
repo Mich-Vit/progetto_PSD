@@ -60,7 +60,7 @@ Cliente login_cliente(hashtable h)
     {
         printf("Attenzione, abbonamento scaduto!\n");
         
-        printf("\nPremi INVIO per tornare al menu...");
+        printf("\nPremi INVIO per amdare avanti...");
         while (getchar() != '\n');
     }
 
