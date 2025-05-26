@@ -58,29 +58,10 @@ Cliente login_cliente(hashtable h)
     }
     else if(!abbonamento_valido(data_oggi(), get_data_scadenza(c)))
     {
-        printf("Abbonamento scaduto!\n");
-
-        printf("1) Se vuoi rinnovare il tuo abbonamento\n");
-        printf("0) Per tornare indietro\n");
-        sc = leggi_intero();
-        switch (sc)
-        {
-            case 1:
-                rinnova_abbonamento(c, h);
-                break;
-            case 0: 
-                printf("Uscita dal menu'.\n");
-                break;
-            
-            default:
-                printf("Opzione non valida.\n");
-                printf("\nPremi INVIO...");
-                break;
-        }
+        printf("Attenzione, abbonamento scaduto!\n");
         
         printf("\nPremi INVIO per tornare al menu...");
         while (getchar() != '\n');
-        return NULL;
     }
 
     return c;
@@ -202,6 +183,14 @@ static void visualizza_lezioni(list l)
 */
 static void prenota_lezione(Cliente c, list l, hashtable_p h)
 {
+    if(!abbonamento_valido(data_oggi(), get_data_scadenza(c)))
+    {
+        printf("===========================================================\n");
+        printf("Abbonamento scaduto, rinnovalo per effettuare prenotazioni!\n");
+        printf("===========================================================\n");
+        return;
+    }
+
     printf("======================================================\n");
     printf("\t    LISTA DELLE LEZIONI DISPONIBILI\n");
     printf("======================================================\n");
@@ -421,6 +410,11 @@ void menu_cliente(Cliente c, hashtable h, list l, hashtable_p hp)
                 printf("\tINFORMAZIONI SULL'ABBONAMENTO\n");
                 printf("==============================================\n");
                 visualizza_abbonamento_cliente(c);
+                if((abbonamento_valido(data_oggi(), get_data_scadenza(c))))
+                    printf("Stato abbonamento: Valido\n");
+                else
+                    printf("Stato abbonamento: Scaduto\n");
+                
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');
                 break;

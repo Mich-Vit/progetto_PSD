@@ -744,6 +744,8 @@ void menu_gestore(hashtable h, list l, hashtable_p hp)
                 break;
             case 3:
                 pulisci_schermo();
+                printf("===================================\n");
+                printf("         Elenco Clienti\n");
                 stampaHash(h);
                 printf("\nPremi INVIO per tornare al menu...");
                 while (getchar() != '\n');

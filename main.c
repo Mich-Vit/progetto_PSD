@@ -28,7 +28,7 @@ int main(void)
         printf("\tBENVENUTO NELLA TUA PALESTRA !\n");
         printf("==============================================\n");
         printf("1) Per il gestore della palestra\n");
-        printf("2) Per l'area cliente\n");
+        printf("2) Per l'area cliente (Devi conoscere il tuo ID)\n");
         printf("0) Per uscire\n");
         printf("Scelta: ");
         sc = leggi_intero();

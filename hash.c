@@ -5,6 +5,7 @@
 #include <string.h>
 #include "hash.h"
 #include "cliente.h"
+#include "utils.h"
 
 //libreria per FNV-1a
 #include <stdint.h>
@@ -346,8 +347,7 @@ void stampaHash(hashtable h)
         return;
     }
 
-    printf("===================================\n");
-    printf("         Elenco Clienti\n");
+
 
     int i, clienti_trovati = 0;
 
@@ -357,6 +357,10 @@ void stampaHash(hashtable h)
         while (curr != NULL)
         {
             visualizza_cliente(curr);
+            if((abbonamento_valido(data_oggi(), get_data_scadenza(curr))))
+                    printf("Stato abbonamento: Valido\n");
+                else
+                    printf("Stato abbonamento: Scaduto\n");
             curr = get_next_cliente(curr);
             clienti_trovati++;
         }

@@ -19,7 +19,7 @@ cliente.o: cliente.c cliente.h data.h utils.h
 data.o: data.c data.h
 	gcc -c data.c
 
-hash.o: hash.c hash.h cliente.h
+hash.o: hash.c hash.h cliente.h utils.h
 	gcc -c hash.c
 
 lezione.o: lezione.c lezione.h data.h orario.h
