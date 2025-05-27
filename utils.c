@@ -146,7 +146,7 @@ int carica_contatore_generico(const char* filename, const char* prefix)
 * - Se non inizializzato, lo carica da file.
 * - Incrementa il contatore e genera l’ID nel formato 'Prefisso + numero'.
 */
-char* genera_id_generico(const char* prefix_letter, const char* filename)
+char* genera_id_generico(const char* prefix_letter, const char* filename, int reset)
 {
     static int contatore_clienti = -1;
     static int contatore_lezioni = -1;
@@ -168,7 +168,7 @@ char* genera_id_generico(const char* prefix_letter, const char* filename)
     char prefix[10];
     sprintf(prefix, "ID: %s", prefix_letter);
 
-    if (*counter == -1)
+    if (*counter == -1 || reset)
         *counter = carica_contatore_generico(filename, prefix);
 
     (*counter)++;

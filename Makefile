@@ -1,5 +1,5 @@
-palestra.exe: main.o area_clienti.o area_gestore.o cliente.o data.o hash.o lezione.o lista_lezioni.o utils.o prenotazione.o orario.o hash_prenotazioni.o report.o
-	gcc main.o area_clienti.o area_gestore.o cliente.o data.o hash.o lezione.o lista_lezioni.o utils.o prenotazione.o orario.o hash_prenotazioni.o report.o -o palestra.exe
+palestra.exe: main.o area_clienti.o area_gestore.o cliente.o data.o hash.o lezione.o lista_lezioni.o utils.o prenotazione.o orario.o hash_prenotazioni.o report.o menu_testing.o
+	gcc main.o area_clienti.o area_gestore.o cliente.o data.o hash.o lezione.o lista_lezioni.o utils.o prenotazione.o orario.o hash_prenotazioni.o report.o menu_testing.o -o palestra.exe
 
 main.o: main.c area_clienti.h area_gestore.h lista_lezioni.h utils.h hash.h hash_prenotazioni.h report.h
 	gcc -c main.c
@@ -39,6 +39,9 @@ hash_prenotazioni.o: hash_prenotazioni.c hash_prenotazioni.h prenotazione.h
 
 report.o: report.c prenotazione.h lezione.h report.h data.h utils.h hash_prenotazioni.h lista_lezioni.h
 	gcc -c report.c
+
+menu_testing.o: menu_testing.c
+	gcc -c menu_testing.c
 
 clean:
 	rm -f *.o palestra.exe

@@ -1,0 +1,6 @@
+ID: P011
+ID Cliente: C012
+ID Lezione: L009
+Data Prenotazione: 27/05/2025
+-----------------------
+Posti occupati: 1

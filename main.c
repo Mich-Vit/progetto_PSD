@@ -10,6 +10,7 @@
 #include "hash.h"
 #include "hash_prenotazioni.h"
 #include "report.h"
+#include "menu_testing.h"
 
 int main(void)
 {
@@ -29,6 +30,7 @@ int main(void)
         printf("==============================================\n");
         printf("1) Per il gestore della palestra\n");
         printf("2) Per l'area cliente (Devi conoscere il tuo ID)\n");
+        printf("3) Per i casi di test\n");
         printf("0) Per uscire\n");
         printf("Scelta: ");
         sc = leggi_intero();
@@ -57,6 +59,14 @@ int main(void)
                     pulisci_schermo();
                     menu_cliente(cliente, h, l, hp);
                 }
+                break;
+            }
+            case 3:
+            {
+                pulisci_schermo();
+                
+                menu_testing(h, l, hp);
+
                 break;
             }
             case 0:

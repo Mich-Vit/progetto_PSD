@@ -85,7 +85,7 @@ static void inserisci_cliente(hashtable h)
 
     data_iscrizione = data_oggi();
 
-    char* id = genera_id_generico("C", "clienti.txt");
+    char* id = genera_id_generico("C", "clienti.txt",0);
 
     Cliente nuovo_cliente = crea_cliente(id, nome, cognome, durata, data_iscrizione);
     free(id); 
@@ -315,7 +315,7 @@ static list inserisci_lezione(list l)
         }
     } while (posti_max <= 0 || posti_max > 30);
 
-    char* id = genera_id_generico("L", "lezioni.txt");
+    char* id = genera_id_generico("L", "lezioni.txt",0);
 
     Lezione nuova_lezione = crea_lezione(id, nome, data, orario, posti_max);
 

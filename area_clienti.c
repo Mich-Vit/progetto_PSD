@@ -181,7 +181,7 @@ static void visualizza_lezioni(list l)
 * - Incrementa i posti occupati.
 * - Crea una nuova prenotazione e la inserisce nella hashtable e nel file di testo.
 */
-static void prenota_lezione(Cliente c, list l, hashtable_p h)
+void prenota_lezione(Cliente c, list l, hashtable_p h)
 {
     if(!abbonamento_valido(data_oggi(), get_data_scadenza(c)))
     {
@@ -263,8 +263,7 @@ static void prenota_lezione(Cliente c, list l, hashtable_p h)
 
     Data data_pre = data_oggi();
 
-
-    char *id_prenotazione = genera_id_generico("P", "prenotazioni.txt");
+    char *id_prenotazione = genera_id_generico("P", "prenotazioni.txt",0);
     Prenotazione p = crea_prenotazione(id_prenotazione, get_id_cliente(c), get_id_lezione(l_selezionata), data_pre);
     free(id_prenotazione);
 

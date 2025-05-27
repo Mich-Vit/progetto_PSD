@@ -38,3 +38,8 @@ ID Cliente: C004
 ID Lezione: L008
 Data Prenotazione: 22/05/2025
 -----------------------
+ID: P010
+ID Cliente: C012
+ID Lezione: L010
+Data Prenotazione: 27/05/2025
+-----------------------

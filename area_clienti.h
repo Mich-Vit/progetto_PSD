@@ -28,6 +28,26 @@
 */
 Cliente login_cliente(hashtable h);
 
+/*
+* Funzione: prenota_lezione 
+* -----------------------------------
+* Permette a un cliente di prenotare una lezione.
+*
+* Parametri:
+*   c: cliente autenticato che vuole prenotare.
+*   l: lista delle lezioni disponibili.
+*   h: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   Il cliente deve avere un abbonamento valido.
+*   l e h devono essere valide.
+*
+* Post-condizione:
+*   Viene creata una nuova prenotazione se possibile.
+*   Vengono aggiornati i posti occupati della lezione 
+*   e aggiorna il file di testo con tutte le lezioni aggiornate.
+*/
+void prenota_lezione(Cliente c, list l, hashtable_p h);
 
 /*
 * Funzione: menu_cliente

@@ -72,7 +72,7 @@ int carica_contatore_generico(const char* filename, const char* prefix);
 * Ritorna:
 *   Puntatore a una stringa dinamica contenente il nuovo ID generato.
 */
-char* genera_id_generico(const char* prefix_letter, const char* filename);
+char* genera_id_generico(const char* prefix_letter, const char* filename, int reset);
 
 /*
 * Funzione: carica_clienti_da_file
