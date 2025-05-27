@@ -15,6 +15,7 @@
         "utils.h": "c",
         "report.h": "c",
         "vector": "c",
-        "vettore.h": "c"
+        "vettore.h": "c",
+        "cstdlib": "c"
     }
 }

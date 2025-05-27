@@ -93,7 +93,7 @@ void salva_prenotazione_test(Prenotazione p, int po,int ncase)
 */
 int prenota_lezione_test_1(Cliente c, list l, hashtable_p hp, char *id_lezione_scelta,int ncase)
 {
-    if(c == NULL)
+    if(c == NULL || hp == NULL)
     {
         return 0;
     }
@@ -301,6 +301,201 @@ void test_prenotazione_1(hashtable h, list l, hashtable_p hp, int ncase)
 }
 
 /*
+* Funzione: salva_cliente_test_2
+* ----------------------------------------
+* Salva i dati aggiornati di un cliente in un file di output per i test automatici.
+*
+* Parametri:
+*   c: cliente di cui salvare i dati.
+*   ncase: numero del caso di test (serve per generare il nome del file).
+*
+* Pre-condizione:
+*   Il cliente deve essere stato inizializzato e contenere dati validi.
+*
+* Post-condizione:
+*   Viene creato un file "2_output_test_<ncase>.txt" contenente:
+*   - Durata dell’abbonamento
+*   - Data di scadenza dell’abbonamento
+*
+* Come funziona:
+* - Genera il nome del file di output in base al numero del test.
+* - Apre il file in scrittura.
+* - Scrive le informazioni richieste.
+* - Chiude il file.
+*/
+void salva_cliente_test_2(Cliente c, int ncase)
+{
+    char output_fname[256];
+   
+    sprintf(output_fname, "2_output_test_%d.txt", ncase);
+
+    FILE *fp = fopen(output_fname, "w");
+    if (fp == NULL)
+    {
+        printf("Errore nell'aprire il file output_test_1.txt.\n");
+        return;
+    }
+ 
+    fprintf(fp, "Durata abbonamento: %d\n", get_durata_abbonamento(c));
+
+    fprintf(fp, "Data scadenza: %02d/%02d/%04d", 
+            get_giorno(get_data_scadenza(c)), get_mese(get_data_scadenza(c)), get_anno(get_data_scadenza(c)));
+
+
+    fclose(fp);
+}
+
+/*
+* Funzione: rinnova_abbonamento_test
+* ----------------------------------------
+* Esegue il rinnovo dell’abbonamento per un cliente e salva i dati aggiornati.
+*
+* Parametri:
+*   c: cliente da aggiornare.
+*   h: hashtable dei clienti (non utilizzata direttamente).
+*   durata: durata da aggiungere all’abbonamento, in mesi.
+*   ncase: numero del caso di test (usato per salvare l’output).
+*
+* Pre-condizione:
+*   Il cliente deve essere valido (diverso da NULL).
+*
+* Post-condizione:
+*   L’abbonamento del cliente viene rinnovato.
+*   Viene aggiornato il campo durata.
+*   Viene salvato l’output del test.
+*
+* Come funziona:
+* - Calcola la nuova data di scadenza aggiungendo la durata a quella attuale.
+* - Aggiorna la data e la durata nel cliente.
+* - Salva i nuovi dati del cliente in un file.
+* - Ritorna 1 se tutto è andato bene, altrimenti 0.
+*/
+int rinnova_abbonamento_test(Cliente c, hashtable h,int durata, int ncase)
+{
+    if (c == NULL)
+    {
+        return 0;
+    }
+
+    Data data_scadenza_attuale = get_data_scadenza(c);
+
+    char buffer[100];
+
+    Data nuova_data_scadenza = calcolo_scadenza_abbonamento(data_scadenza_attuale, durata);
+    set_data_scadenza(c, nuova_data_scadenza);
+
+    // Calcola la durata effettiva dell'abbonamento (differenza tra data di scadenza e data di iscrizione)
+    int durata_effettiva = calcola_durata_in_mesi(get_data_iscrizione(c), get_data_scadenza(c));    
+    set_durata(c, durata_effettiva);
+
+    salva_cliente_test_2(c, ncase);
+
+    return 1;
+}
+
+/*
+* Funzione: test_abbonamenti
+* ----------------------------------------
+* Esegue test automatici sugli abbonamenti dei clienti.
+*
+* Parametri:
+*   h: hashtable dei clienti.
+*   l: lista delle lezioni.
+*   hp: hashtable delle prenotazioni.
+*   ncase: numero del caso di test.
+*
+* Pre-condizione:
+*   Le strutture devono essere inizializzate e contenere i dati richiesti.
+*
+* Post-condizione:
+*   Viene scritto il risultato del test ("PASS"/"FAIL") in un file apposito.
+*   Viene creato un file di output per ogni test case.
+*
+* Come funziona:
+* - Apre i file di input, oracle, output e result in base al numero del test.
+* - Legge i dati dal file di input.
+* - Esegue test diversi a seconda del valore di ncase:
+*     - Se ncase == 1: rinnova l’abbonamento del cliente.
+*     - Altrimenti: controlla se l’abbonamento è ancora valido.
+* - Scrive l’output e confronta con l’oracolo.
+* - Scrive nel file result l’esito del test ("PASS" o "FAIL").
+*/
+void test_abbonamenti(hashtable h, list l, hashtable_p hp,int ncase)
+{
+    FILE *fp_input,*result,*fp_output = NULL;
+    char input_fname[256],result_fname[256],output_fname[256],oracle_fname[256];
+
+    sprintf(input_fname, "2_input_test_%d.txt", ncase);
+
+    sprintf(result_fname, "2_result_test_%d.txt", ncase);
+
+    sprintf(oracle_fname, "2_oracle_test_%d.txt", ncase);
+
+    sprintf(output_fname, "2_output_test_%d.txt", ncase);
+
+
+    if((fp_input = fopen(input_fname, "r")) == NULL)
+    {
+        printf("Errore nell'apertura del file di input\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if((result = fopen(result_fname, "w")) == NULL)
+    {
+        printf("Errore nell'apertura del file di result\n");
+        exit(EXIT_FAILURE);
+    }
+    char buffer[256];
+    char id_cliente[20];
+    int k,z, durata;
+
+    while(fgets(buffer, sizeof(buffer), fp_input))
+    {
+        if(ncase == 1)
+        {
+            sscanf(buffer, "%s %d", id_cliente, &durata);
+            Cliente c = hashSearch(h, id_cliente);
+
+            k = rinnova_abbonamento_test(c, h, durata, ncase); 
+            if(k==0)
+                fp_output = fopen(output_fname, "w");  
+
+            z = confronta_file(oracle_fname, output_fname);
+
+            if(z == 1)
+                fprintf(result,"PASS\n");
+            else
+                fprintf(result,"FAIL\n");  
+        }
+        else
+        {
+            sscanf(buffer, "%s", id_cliente);
+            Cliente c = hashSearch(h, id_cliente);
+
+            fp_output = fopen(output_fname, "w");
+
+            k = abbonamento_valido(data_oggi(), get_data_scadenza(c));
+            if(k==0)
+                fprintf(fp_output,"Non valido");
+            else
+                fprintf(fp_output,"Valido");
+
+            z = confronta_file(oracle_fname, output_fname);
+
+            if(z == 1)
+                fprintf(result,"PASS\n");
+            else
+                fprintf(result,"FAIL\n");  
+        }
+    }
+    if(fp_output!=NULL)
+        fclose(fp_output);
+
+    fclose(result);
+    fclose(fp_input);
+}
+
+/*
 * Funzione: menu_testing
 * ----------------------------------------
 * Mostra un menu di test automatici per il sistema.
@@ -368,7 +563,23 @@ void menu_testing(hashtable h, list l, hashtable_p hp)
             case 2:
             {
                 pulisci_schermo();
+                printf("==============================================\n");
+                printf("\t\tTEST NUMERO 2 !\n");
+                printf("==============================================\n");
+                printf("1) Testa il rinnovo di un abbonamento\n");
+                printf("2) Testa un abbonamento valido\n");
+                printf("3) Testa un abbonamento non valido\n");
                 
+                do
+                {   
+                    printf("Scelta: ");
+                    ncase = leggi_intero();
+                } while(ncase<1 || ncase >3);
+
+                test_abbonamenti(h, l, hp,ncase);
+
+                printf("\nTest generato, controlla il file result. Premi invio...");
+                while (getchar() != '\n');
                 break;
             }
             case 3:
