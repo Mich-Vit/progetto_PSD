@@ -16,6 +16,7 @@
         "report.h": "c",
         "vector": "c",
         "vettore.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "area_gestore.h": "c"
     }
 }
