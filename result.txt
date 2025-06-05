@@ -4,3 +4,4 @@ TC3_prenotazione PASS
 TC1_abbonamento PASS 
 TC2_abbonamento PASS 
 TC3_abbonamento PASS 
+TC1_report PASS 

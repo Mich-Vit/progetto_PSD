@@ -32,4 +32,31 @@ typedef struct statistica *Stats;
 */
 void genera_report_mensile(hashtable_p hp, list l);
 
+/*
+* Funzione: genera_report_test
+* ----------------------------
+* Genera e stampa un report di test (file di testo) sulle prenotazioni attualmente 
+* presenti nella tabella hash temporanea, utile per la verifica automatizzata dei test.
+*
+* Parametri:
+*   hp: puntatore alla tabella hash contenente le prenotazioni temporanee create 
+*       durante il test.
+*   l: lista contenente tutte le lezioni (necessaria per ottenere dettagli delle lezioni).
+*   output_fname: nome del file di testo in cui salvare il report generato.
+*
+* Pre-condizione:
+*   hp deve essere una tabella hash valida e inizializzata, contenente solo le prenotazioni 
+*   create nel test corrente.
+*   l deve essere una lista valida (può anche essere vuota).
+*   output_fname deve essere un percorso valido per la creazione del file di output.
+*
+* Post-condizione:
+*   Viene generato un file di testo contenente il report delle prenotazioni presenti in hp,
+*   formattato secondo le specifiche di test.
+*
+* Ritorna:
+*   Nessun valore (funzione void).
+*/
+void genera_report_test(hashtable_p hp, list l, const char *output_fname);
+
 #endif

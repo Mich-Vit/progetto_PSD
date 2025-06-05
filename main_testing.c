@@ -51,6 +51,7 @@ int confronta_file(char *oracle, char *output)
     {
         if(strcmp(buffer,buffer2)!=0)
         {
+            printf("RIGA DIVERSA\nOracle: [%s]\nOutput: [%s]\n", buffer, buffer2); //DEBUG
             return 0;
         }
     }
@@ -61,6 +62,27 @@ int confronta_file(char *oracle, char *output)
     return 1;  
 }
 
+/*
+* Funzione: salva_prenotazione_test
+* ----------------------------------------
+* Salva su file i dati relativi a una prenotazione, in formato leggibile.
+*
+* Parametri:
+*   p: prenotazione da salvare.
+*   po: numero di posti occupati aggiornato.
+*   output_fname: nome del file di output dove scrivere i dati.
+*
+* Pre-condizione:
+*   La prenotazione deve essere valida.
+*
+* Post-condizione:
+*   I dati della prenotazione vengono scritti su file.
+*
+* Come funziona:
+* - Apre un file in scrittura.
+* - Scrive l’ID della prenotazione, cliente, lezione, data e posti occupati.
+* - Chiude il file.
+*/
 void salva_prenotazione_test(Prenotazione p, int po, const char* output_fname)
 {
     FILE *fp = fopen(output_fname, "w");
@@ -193,6 +215,30 @@ int prenota_lezione_test(Cliente c, list l, hashtable_p hp, char *id_lezione_sce
     return 1;
 }
 
+/*
+* Funzione: esegui_test_prenotazione
+* ----------------------------------------
+* Esegue un test automatico per la prenotazione lezioni.
+*
+* Parametri:
+*   input_fname: nome del file con input di test.
+*   output_fname: file dove scrivere l’output.
+*   oracle_fname: file oracle per confronto.
+*   h: hashtable dei clienti.
+*   l: lista delle lezioni.
+*   hp: hashtable delle prenotazioni.
+*
+* Pre-condizione:
+*   File di input deve esistere e contenere dati corretti.
+*
+* Post-condizione:
+*   Il risultato del test viene confrontato con il file oracle.
+*
+* Come funziona:
+* - Legge le righe di input e tenta la prenotazione per ogni coppia cliente-lezione.
+* - Scrive l’esito sul file output.
+* - Confronta l’output con il file oracle.
+*/
 int esegui_test_prenotazione(char *input_fname, char *output_fname, char *oracle_fname, hashtable h, list l, hashtable_p hp)
 {
     FILE *fp_input, *fp_output;
@@ -233,11 +279,32 @@ int esegui_test_prenotazione(char *input_fname, char *output_fname, char *oracle
     fclose(fp_output);
 
     // Ora confronta output con oracle
-    int z = confronta_file(oracle_fname, output_fname);
+    int z;
+    z = confronta_file(oracle_fname, output_fname);
 
     return z;  // 1 = PASS, 0 = FAIL
 }
 
+/*
+* Funzione: salva_cliente_test
+* ----------------------------------------
+* Salva i dati relativi all’abbonamento di un cliente su file.
+*
+* Parametri:
+*   c: cliente da salvare.
+*   output_fname: nome del file su cui scrivere.
+*
+* Pre-condizione:
+*   Cliente deve essere valido.
+*
+* Post-condizione:
+*   I dati vengono scritti su file in formato leggibile.
+*
+* Come funziona:
+* - Apre il file.
+* - Scrive durata abbonamento e data di scadenza.
+* - Chiude il file.
+*/
 void salva_cliente_test(Cliente c, const char* output_fname)
 {
     FILE *fp = fopen(output_fname, "w");
@@ -258,27 +325,25 @@ void salva_cliente_test(Cliente c, const char* output_fname)
 /*
 * Funzione: rinnova_abbonamento_test
 * ----------------------------------------
-* Esegue il rinnovo dell’abbonamento per un cliente e salva i dati aggiornati.
+* Rinnova l’abbonamento di un cliente per un numero specificato di mesi.
 *
 * Parametri:
 *   c: cliente da aggiornare.
-*   h: hashtable dei clienti (non utilizzata direttamente).
-*   durata: durata da aggiungere all’abbonamento, in mesi.
-*   ncase: numero del caso di test (usato per salvare l’output).
+*   h: hashtable dei clienti (non usata).
+*   durata: mesi da aggiungere all’abbonamento.
+*   output_fname: file dove scrivere i dati aggiornati.
 *
 * Pre-condizione:
-*   Il cliente deve essere valido (diverso da NULL).
+*   Cliente deve esistere.
 *
 * Post-condizione:
-*   L’abbonamento del cliente viene rinnovato.
-*   Viene aggiornato il campo durata.
-*   Viene salvato l’output del test.
+*   La data di scadenza e la durata dell’abbonamento vengono aggiornate.
+*   I dati vengono scritti su file.
 *
 * Come funziona:
-* - Calcola la nuova data di scadenza aggiungendo la durata a quella attuale.
-* - Aggiorna la data e la durata nel cliente.
-* - Salva i nuovi dati del cliente in un file.
-* - Ritorna 1 se tutto è andato bene, altrimenti 0.
+* - Calcola nuova scadenza.
+* - Aggiorna cliente.
+* - Salva i dati aggiornati su file.
 */
 int rinnova_abbonamento_test(Cliente c, hashtable h, int durata, const char* output_fname)
 {
@@ -303,7 +368,30 @@ int rinnova_abbonamento_test(Cliente c, hashtable h, int durata, const char* out
     return 1;
 }
 
-int esegui_test_abbonamenti(char *input_fname, char *output_fname, char *oracle_fname, hashtable h, list l, hashtable_p hp)
+/*
+* Funzione: esegui_test_abbonamenti
+* ----------------------------------------
+* Esegue un test automatico su abbonamenti: validità o rinnovo.
+*
+* Parametri:
+*   input_fname: nome del file di input.
+*   output_fname: nome del file di output.
+*   oracle_fname: file con output atteso.
+*   h: hashtable dei clienti.
+*
+* Pre-condizione:
+*   Il file di input deve esistere e contenere ID cliente.
+*
+* Post-condizione:
+*   L’output del test viene confrontato con l’oracle.
+*
+* Come funziona:
+* - Legge i parametri (cliente e durata).
+* - Esegue test di rinnovo o verifica validità.
+* - Scrive esito su file.
+* - Confronta con oracle.
+*/
+int esegui_test_abbonamenti(char *input_fname, char *output_fname, char *oracle_fname, hashtable h)
 {
     FILE *fp_input, *fp_output;
 
@@ -371,6 +459,188 @@ int esegui_test_abbonamenti(char *input_fname, char *output_fname, char *oracle_
     return z;  // 1 = PASS, 0 = FAIL
 }
 
+/*
+* Funzione: prenotazioni_per_report
+* ----------------------------------------
+* Prenota una lezione solo se valida per generare il report.
+*
+* Parametri:
+*   c: cliente che prenota.
+*   l: lista lezioni.
+*   hp_test: hashtable temporanea per prenotazioni.
+*   id_lezione: ID della lezione da prenotare.
+*
+* Pre-condizione:
+*   Cliente e dati validi.
+*
+* Post-condizione:
+*   La prenotazione viene inserita nella hashtable temporanea.
+*
+* Come funziona:
+* - Controlla validità abbonamento, disponibilità e duplicati.
+* - Inserisce la prenotazione in struttura temporanea.
+*/
+int prenotazioni_per_report(Cliente c, list l, hashtable_p hp_test, char *id_lezione)
+{
+    if(!abbonamento_valido(data_oggi(), get_data_scadenza(c)))
+    {
+        return 0;
+    }
+
+    list tmp = l;
+    int trovate = 0;
+
+    if(emptyList(l))
+    {
+        return 0;
+    }
+
+    // Cerca la lezione nella lista
+    Lezione l_selezionata = cerca_lezione_per_id(l, id_lezione);
+    if (l_selezionata == NULL)
+    {
+        return 0;
+    }
+
+    if (confronta_date(get_data_lezione(l_selezionata), get_data_scadenza(c)) > 0)
+    {
+        return 0;
+    }
+    else if (confronta_date(data_oggi(), get_data_lezione(l_selezionata)) > 0)
+    {
+        return 0;
+    }
+
+    int posti_occupati = get_posti_occupati(l_selezionata);
+    int posti_max = get_posti_max(l_selezionata);
+    int posti_disponibili = posti_max - posti_occupati;
+
+    if (posti_disponibili <= 0)
+    {
+        return 0;
+    }
+
+    // Verifica se il cliente è già prenotato alla lezione
+    Prenotazione* table = get_table_hash_p(hp_test);
+    for (int i = 0; i < get_size_hash_p(hp_test); i++)
+    {
+        Prenotazione curr = table[i];
+        while (curr != NULL)
+        {
+            if (strcmp(get_id_cliente_prenotazione(curr), get_id_cliente(c)) == 0 &&
+            strcmp(get_id_lezione_prenotazione(curr), get_id_lezione(l_selezionata)) == 0)
+            {
+                return 0;
+            }
+            curr = get_next_prenotazione(curr);
+        }
+    }
+
+    set_posti_occupati(l_selezionata, posti_occupati + 1);
+
+    Data data_pre = data_oggi();
+
+    char *id_prenotazione = genera_id_generico("P", "prenotazioni.txt",0);
+    Prenotazione p = crea_prenotazione(id_prenotazione, get_id_cliente(c), get_id_lezione(l_selezionata), data_pre);
+    free(id_prenotazione);
+
+    insertHash_p(hp_test, p);
+
+    return 1;
+}
+
+/*
+* Funzione: esegui_test_report
+* ----------------------------------------
+* Esegue test per la generazione del report delle prenotazioni.
+*
+* Parametri:
+*   input_fname: nome del file di input.
+*   output_fname: nome del file output.
+*   oracle_fname: nome del file oracle.
+*   h: hashtable dei clienti.
+*   l: lista lezioni.
+*
+* Pre-condizione:
+*   I file devono esistere e contenere dati coerenti.
+*
+* Post-condizione:
+*   Il report viene generato e confrontato con il file oracle.
+*
+* Come funziona:
+* - Legge prenotazioni da file input.
+* - Inserisce in hashtable temporanea.
+* - Genera report.
+* - Confronta con oracle.
+*/
+int esegui_test_report(char *input_fname, char *output_fname, char *oracle_fname, hashtable h, list l)
+{
+    hashtable_p hp_test = newHashtable_p(50);  // Hash temporanea per test
+
+    FILE *fp_input, *fp_output;
+
+    if((fp_input = fopen(input_fname, "r")) == NULL)
+    {
+        printf("Errore nell'apertura del file di input\n");
+        return 0;
+    }
+
+    if((fp_output = fopen(output_fname, "w")) == NULL)
+    {
+        printf("Errore nell'apertura del file di output\n");
+        fclose(fp_input);
+        return 0;
+    }
+
+    char buffer[256];
+    char id_cliente[20], id_lezione[20];
+    int k;
+
+    while(fgets(buffer, sizeof(buffer), fp_input))
+    {
+        if (sscanf(buffer, "%s %s", id_cliente, id_lezione) == 2)
+        {
+            Cliente c = hashSearch(h, id_cliente);
+
+            k = prenotazioni_per_report(c, l, hp_test, id_lezione);
+
+            if(k == 0)
+            {
+                fprintf(fp_output, "Prenotazione fallita per %s", id_cliente);
+            }
+        }
+    }
+
+    genera_report_test(hp_test, l, output_fname);
+
+    // Confronto con oracle
+    int z = confronta_file(oracle_fname, output_fname);
+
+    return z;
+}
+
+/*
+* Funzione: run_test_case
+* ----------------------------------------
+* Avvia l’esecuzione di un caso di test specificato.
+*
+* Parametri:
+*   tc_id: identificatore del caso di test.
+*   tipo_test: tipo di test (1 = prenotazione, 2 = abbonamenti, 3 = report).
+*   h: hashtable dei clienti.
+*   l: lista lezioni.
+*   hp: hashtable prenotazioni.
+*
+* Pre-condizione:
+*   ID e tipo test validi.
+*
+* Post-condizione:
+*   Esegue e ritorna il risultato del test.
+*
+* Come funziona:
+* - Costruisce i nomi dei file input/output/oracle.
+* - Chiama la funzione di test in base al tipo.
+*/
 int run_test_case(char *tc_id, int tipo_test, hashtable h, list l, hashtable_p hp)
 {
     int esito = 0;
@@ -392,10 +662,10 @@ int run_test_case(char *tc_id, int tipo_test, hashtable h, list l, hashtable_p h
             esito = esegui_test_prenotazione(input_fname, output_fname, oracle_fname, h, l, hp);
             break;
         case 2:
-            esito = esegui_test_abbonamenti(input_fname, output_fname, oracle_fname, h, l, hp);
+            esito = esegui_test_abbonamenti(input_fname, output_fname, oracle_fname, h);
             break;
         case 3:
-
+            esito = esegui_test_report(input_fname, output_fname, oracle_fname, h, l);
             break;
         default:
             printf("Tipo di test non riconosciuto: %d\n", tipo_test);
@@ -437,14 +707,13 @@ int main(void)
     
         fprintf(result,"%s ", tc_id); //scrive nel file result, la stringa tc_id
         if(pass == 1)
-            fprintf(result, "PASS \n"); //affianco alla stringa appena scritta, scrive PASS
+            fprintf(result, "PASS \n");
         else   
-           fprintf(result, "FAIL \n");	//affianco alla stringa appena scritta, scrive FAIl	
+           fprintf(result, "FAIL \n");	
     }	
     
-    fclose(test_suite);  // chiusura file di input
-    fclose(result);      // chiusura file di output
-
+    fclose(test_suite); 
+    fclose(result);    
 
     return 0;
 }

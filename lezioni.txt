@@ -7,35 +7,35 @@ Posti occupati: 2
 -----------------------
 ID: L009
 Nome: Pugilato
-Data: 15/06/2025
+Data: 28/06/2025
 Orario: 18:00
 Posti massimi: 18
 Posti occupati: 0
 -----------------------
 ID: L008
 Nome: Pugilato
-Data: 12/06/2025
+Data: 19/06/2025
 Orario: 12:00
 Posti massimi: 12
 Posti occupati: 4
 -----------------------
 ID: L007
 Nome: Danza Classica
-Data: 10/06/2025
+Data: 17/06/2025
 Orario: 14:00
 Posti massimi: 10
 Posti occupati: 0
 -----------------------
 ID: L006
 Nome: Pilates
-Data: 05/06/2025
+Data: 18/06/2025
 Orario: 15:30
 Posti massimi: 15
 Posti occupati: 0
 -----------------------
 ID: L005
 Nome: Zumba
-Data: 02/06/2025
+Data: 24/06/2025
 Orario: 17:00
 Posti massimi: 20
 Posti occupati: 0

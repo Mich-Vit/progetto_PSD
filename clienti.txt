@@ -68,3 +68,10 @@ Durata abbonamento: 1
 Data d'iscrizione: 14/04/2025
 Data scadenza: 14/05/2025
 -----------------------
+ID: C013
+Nome: ClienteTest
+Cognome: testing
+Durata abbonamento: 16
+Data d'iscrizione: 05/06/2025
+Data scadenza: 05/10/2026
+-----------------------
