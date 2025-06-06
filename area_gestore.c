@@ -93,7 +93,7 @@ static void inserisci_cliente(hashtable h)
 
     if (insertHash(h, nuovo_cliente))
     {
-        printf("Cliente inserito con successo!\n");
+        printf("Cliente inserito con successo, il suo ID e': %s\n", get_id_cliente(nuovo_cliente));
     }
     else
     {
@@ -323,7 +323,7 @@ static list inserisci_lezione(list l)
 
     salva_lezione_file(nuova_lezione);
 
-    printf("Lezione inserita con successo!\n");
+    printf("Lezione inserita con successo, con ID: %s\n", get_id_lezione(nuova_lezione));
 
     free(id);
 

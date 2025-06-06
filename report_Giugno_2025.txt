@@ -1,6 +1,11 @@
 REPORT MENSILE - Giugno 2025
 
-Totale prenotazioni effettuate: 0
+Totale prenotazioni effettuate: 7
 
 Lezioni più frequentate (solo quelle di Giugno):
-Nessuna lezione in questo mese tra quelle prenotate.
+1. Pugilato - 4 prenotazioni
+    Data: 19/06/2025 | Ora: 12:00
+2. Crossfit - 2 prenotazioni
+    Data: 20/06/2025 | Ora: 16:00
+3. Pugilato - 1 prenotazioni
+    Data: 28/06/2025 | Ora: 18:00
