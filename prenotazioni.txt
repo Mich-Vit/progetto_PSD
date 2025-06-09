@@ -31,5 +31,5 @@ Data Prenotazione: 03/06/2025
 ID: P012
 ID Cliente: C014
 ID Lezione: L009
-Data Prenotazione: 06/06/2025
+Data Prenotazione: 09/06/2025
 -----------------------

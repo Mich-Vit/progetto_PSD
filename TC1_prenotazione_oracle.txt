@@ -1,6 +1,6 @@
-ID: P011
+ID: P013
 ID Cliente: C012
 ID Lezione: L009
-Data Prenotazione: 06/06/2025
+Data Prenotazione: 09/06/2025
 -----------------------
-Posti occupati: 1
+Posti occupati: 2
