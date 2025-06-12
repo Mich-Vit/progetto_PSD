@@ -713,7 +713,12 @@ int main(void)
     }	
     
     fclose(test_suite); 
-    fclose(result);    
+    fclose(result);  
+    
+    printf("=====================================================\n");
+    printf("FILE GENERATI, CONTROLLARE I RISULTATI NELLA CARTELLA\n");
+    printf("\nPremi INVIO PER LA FINE DEL PROGRAMMA...");
+    while (getchar() != '\n');
 
     return 0;
 }
